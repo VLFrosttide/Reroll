@@ -1,0 +1,42 @@
+body {
+  background-color: black;
+  color: aliceblue;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+#Container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.Image {
+  height: 40px;
+  width: 40px;
+  display: flex;
+  border: 3px solid transparent;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  -webkit-user-drag: none;
+}
+
+#ImageContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  border-bottom: 50px solid transparent;
+  user-select: none;
+}
+.Hover {
+  border: 3px double;
+  border-color: rgb(255, 255, 255);
+}
+.HoverTooltip {
+  display: flex;
+  font-size: 20px;
+}
