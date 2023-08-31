@@ -7,465 +7,492 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <input type="text" id="ModInput" placeholder="Mod youre looking for" />
-    <input type="number" id="MaxRerolls" />
-    <input type="text" id="EssenceInput" , placeholder="Which essence" />
+    <input
+      class="Input"
+      type="text"
+      id="ModInput"
+      placeholder="Mod youre looking for"
+    />
+    <input
+      class="Input"
+      type="number"
+      id="MaxRerolls"
+      placeholder="Maximum rerolls"
+    />
+    <input
+      class="Input"
+      type="text"
+      id="EssenceInput"
+      ,
+      placeholder="Essence Highlight"
+    />
 
     <div id="ImageContainer">
       <img
         id="ChaosOrb"
         class="Image Currency"
-        src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\ChaosOrb.png"
+        src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\ChaosOrb.png"
         alt=""
       />
       <img
         id="OrbofAlteration"
         class="Image Currency"
-        src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\AltOrb.png"
+        src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\AltOrb.png"
         alt=""
       />
 
       <img
-        id="Essences"
-        src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\Torment.png"
+        id="EssenceImage"
+        src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\Torment.png"
         class="Image"
         alt=""
       />
       <div id="EssenceContainer" hidden>
-        <div id="Anger" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Anger\Deafening_Essence_of_Anger_inventory_icon.png"
-            alt=""
-            class="Image Essence Deafening"
-            id="DeafeningEssenceOfAnger"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Anger\Shrieking_Essence_of_Anger_inventory_icon.png"
-            alt=""
-            class="Image Essence Shrieking"
-            id="ShriekingEssenceOfAnger"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Anger\Screaming_Essence_of_Anger_inventory_icon.png"
-            alt=""
-            class="Image Essence Screaming"
-            id="ScreamingEssenceOfAnger"
-          />
+        <div id="EssenceLeftSide">
+          <div id="Greed" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Greed\Deafening_Essence_of_Greed_inventory_icon.png"
+              alt=""
+              class="Image Essence Deafening"
+              id="DeafeningEssenceOfGreed"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Greed\Shrieking_Essence_of_Greed_inventory_icon.png"
+              alt=""
+              class="Image Essence Shrieking"
+              id="ShriekingEssenceOfGreed"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Greed\Screaming_Essence_of_Greed_inventory_icon.png"
+              alt=""
+              class="Image Essence Screaming"
+              id="ScreamingEssenceOfGreed"
+            />
+          </div>
+          <div id="Contempt" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Contempt\Deafening_Essence_of_Contempt_inventory_icon.png"
+              alt=""
+              class="Image Essence Deafening"
+              id="DeafeningEssenceOfContempt"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Contempt\Shrieking_Essence_of_Contempt_inventory_icon.png"
+              alt=""
+              class="Image Essence Shrieking"
+              id="ShriekingEssenceOfContempt"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Contempt\Screaming_Essence_of_Contempt_inventory_icon.png"
+              alt=""
+              class="Image Essence Screaming"
+              id="ScreamingEssenceOfContempt"
+            />
+          </div>
+          <div id="Hatred" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Hatred\Deafening_Essence_of_Hatred_inventory_icon.png"
+              alt=""
+              class="Image Essence Deafening"
+              id="DeafeningEssenceOfHatred"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Hatred\Shrieking_Essence_of_Hatred_inventory_icon.png"
+              alt=""
+              class="Image Essence Shrieking"
+              id="ShriekingEssenceOfHatred"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Hatred\Screaming_Essence_of_Hatred_inventory_icon.png"
+              alt=""
+              class="Image Essence Screaming"
+              id="ScreamingEssenceOfHatred"
+            />
+          </div>
+          <div id="Woe" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Woe\Deafening_Essence_of_Woe_inventory_icon.png"
+              alt=""
+              class="Image Essence Deafening"
+              id="DeafeningEssenceOfWoe"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Woe\Shrieking_Essence_of_Woe_inventory_icon.png"
+              alt=""
+              class="Image Essence Shrieking"
+              id="ShriekingEssenceOfWoe"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Woe\Screaming_Essence_of_Woe_inventory_icon.png"
+              alt=""
+              class="Image Essence Screaming"
+              id="ScreamingEssenceOfWoe"
+            />
+          </div>
+          <div id="Fear" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Fear\Deafening_Essence_of_Fear_inventory_icon.png"
+              alt=""
+              class="Image Essence Deafening"
+              id="DeafeningEssenceOfFear"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Fear\Shrieking_Essence_of_Fear_inventory_icon.png"
+              alt=""
+              class="Image Essence Shrieking"
+              id="ShriekingEssenceOfFear"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Fear\Screaming_Essence_of_Fear_inventory_icon.png"
+              alt=""
+              class="Image Essence Screaming"
+              id="ScreamingEssenceOfFear"
+            />
+          </div>
+          <div id="Anger" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Anger\Deafening_Essence_of_Anger_inventory_icon.png"
+              alt=""
+              class="Image Essence Deafening"
+              id="DeafeningEssenceOfAnger"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Anger\Shrieking_Essence_of_Anger_inventory_icon.png"
+              alt=""
+              class="Image Essence Shrieking"
+              id="ShriekingEssenceOfAnger"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Anger\Screaming_Essence_of_Anger_inventory_icon.png"
+              alt=""
+              class="Image Essence Screaming"
+              id="ScreamingEssenceOfAnger"
+            />
+          </div>
+          <div id="Torment" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Torment\Deafening_Essence_of_Torment_inventory_icon.png"
+              alt=""
+              class="Image Essence Deafening"
+              id="DeafeningEssenceOfTorment"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Torment\Shrieking_Essence_of_Torment_inventory_icon.png"
+              alt=""
+              class="Image Essence Shrieking"
+              id="ShriekingEssenceOfTorment"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Torment\Screaming_Essence_of_Torment_inventory_icon.png"
+              alt=""
+              class="Image Essence Screaming"
+              id="ScreamingEssenceOfTorment"
+            />
+          </div>
+          <div id="Sorrow" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Sorrow\Deafening_Essence_of_Sorrow_inventory_icon.png"
+              alt=""
+              class="Image Essence Deafening"
+              id="DeafeningEssenceOfSorrow"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Sorrow\Shrieking_Essence_of_Sorrow_inventory_icon.png"
+              alt=""
+              class="Image Essence Shrieking"
+              id="ShriekingEssenceOfSorrow"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Sorrow\Screaming_Essence_of_Sorrow_inventory_icon.png"
+              alt=""
+              class="Image Essence Screaming"
+              id="ScreamingEssenceOfSorrow"
+            />
+          </div>
+          <div id="Rage" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Rage\Deafening_Essence_of_Rage_inventory_icon.png"
+              alt=""
+              class="Image Essence Deafening"
+              id="DeafeningEssenceOfRage"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Rage\Shrieking_Essence_of_Rage_inventory_icon.png"
+              alt=""
+              class="Image Essence Shrieking"
+              id="ShriekingEssenceOfRage"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Rage\Screaming_Essence_of_Rage_inventory_icon.png"
+              alt=""
+              class="Image Essence Screaming"
+              id="ScreamingEssenceOfRage"
+            />
+          </div>
+          <div id="Suffering" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Suffering\Deafening_Essence_of_Suffering_inventory_icon.png"
+              alt=""
+              class="Image Essence Deafening"
+              id="DeafeningEssenceOfSuffering"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Suffering\Shrieking_Essence_of_Suffering_inventory_icon.png"
+              alt=""
+              class="Image Essence Shrieking"
+              id="ShriekingEssenceOfSuffering"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Suffering\Screaming_Essence_of_Suffering_inventory_icon.png"
+              alt=""
+              class="Image Essence Screaming"
+              id="ScreamingEssenceOfSuffering"
+            />
+          </div>
+          <div id="Wrath" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Wrath\Deafening_Essence_of_Wrath_inventory_icon.png"
+              alt=""
+              class="Image Essence Deafening"
+              id="DeafeningEssenceOfWrath"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Wrath\Shrieking_Essence_of_Wrath_inventory_icon.png"
+              alt=""
+              class="Image Essence Shrieking"
+              id="ShriekingEssenceOfWrath"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Wrath\Screaming_Essence_of_Wrath_inventory_icon.png"
+              alt=""
+              class="Image Essence Screaming"
+              id="ScreamingEssenceOfWrath"
+            />
+          </div>
+          <div id="Doubt" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Doubt\Deafening_Essence_of_Doubt_inventory_icon.png"
+              alt=""
+              class="Image Essence Deafening"
+              id="DeafeningEssenceOfDoubt"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Doubt\Shrieking_Essence_of_Doubt_inventory_icon.png"
+              alt=""
+              class="Image Essence Shrieking"
+              id="ShriekingEssenceOfDoubt"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Doubt\Screaming_Essence_of_Doubt_inventory_icon.png"
+              alt=""
+              class="Image Essence Screaming"
+              id="ScreamingEssenceOfDoubt"
+            />
+          </div>
         </div>
-        <div id="Anguish" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Anguish\Deafening_Essence_of_Anguish_inventory_icon.png"
-            alt=""
-            class="Image Essence Deafening"
-            id="DeafeningEssenceOfAnguish"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Anguish\Shrieking_Essence_of_Anguish_inventory_icon.png"
-            alt=""
-            class="Image Essence Shrieking"
-            id="ShriekingEssenceOfAnguish"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Anguish\Screaming_Essence_of_Anguish_inventory_icon.png"
-            alt=""
-            class="Image Essence Screaming"
-            id="ScreamingEssenceOfAnguish"
-          />
+        <br />
+        <div id="EssenceRightSide">
+          <div id="Loathing" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Loathing\Screaming_Essence_of_Loathing_inventory_icon.png"
+              alt=""
+              class="Image Essence Screaming"
+              id="ScreamingEssenceOfLoathing"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Loathing\Shrieking_Essence_of_Loathing_inventory_icon.png"
+              alt=""
+              class="Image Essence Shrieking"
+              id="ShriekingEssenceOfLoathing"
+            />
+
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Loathing\Deafening_Essence_of_Loathing_inventory_icon.png"
+              alt=""
+              class="Image Essence Deafening"
+              id="DeafeningEssenceOfLoathing"
+            />
+          </div>
+          <div id="Zeal" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Zeal\Screaming_Essence_of_Zeal_inventory_icon.png"
+              alt=""
+              class="Image Essence Screaming"
+              id="ScreamingEssenceOfZeal"
+            />
+
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Zeal\Shrieking_Essence_of_Zeal_inventory_icon.png"
+              alt=""
+              class="Image Essence Shrieking"
+              id="ShriekingEssenceOfZeal"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Zeal\Deafening_Essence_of_Zeal_inventory_icon.png"
+              alt=""
+              class="Image Essence Deafening"
+              id="DeafeningEssenceOfZeal"
+            />
+          </div>
+
+          <div id="Anguish" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Anguish\Screaming_Essence_of_Anguish_inventory_icon.png"
+              alt=""
+              class="Image Essence Screaming"
+              id="ScreamingEssenceOfAnguish"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Anguish\Shrieking_Essence_of_Anguish_inventory_icon.png"
+              alt=""
+              class="Image Essence Shrieking"
+              id="ShriekingEssenceOfAnguish"
+            />
+
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Anguish\Deafening_Essence_of_Anguish_inventory_icon.png"
+              alt=""
+              class="Image Essence Deafening"
+              id="DeafeningEssenceOfAnguish"
+            />
+          </div>
+          <div id="Spite" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Spite\Screaming_Essence_of_Spite_inventory_icon.png"
+              alt=""
+              class="Image Essence Screaming"
+              id="ScreamingEssenceOfSpite"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Spite\Shrieking_Essence_of_Spite_inventory_icon.png"
+              alt=""
+              class="Image Essence Shrieking"
+              id="ShriekingEssenceOfSpite"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Spite\Deafening_Essence_of_Spite_inventory_icon.png"
+              alt=""
+              class="Image Essence Deafening"
+              id="DeafeningEssenceOfSpite"
+            />
+          </div>
+          <div id="Scorn" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Scorn\Screaming_Essence_of_Scorn_inventory_icon.png"
+              alt=""
+              class="Image Essence Screaming"
+              id="ScreamingEssenceOfScorn"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Scorn\Shrieking_Essence_of_Scorn_inventory_icon.png"
+              alt=""
+              class="Image Essence Shrieking"
+              id="ShriekingEssenceOfScorn"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Scorn\Deafening_Essence_of_Scorn_inventory_icon.png"
+              alt=""
+              class="Image Essence Deafening"
+              id="DeafeningEssenceOfScorn"
+            />
+          </div>
+          <div id="Envy" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Envy\Screaming_Essence_of_Envy_inventory_icon.png"
+              alt=""
+              class="Image Essence Screaming"
+              id="ScreamingEssenceOfEnvy"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Envy\Shrieking_Essence_of_Envy_inventory_icon.png"
+              alt=""
+              class="Image Essence Shrieking"
+              id="ShriekingEssenceOfEnvy"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Envy\Deafening_Essence_of_Envy_inventory_icon.png"
+              alt=""
+              class="Image Essence Deafening"
+              id="DeafeningEssenceOfEnvy"
+            />
+          </div>
+          <div id="Misery" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Misery\Screaming_Essence_of_Misery_inventory_icon.png"
+              alt=""
+              class="Image Essence Screaming"
+              id="ScreamingEssenceOfMisery"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Misery\Shrieking_Essence_of_Misery_inventory_icon.png"
+              alt=""
+              class="Image Essence Shrieking"
+              id="ShriekingEssenceOfMisery"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Misery\Deafening_Essence_of_Misery_inventory_icon.png"
+              alt=""
+              class="Image Essence Deafening"
+              id="DeafeningEssenceOfMisery"
+            />
+          </div>
+          <div id="Dread" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Dread\Screaming_Essence_of_Dread_inventory_icon.png"
+              alt=""
+              class="Image Essence Screaming"
+              id="ScreamingEssenceOfDread"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Dread\Shrieking_Essence_of_Dread_inventory_icon.png"
+              alt=""
+              class="Image Essence Shrieking"
+              id="ShriekingEssenceOfDread"
+            />
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Dread\Deafening_Essence_of_Dread_inventory_icon.png"
+              alt=""
+              class="Image Essence Deafening"
+              id="DeafeningEssenceOfDread"
+            />
+          </div>
+          <div id="Insanity" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Insanity\Essence_of_Insanity_inventory_icon.png"
+              alt=""
+              class="Image Essence Special"
+              id="EssenceOfInsanity"
+            />
+          </div>
+          <div id="Horror" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Horror\Essence_of_Horror_inventory_icon.png"
+              alt=""
+              class="Image Essence Special"
+              id="EssenceOfHorror"
+            />
+          </div>
+          <div id="Delirium" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Delirium\Essence_of_Delirium_inventory_icon.png"
+              alt=""
+              class="Image Essence Special"
+              id="EssenceOfDelirium"
+            />
+          </div>
+          <div id="Hysteria" class="EssenceDiv">
+            <img
+              src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\EssencePics\Hysteria\Essence_of_Hysteria_inventory_icon.png"
+              alt=""
+              class="Image Essence Special"
+              id="EssenceOfHysteria"
+            />
+          </div>
         </div>
-        <div id="Contempt" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Contempt\Deafening_Essence_of_Contempt_inventory_icon.png"
-            alt=""
-            class="Image Essence Deafening"
-            id="DeafeningEssenceOfContempt"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Contempt\Shrieking_Essence_of_Contempt_inventory_icon.png"
-            alt=""
-            class="Image Essence Shrieking"
-            id="ShriekingEssenceOfContempt"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Contempt\Screaming_Essence_of_Contempt_inventory_icon.png"
-            alt=""
-            class="Image Essence Screaming"
-            id="ScreamingEssenceOfContempt"
-          />
-        </div>
-        <div id="Doubt" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Doubt\Deafening_Essence_of_Doubt_inventory_icon.png"
-            alt=""
-            class="Image Essence Deafening"
-            id="DeafeningEssenceOfDoubt"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Doubt\Shrieking_Essence_of_Doubt_inventory_icon.png"
-            alt=""
-            class="Image Essence Shrieking"
-            id="ShriekingEssenceOfDoubt"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Doubt\Screaming_Essence_of_Doubt_inventory_icon.png"
-            alt=""
-            class="Image Essence Screaming"
-            id="ScreamingEssenceOfDoubt"
-          />
-        </div>
-        <div id="Dread" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Dread\Deafening_Essence_of_Dread_inventory_icon.png"
-            alt=""
-            class="Image Essence Deafening"
-            id="DeafeningEssenceOfDread"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Dread\Shrieking_Essence_of_Dread_inventory_icon.png"
-            alt=""
-            class="Image Essence Shrieking"
-            id="ShriekingEssenceOfDread"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Dread\Screaming_Essence_of_Dread_inventory_icon.png"
-            alt=""
-            class="Image Essence Screaming"
-            id="ScreamingEssenceOfDread"
-          />
-        </div>
-        <div id="Envy" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Envy\Deafening_Essence_of_Envy_inventory_icon.png"
-            alt=""
-            class="Image Essence Deafening"
-            id="DeafeningEssenceOfEnvy"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Envy\Shrieking_Essence_of_Envy_inventory_icon.png"
-            alt=""
-            class="Image Essence Shrieking"
-            id="ShriekingEssenceOfEnvy"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Envy\Screaming_Essence_of_Envy_inventory_icon.png"
-            alt=""
-            class="Image Essence Screaming"
-            id="ScreamingEssenceOfEnvy"
-          />
-        </div>
-        <div id="Fear" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Fear\Deafening_Essence_of_Fear_inventory_icon.png"
-            alt=""
-            class="Image Essence Deafening"
-            id="DeafeningEssenceOfFear"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Fear\Shrieking_Essence_of_Fear_inventory_icon.png"
-            alt=""
-            class="Image Essence Shrieking"
-            id="ShriekingEssenceOfFear"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Fear\Screaming_Essence_of_Fear_inventory_icon.png"
-            alt=""
-            class="Image Essence Screaming"
-            id="ScreamingEssenceOfFear"
-          />
-        </div>
-        <div id="Greed" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Greed\Deafening_Essence_of_Greed_inventory_icon.png"
-            alt=""
-            class="Image Essence Deafening"
-            id="DeafeningEssenceOfGreed"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Greed\Shrieking_Essence_of_Greed_inventory_icon.png"
-            alt=""
-            class="Image Essence Shrieking"
-            id="ShriekingEssenceOfGreed"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Greed\Screaming_Essence_of_Greed_inventory_icon.png"
-            alt=""
-            class="Image Essence Screaming"
-            id="ScreamingEssenceOfGreed"
-          />
-        </div>
-        <div id="Hatred" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Hatred\Deafening_Essence_of_Hatred_inventory_icon.png"
-            alt=""
-            class="Image Essence Deafening"
-            id="DeafeningEssenceOfHatred"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Hatred\Shrieking_Essence_of_Hatred_inventory_icon.png"
-            alt=""
-            class="Image Essence Shrieking"
-            id="ShriekingEssenceOfHatred"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Hatred\Screaming_Essence_of_Hatred_inventory_icon.png"
-            alt=""
-            class="Image Essence Screaming"
-            id="ScreamingEssenceOfHatred"
-          />
-        </div>
-        <div id="Loathing" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Loathing\Deafening_Essence_of_Loathing_inventory_icon.png"
-            alt=""
-            class="Image Essence Deafening"
-            id="DeafeningEssenceOfLoathing"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Loathing\Shrieking_Essence_of_Loathing_inventory_icon.png"
-            alt=""
-            class="Image Essence Shrieking"
-            id="ShriekingEssenceOfLoathing"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Loathing\Screaming_Essence_of_Loathing_inventory_icon.png"
-            alt=""
-            class="Image Essence Screaming"
-            id="ScreamingEssenceOfLoathing"
-          />
-        </div>
-        <div id="Misery" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Misery\Deafening_Essence_of_Misery_inventory_icon.png"
-            alt=""
-            class="Image Essence Deafening"
-            id="DeafeningEssenceOfMisery"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Misery\Shrieking_Essence_of_Misery_inventory_icon.png"
-            alt=""
-            class="Image Essence Shrieking"
-            id="ShriekingEssenceOfMisery"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Misery\Screaming_Essence_of_Misery_inventory_icon.png"
-            alt=""
-            class="Image Essence Screaming"
-            id="ScreamingEssenceOfMisery"
-          />
-        </div>
-        <div id="Rage" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Rage\Deafening_Essence_of_Rage_inventory_icon.png"
-            alt=""
-            class="Image Essence Deafening"
-            id="DeafeningEssenceOfRage"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Rage\Shrieking_Essence_of_Rage_inventory_icon.png"
-            alt=""
-            class="Image Essence Shrieking"
-            id="ShriekingEssenceOfRage"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Rage\Screaming_Essence_of_Rage_inventory_icon.png"
-            alt=""
-            class="Image Essence Screaming"
-            id="ScreamingEssenceOfRage"
-          />
-        </div>
-        <div id="Scorn" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Scorn\Deafening_Essence_of_Scorn_inventory_icon.png"
-            alt=""
-            class="Image Essence Deafening"
-            id="DeafeningEssenceOfScorn"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Scorn\Shrieking_Essence_of_Scorn_inventory_icon.png"
-            alt=""
-            class="Image Essence Shrieking"
-            id="ShriekingEssenceOfScorn"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Scorn\Screaming_Essence_of_Scorn_inventory_icon.png"
-            alt=""
-            class="Image Essence Screaming"
-            id="ScreamingEssenceOfScorn"
-          />
-        </div>
-        <div id="Sorrow" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Sorrow\Deafening_Essence_of_Sorrow_inventory_icon.png"
-            alt=""
-            class="Image Essence Deafening"
-            id="DeafeningEssenceOfSorrow"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Sorrow\Shrieking_Essence_of_Sorrow_inventory_icon.png"
-            alt=""
-            class="Image Essence Shrieking"
-            id="ShriekingEssenceOfSorrow"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Sorrow\Screaming_Essence_of_Sorrow_inventory_icon.png"
-            alt=""
-            class="Image Essence Screaming"
-            id="ScreamingEssenceOfSorrow"
-          />
-        </div>
-        <div id="Spite" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Spite\Deafening_Essence_of_Spite_inventory_icon.png"
-            alt=""
-            class="Image Essence Deafening"
-            id="DeafeningEssenceOfSpite"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Spite\Shrieking_Essence_of_Spite_inventory_icon.png"
-            alt=""
-            class="Image Essence Shrieking"
-            id="ShriekingEssenceOfSpite"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Spite\Screaming_Essence_of_Spite_inventory_icon.png"
-            alt=""
-            class="Image Essence Screaming"
-            id="ScreamingEssenceOfSpite"
-          />
-        </div>
-        <div id="Suffering" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Suffering\Deafening_Essence_of_Suffering_inventory_icon.png"
-            alt=""
-            class="Image Essence Deafening"
-            id="DeafeningEssenceOfSuffering"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Suffering\Shrieking_Essence_of_Suffering_inventory_icon.png"
-            alt=""
-            class="Image Essence Shrieking"
-            id="ShriekingEssenceOfSuffering"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Suffering\Screaming_Essence_of_Suffering_inventory_icon.png"
-            alt=""
-            class="Image Essence Screaming"
-            id="ScreamingEssenceOfSuffering"
-          />
-        </div>
-        <div id="Torment" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Torment\Deafening_Essence_of_Torment_inventory_icon.png"
-            alt=""
-            class="Image Essence Deafening"
-            id="DeafeningEssenceOfTorment"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Torment\Shrieking_Essence_of_Torment_inventory_icon.png"
-            alt=""
-            class="Image Essence Shrieking"
-            id="ShriekingEssenceOfTorment"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Torment\Screaming_Essence_of_Torment_inventory_icon.png"
-            alt=""
-            class="Image Essence Screaming"
-            id="ScreamingEssenceOfTorment"
-          />
-        </div>
-        <div id="Woe" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Woe\Deafening_Essence_of_Woe_inventory_icon.png"
-            alt=""
-            class="Image Essence Deafening"
-            id="DeafeningEssenceOfWoe"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Woe\Shrieking_Essence_of_Woe_inventory_icon.png"
-            alt=""
-            class="Image Essence Shrieking"
-            id="ShriekingEssenceOfWoe"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Woe\Screaming_Essence_of_Woe_inventory_icon.png"
-            alt=""
-            class="Image Essence Screaming"
-            id="ScreamingEssenceOfWoe"
-          />
-        </div>
-        <div id="Wrath" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Wrath\Deafening_Essence_of_Wrath_inventory_icon.png"
-            alt=""
-            class="Image Essence Deafening"
-            id="DeafeningEssenceOfWrath"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Wrath\Shrieking_Essence_of_Wrath_inventory_icon.png"
-            alt=""
-            class="Image Essence Shrieking"
-            id="ShriekingEssenceOfWrath"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Wrath\Screaming_Essence_of_Wrath_inventory_icon.png"
-            alt=""
-            class="Image Essence Screaming"
-            id="ScreamingEssenceOfWrath"
-          />
-        </div>
-        <div id="Zeal" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Zeal\Deafening_Essence_of_Zeal_inventory_icon.png"
-            alt=""
-            class="Image Essence Deafening"
-            id="DeafeningEssenceOfZeal"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Zeal\Shrieking_Essence_of_Zeal_inventory_icon.png"
-            alt=""
-            class="Image Essence Shrieking"
-            id="ShriekingEssenceOfZeal"
-          />
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Zeal\Screaming_Essence_of_Zeal_inventory_icon.png"
-            alt=""
-            class="Image Essence Screaming"
-            id="ScreamingEssenceOfZeal"
-          />
-        </div>
-        <div id="Delirium" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Delirium\Essence_of_Delirium_inventory_icon.png"
-            alt=""
-            class="Image Essence Special"
-            id="EssenceOfDelirium"
-          />
-        </div>
-        <div id="Horror" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Horror\Essence_of_Horror_inventory_icon.png"
-            alt=""
-            class="Image Essence Special"
-            id="EssenceOfHorror"
-          />
-        </div>
-        <div id="Hysteria" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Hysteria\Essence_of_Hysteria_inventory_icon.png"
-            alt=""
-            class="Image Essence Special"
-            id="EssenceOfHysteria"
-          />
-        </div>
-        <div id="Insanity" class="EssenceDiv">
-          <img
-            src="C:\Users\shacx\Documents\GitHub\HarvestClicker\renderer\EssencePics\Insanity\Essence_of_Insanity_inventory_icon.png"
-            alt=""
-            class="Image Essence Special"
-            id="EssenceOfInsanity"
-          />
-        </div>
+        <div id="EssenceSpecial"></div>
       </div>
     </div>
+    <div id="Insertion"></div>
     <div id="Container">Contains all labels</div>
     <button id="Start">Start crafting</button>
     <script src="logic.js"></script>

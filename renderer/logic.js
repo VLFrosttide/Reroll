@@ -8,12 +8,13 @@ const Currencies = document.getElementsByClassName("Currency");
 const StartButton = document.getElementById("Start");
 const EssenceContainer = document.getElementById("EssenceContainer");
 const ImageContainer = document.getElementById("ImageContainer");
-const EssenceImage = document.getElementById("Essences");
+const EssenceImage = document.getElementById("EssenceImage");
 const Chaos = document.getElementById("ChaosOrb");
 const Alt = document.getElementById("OrbofAlteration");
 const Essences = document.getElementsByClassName("Essence");
 const EssenceInput = document.getElementById("EssenceInput");
 const EssenceNameArray = [];
+const Insertion = document.getElementById("Insertion");
 const MaxRerolls = document.getElementById("MaxRerolls");
 //#endregion
 EssenceInput.style.display = "none";
@@ -48,10 +49,8 @@ for (const Essence of Essences) {
     let Spaces = Essence.id.replace(/([A-Z])/g, " $1").trim();
     HoverTooltip.textContent = `${Spaces}`;
 
-    HoverTooltip.style.position = "absolute";
-    document
-      .getElementById(`${Essence.id}`)
-      .parentElement.appendChild(HoverTooltip);
+    HoverTooltip.style.position = "static";
+    Insertion.appendChild(HoverTooltip);
     // }
 
     HoverTooltip.classList.add("HoverTooltip");
@@ -106,7 +105,7 @@ EssenceInput.addEventListener("focusin", function () {
   EssenceInput.placeholder = "";
 });
 EssenceInput.addEventListener("focusout", function () {
-  EssenceInput.placeholder = "Which essence";
+  EssenceInput.placeholder = "Essence Highlight";
 });
 
 //#endregion
@@ -116,22 +115,24 @@ EssenceImage.addEventListener("click", function (e) {
     for (let j = 0; j < Currencies.length; j++) {
       Currencies[j].classList.remove("Hover");
     }
+    window.api.ResizeWindow("awd");
     EssenceInput.style.display = "flex";
     EssenceContainer.style.display = "flex";
     Chaos.style.display = "none";
     Alt.style.display = "none";
     ImageContainer.style.flexDirection = "column";
     EssenceImage.src =
-      "C:\\Users\\shacx\\Documents\\GitHub\\HarvestClicker\\renderer\\EssencePics\\Arrow.png";
+      "C:/Users/shacx/Documents/GitHub/Reroll/renderer/EssencePics/Arrow.png";
   } else {
     EssenceImage.classList.remove("Clicked");
+    window.api.ResizeWindow("abruvwd");
     EssenceInput.style.display = "none";
     EssenceContainer.style.display = "none";
     Chaos.style.display = "flex";
     Alt.style.display = "flex";
     ImageContainer.style.flexDirection = "row";
     EssenceImage.src =
-      "C:/Users/shacx/Documents/GitHub/HarvestClicker/renderer/Torment.png";
+      "C:/Users/shacx/Documents/GitHub/Reroll/renderer/Torment.png";
   }
 });
 
@@ -173,20 +174,20 @@ for (let i = 0; i < Currencies.length; i++) {
 }
 let LengthCheck = document.getElementsByClassName("Hover");
 StartButton.addEventListener("click", function () {
-  InfoArray.length = 0;
-  if (
-    CraftMaterial === undefined ||
-    ModClass.length < 1 ||
-    LengthCheck.length < 1
-  ) {
-    alert("Please select crafting method and mods");
-  } else {
-    InfoArray.push(CraftMaterial);
-    for (let i = 0; i < ModClass.length; i++) {
-      InfoArray.push(ModClass[i].textContent);
-    }
-    InfoArray.push(MaxRerolls.value);
-    console.log(InfoArray);
-    window.api.SendModNames(InfoArray);
-  }
+  // InfoArray.length = 0;
+  // if (
+  //   CraftMaterial === undefined ||
+  //   ModClass.length < 1 ||
+  //   LengthCheck.length < 1
+  // ) {
+  //   alert("Please select crafting method and mods");
+  // } else {
+  //   InfoArray.push(CraftMaterial);
+  //   for (let i = 0; i < ModClass.length; i++) {
+  //     InfoArray.push(ModClass[i].textContent);
+  //   }
+  //   InfoArray.push(MaxRerolls.value);
+  //   console.log(InfoArray);
+  //   window.api.SendModNames(InfoArray);
+  // }
 });

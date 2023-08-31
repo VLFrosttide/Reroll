@@ -24,12 +24,12 @@ body {
 }
 
 #ImageContainer {
+  position: relative;
   display: flex;
-  flex-direction: row;
   justify-content: center;
   justify-items: center;
   align-items: center;
-  border-bottom: 50px solid transparent;
+  margin-bottom: 5px;
   user-select: none;
 }
 .Hover {
@@ -39,4 +39,32 @@ body {
 .HoverTooltip {
   display: flex;
   font-size: 20px;
+}
+#EssenceContainer {
+  flex-direction: row;
+}
+#EssenceLeftSide {
+  flex-direction: row;
+  border-right: 50px solid transparent;
+}
+#EssenceRightSide {
+  border-left: 50px solid transparent;
+}
+.EssenceDiv {
+  display: flex;
+  flex-direction: row;
+}
+#Insertion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 10px;
+  width: 300px;
+  height: 50px;
+}
+
+.Input {
+  background-color: rgb(15, 15, 15);
+  color: aliceblue;
 }
