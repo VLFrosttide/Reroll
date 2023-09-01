@@ -61,7 +61,33 @@ app.whenReady().then(() => {
   CreateWindow();
 
   const template = [
-    // Your menu template remains unchanged
+    {
+      label: "Hotkeys",
+      submenu: [
+        {
+          label: "Capture Mouse position",
+          accelerator: "F1",
+          click() {
+            MousePosition = screen.getCursorScreenPoint();
+            MousePosition = JSON.stringify(MousePosition);
+            MousePosition = MousePosition.replace(/[^\d,]/g, "");
+            CaptureMouseEvent.emit("Coords", MousePosition);
+          },
+        },
+        {
+          label: "Reload",
+          accelerator: "Ctrl+R",
+          role: "forceReload",
+        },
+        {
+          label: "Dev tools",
+          role: "toggleDevTools",
+          accelerator: "Ctrl+`",
+        },
+        { type: "separator" },
+        { label: "Exit", role: "quit" },
+      ],
+    },
   ];
 
   const menu = Menu.buildFromTemplate(template);

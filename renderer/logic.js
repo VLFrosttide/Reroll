@@ -11,25 +11,33 @@ const ImageContainer = document.getElementById("ImageContainer");
 const EssenceImage = document.getElementById("EssenceImage");
 const Chaos = document.getElementById("ChaosOrb");
 const Alt = document.getElementById("OrbofAlteration");
-const Essences = document.getElementsByClassName("Essence");
+const EssenceClassList = document.getElementsByClassName("Essence");
 const EssenceInput = document.getElementById("EssenceInput");
 const EssenceNameArray = [];
 const Insertion = document.getElementById("Insertion");
 const MaxRerolls = document.getElementById("MaxRerolls");
+let ModNumber = 0;
+let CraftMaterial;
+let InfoArray = []; //Array to send data to backend
+let DebounceTimer;
 //#endregion
+for (const Essence of EssenceClassList) {
+  EssenceNameArray.push(Essence.id);
+  Essence.style.opacity = 0.3;
+}
 EssenceInput.style.display = "none";
 
 //#region Click Event Highlight
-for (const Essence of Essences) {
-  EssenceNameArray.push(Essence.id);
-  Essence.style.opacity = 0.3;
-  Essence.addEventListener("click", function (e) {
+
+EssenceContainer.addEventListener("click", function (e) {
+  if (e.target.classList.contains("Essence")) {
+    // Returns true or false
     let HoverHighlight = e.target.classList.contains("Hover", "Highlight");
 
     document
-      .getElementById(`${Essence.id}`)
+      .getElementById(`${e.target.id}`)
       .classList.add("Hover", "Highlight");
-    for (const Item of Essences) {
+    for (const Item of EssenceClassList) {
       Item.style.opacity = 0.3;
       Item.classList.remove("Hover", "Highlight");
     }
@@ -38,42 +46,39 @@ for (const Essence of Essences) {
       e.target.classList.add("Hover", "Highlight");
       CraftMaterial = e.target.id;
     }
-  });
-  //#endregion
-  //#region  Hover event highlight
+  }
+});
+//#endregion
+//#region Hover Event listeners
+EssenceContainer.addEventListener("mouseover", function (e) {
+  if (e.target.classList.contains("Essence")) {
+    clearTimeout(DebounceTimer);
 
-  Essence.addEventListener("mouseenter", function (e) {
-    document.getElementById(Essence.id).style.opacity = 1;
-
-    let HoverTooltip = document.createElement("div");
-    let Spaces = Essence.id.replace(/([A-Z])/g, " $1").trim();
-    HoverTooltip.textContent = `${Spaces}`;
-
-    HoverTooltip.style.position = "static";
-    Insertion.appendChild(HoverTooltip);
-    // }
-
-    HoverTooltip.classList.add("HoverTooltip");
-  });
-  Essence.addEventListener("mouseleave", function (e) {
+    DebounceTimer = setTimeout(() => {
+      e.target.style.opacity = 1;
+      let HoverTooltip = document.createElement("div");
+      let Spaces = `${e.target.id}`.replace(/([A-Z])/g, " $1").trim();
+      HoverTooltip.textContent = `${Spaces}`;
+      HoverTooltip.style.position = "static";
+      Insertion.appendChild(HoverTooltip);
+      HoverTooltip.classList.add("HoverTooltip");
+    }, 0);
+  }
+});
+EssenceContainer.addEventListener("mouseout", function (e) {
+  if (e.target.classList.contains("Essence")) {
     let Remove = document.getElementsByClassName("HoverTooltip");
+    if (!e.target.classList.contains("Highlight")) {
+      e.target.style.opacity = 0.3;
+    }
     for (const Item of Remove) {
       Item.remove();
     }
-  });
-}
-for (const Item of EssenceNameArray) {
-  document
-    .getElementById(`${Item}`)
-    .addEventListener("mouseleave", function () {
-      if (!document.getElementById(`${Item}`).classList.contains("Highlight")) {
-        document.getElementById(`${Item}`).style.opacity = 0.3;
-      }
-    });
-}
+  }
+});
 //#endregion
 
-//#region Input event highlight
+//#region Input highlight
 EssenceInput.addEventListener("input", function () {
   for (const Name of EssenceNameArray) {
     let SpacedName = Name.replace(/([A-Z])/g, " $1").trim();
@@ -89,10 +94,6 @@ EssenceInput.addEventListener("input", function () {
     }
   }
 });
-//#endregion
-let ModNumber = 0;
-let CraftMaterial;
-let InfoArray = [];
 //#region Placeholder Eventlisteners
 ModNameInput.addEventListener("focusin", function () {
   ModNameInput.placeholder = "";
