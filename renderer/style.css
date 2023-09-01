@@ -3,13 +3,18 @@ body {
   color: aliceblue;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+}
+.Instructions {
+  user-select: none;
+}
+#EssenceImage {
+  -webkit-user-drag: none;
+  user-select: none;
 }
 #Container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
 .Image {
@@ -22,11 +27,15 @@ body {
   align-self: center;
   -webkit-user-drag: none;
 }
-
+#Instructions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
 #ImageContainer {
   position: relative;
   display: flex;
-  justify-content: center;
   justify-items: center;
   align-items: center;
   margin-bottom: 5px;
@@ -34,13 +43,15 @@ body {
 }
 .Hover {
   border: 3px double;
-  border-color: rgb(255, 255, 255);
+  border-color: rgb(213, 9, 80);
 }
 .HoverTooltip {
   display: flex;
   font-size: 20px;
 }
 #EssenceContainer {
+  -webkit-user-drag: none;
+  user-select: none;
   flex-direction: row;
 }
 #EssenceLeftSide {
@@ -63,8 +74,22 @@ body {
   width: 300px;
   height: 50px;
 }
-
+.Currency {
+  margin: 5px;
+}
 .Input {
   background-color: rgb(15, 15, 15);
   color: aliceblue;
+}
+#CurrencyDiv {
+  display: flex;
+}
+#HideInstructions {
+  position: absolute;
+  bottom: 1%;
+  right: 1%;
+}
+#InstructionsCheckBox {
+  filter: brightness(40%);
+  accent-color: rgb(0, 0, 0);
 }

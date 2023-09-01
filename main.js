@@ -17,6 +17,7 @@ let MousePosition;
 let Mod;
 let Minroll;
 let PythonArgs = [];
+let ScreenTimeout;
 
 const CreateWindow = () => {
   const win = new BrowserWindow({
@@ -45,15 +46,17 @@ const CreateWindow = () => {
     }
   });
 
-  win.loadFile("C:/Users/shacx/Documents/GitHub/Reroll/Hotkeys/Hotkeys.html");
+  win.loadFile("renderer/Index.html");
 
   win.on("move", () => {
-    const currentDisplay = screen.getDisplayNearestPoint({
-      x: win.getPosition()[0],
-      y: win.getPosition()[1],
-    });
-    DisplayNumber = currentDisplay.id;
-    console.log("Window is on display:", currentDisplay.id);
+    ScreenTimeout = setTimeout(() => {
+      const currentDisplay = screen.getDisplayNearestPoint({
+        x: win.getPosition()[0],
+        y: win.getPosition()[1],
+      });
+      DisplayNumber = currentDisplay.id;
+      console.log("Window is on display:", currentDisplay.id);
+    }, 400);
   });
 };
 
