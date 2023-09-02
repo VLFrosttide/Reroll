@@ -24,9 +24,12 @@ object = json.loads(sys.argv[1])
 for item, value in object.items():
     if "Name" in value:
         EssenceList.append(Essence(value["Name"],[int(int(value["Coords"][0])*Convert), int(int(value["Coords"][1])*Convert)] , value["Side"], "Deafening" ))
-        
+     
+   
 for item in EssenceList:   
     print(item.GetTier(), flush=True)
+    print("awd", flush=True)
+    print(item.GetCoords(), flush=True)
     pyautogui.moveTo(item.GetCoords())
     time.sleep(1)
     pyautogui.click(item.GetCoords())

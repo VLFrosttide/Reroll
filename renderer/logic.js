@@ -14,6 +14,8 @@ const EssenceImage = document.getElementById("EssenceImage");
 const EssenceClassList = document.getElementsByClassName("Essence");
 const EssenceInput = document.getElementById("EssenceInput");
 const DeafeningEssencesLeft = document.querySelectorAll(".Deafening.Left");
+const ScreamingEssencesLeft = document.querySelectorAll(".Screaming.Left");
+const ShriekingEssenceLeft = document.querySelectorAll(".Shrieking.Left");
 const EssenceNameArray = [];
 const Insertion = document.getElementById("Insertion");
 const MaxRerolls = document.getElementById("MaxRerolls");
@@ -31,7 +33,9 @@ const StoreCoordsButton = document.getElementById("StoreCoordsButton");
 const TutorialEssence = document.getElementsByClassName("Tutorial");
 const TestCoords = document.getElementById("TestCoords");
 const ItemCoords = {};
-const DeafeningCoordsLeft = {};
+const DeafeningCoordsLeftObj = {};
+const ShriekingEssenceLeftObj = {};
+const ScreamingEssencesLeftObj = {};
 let TutorialCheck;
 let XDifferential;
 let YDifferential;
@@ -96,14 +100,21 @@ window.api.MousePos((event, data) => {
       parseInt(ItemCoords.DeafeningEssenceOfContempt.Coords[1]) -
       parseInt(InitialLeftY);
     for (const Item of DeafeningEssencesLeft) {
-      DeafeningCoordsLeft[`${Item.id}`] = {
+      DeafeningCoordsLeftObj[`${Item.id}`] = {
         Name: Item.id,
         Coords: [InitialLeftX, InitialLeftY],
         Side: "left",
       };
       InitialLeftY = InitialLeftY + YDifferential;
     }
-    console.log(DeafeningCoordsLeft);
+    for (const Item of ShriekingEssenceLeft) {
+      ShriekingEssenceLeftObj[`${Item.id}`] = {
+        Name: Item.id,
+        Coords: [InitialLeftX - XDifferential, InitialLeftY],
+        Side: "left",
+      };
+      InitialLeftY = InitialLeftY - YDifferential;
+    }
   }
 });
 //#endregion
@@ -277,7 +288,7 @@ ModNameInput.addEventListener("keydown", (e) => {
 });
 //#endregion
 
-A; //#region Currencies eventlistener
+//#region Currencies eventlistener
 for (let i = 0; i < Currencies.length; i++) {
   Currencies[i].addEventListener("click", (e) => {
     let wasHovered = e.target.classList.contains("Hover");
@@ -338,8 +349,10 @@ StoreCoordsButton.addEventListener("click", function () {
 //#endregion
 //#region Test coords button
 TestCoords.addEventListener("click", function () {
-  console.log("it works");
-  window.api.SendTestCoords(JSON.stringify(DeafeningCoordsLeft));
+  // console.log(ShriekingEssenceLeftObj);
+  window.api.SendTestCoords(
+    JSON.stringify(DeafeningCoordsLeftObj, ShriekingEssenceLeftObj)
+  );
   // for (const Item in ItemCoords) {
   // console.log(ItemCoords[Item].Coords);
   // }

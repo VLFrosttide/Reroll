@@ -1,3 +1,4 @@
+Renamed Test Coords to EssenceObjectFactory to better fit its function
 
 /////// WORK TO DO 
 Add logic for local storage to check if it has coords already
@@ -5,3 +6,4 @@ Create database and import all essence data inside
 Populate EssenceList with all essences(Currently only has DeafeningLeft)
 Add Tutorial boolean ???? Make the dimmed essences unclickable during tutorial
 Add coords into localstorage
+Import essence class from EssenceObjectFactory into worker file to click 

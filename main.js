@@ -68,7 +68,7 @@ app.whenReady().then(() => {
   const currentScreen = screen.getPrimaryDisplay();
   ipcMain.on("TestCoords", (event, args) => {
     const Test = spawn("python", [
-      "C:/Users/shacx/Documents/GitHub/Reroll/TestCoords.py",
+      "C:/Users/shacx/Documents/GitHub/Reroll/EssenceObjectFactory.py",
       args,
       currentScreen.scaleFactor,
     ]);
