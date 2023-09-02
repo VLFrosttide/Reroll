@@ -1,10 +1,7 @@
-  
+
 /////// WORK TO DO 
-Add Test coords for essences. 
-Calculate all coords based on the given coords
 Add logic for local storage to check if it has coords already
+Create database and import all essence data inside
+Populate EssenceList with all essences(Currently only has DeafeningLeft)
 Add Tutorial boolean ???? Make the dimmed essences unclickable during tutorial
-Change instructions text when swapping to essences
-Add coords location function to essences
 Add coords into localstorage
-Add button that removes instructions and shows input and button

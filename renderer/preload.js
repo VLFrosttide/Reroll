@@ -9,6 +9,9 @@ contextBridge.exposeInMainWorld("api", {
   ResizeWindow: (callback) => {
     ipcRenderer.send("ResizeWindow", callback);
   },
+  SendTestCoords: (variable) => {
+    ipcRenderer.send("TestCoords", variable);
+  },
 });
 window.addEventListener("error", (event) => {
   console.error(

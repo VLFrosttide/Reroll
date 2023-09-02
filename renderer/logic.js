@@ -29,7 +29,9 @@ const Contempt = document.getElementById("DeafeningEssenceOfContempt");
 const Loathing = document.getElementById("DeafeningEssenceOfLoathing");
 const StoreCoordsButton = document.getElementById("StoreCoordsButton");
 const TutorialEssence = document.getElementsByClassName("Tutorial");
+const TestCoords = document.getElementById("TestCoords");
 const ItemCoords = {};
+const DeafeningCoordsLeft = {};
 let TutorialCheck;
 let XDifferential;
 let YDifferential;
@@ -83,6 +85,25 @@ window.api.MousePos((event, data) => {
     let RemovedEssence = document.getElementById(`${RemoveTutorialString}`);
 
     RemovedEssence.classList.remove("Tutorial");
+  }
+  if (Object.keys(ItemCoords).length >= 6) {
+    let InitialLeftX = parseInt(ItemCoords.DeafeningEssenceOfGreed.Coords[0]);
+    let InitialLeftY = parseInt(ItemCoords.DeafeningEssenceOfGreed.Coords[1]);
+    XDifferential =
+      parseInt(ItemCoords.ShriekingEssenceOfGreed.Coords[0]) -
+      parseInt(InitialLeftX);
+    YDifferential =
+      parseInt(ItemCoords.DeafeningEssenceOfContempt.Coords[1]) -
+      parseInt(InitialLeftY);
+    for (const Item of DeafeningEssencesLeft) {
+      DeafeningCoordsLeft[`${Item.id}`] = {
+        Name: Item.id,
+        Coords: [InitialLeftX, InitialLeftY],
+        Side: "left",
+      };
+      InitialLeftY = InitialLeftY + YDifferential;
+    }
+    console.log(DeafeningCoordsLeft);
   }
 });
 //#endregion
@@ -256,7 +277,7 @@ ModNameInput.addEventListener("keydown", (e) => {
 });
 //#endregion
 
-//#region Currencies eventlistener
+A; //#region Currencies eventlistener
 for (let i = 0; i < Currencies.length; i++) {
   Currencies[i].addEventListener("click", (e) => {
     let wasHovered = e.target.classList.contains("Hover");
@@ -306,21 +327,6 @@ StoreCoordsButton.addEventListener("click", function () {
   if (Object.keys(ItemCoords).length < 6) {
     alert("Select the coords of all currencies.");
   } else {
-    let InitialLeftX = parseInt(ItemCoords.DeafeningEssenceOfGreed.Coords[0]);
-    let InitialLeftY = parseInt(ItemCoords.DeafeningEssenceOfGreed.Coords[1]);
-    XDifferential =
-      parseInt(ItemCoords.ShriekingEssenceOfGreed.Coords[0]) -
-      parseInt(InitialLeftX);
-    YDifferential =
-      parseInt(ItemCoords.DeafeningEssenceOfContempt.Coords[1]) -
-      parseInt(InitialLeftY);
-    for (const Item of DeafeningEssencesLeft) {
-      ItemCoords[`${Item.id}`] = {
-        Name: Item.id,
-        Coords: [InitialLeftX, InitialLeftY],
-      };
-      InitialLeftY = InitialLeftY + YDifferential;
-    }
     // for (const Item in ItemCoords) {
     //   console.log(ItemCoords[Item]);
     //   localStorage.setItem(`${ItemCoords[Item].Name}`, ItemCoords[Item].Coords);
@@ -328,5 +334,14 @@ StoreCoordsButton.addEventListener("click", function () {
     console.log(ItemCoords);
     alert("Items have been stored!");
   }
+});
+//#endregion
+//#region Test coords button
+TestCoords.addEventListener("click", function () {
+  console.log("it works");
+  window.api.SendTestCoords(JSON.stringify(DeafeningCoordsLeft));
+  // for (const Item in ItemCoords) {
+  // console.log(ItemCoords[Item].Coords);
+  // }
 });
 //#endregion

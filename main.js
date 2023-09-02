@@ -10,6 +10,9 @@ const {
   screen,
 } = require("electron");
 const EventEmitter = require("events");
+const { type } = require("os");
+const { test } = require("picomatch");
+const { error } = require("console");
 const CaptureMouseEvent = new EventEmitter();
 let DisplayNumber;
 let ItemName;
@@ -18,7 +21,7 @@ let Mod;
 let Minroll;
 let PythonArgs = [];
 let ScreenTimeout;
-
+let ItemCoords;
 const CreateWindow = () => {
   const win = new BrowserWindow({
     width: 600,
@@ -62,6 +65,22 @@ const CreateWindow = () => {
 
 app.whenReady().then(() => {
   CreateWindow();
+  const currentScreen = screen.getPrimaryDisplay();
+  ipcMain.on("TestCoords", (event, args) => {
+    const Test = spawn("python", [
+      "C:/Users/shacx/Documents/GitHub/Reroll/TestCoords.py",
+      args,
+      currentScreen.scaleFactor,
+    ]);
+    Test.stdout.on("data", (data) => {
+      console.log("\x1Bc");
+      console.log(data.toString());
+    });
+    Test.stderr.on("data", (error) => {
+      console.error("The error is: " + error);
+    });
+    console.log("Current factor: " + currentScreen.scaleFactor);
+  });
 
   const template = [
     {
