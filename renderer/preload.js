@@ -6,6 +6,8 @@ contextBridge.exposeInMainWorld("api", {
     ipcRenderer.send("ModNames", variable);
   },
   MousePos: (callback) => ipcRenderer.on("MouseCoords", callback),
+  ClearLocalStorage: (callback) =>
+    ipcRenderer.on("ClearLocalStorage", callback),
   ResizeWindow: (callback) => {
     ipcRenderer.send("ResizeWindow", callback);
   },

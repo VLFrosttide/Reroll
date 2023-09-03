@@ -22,6 +22,7 @@ let Minroll;
 let PythonArgs = [];
 let ScreenTimeout;
 let ItemCoords;
+let template;
 const CreateWindow = () => {
   const win = new BrowserWindow({
     width: 600,
@@ -61,28 +62,8 @@ const CreateWindow = () => {
       console.log("Window is on display:", currentDisplay.id);
     }, 400);
   });
-};
 
-app.whenReady().then(() => {
-  CreateWindow();
-  const currentScreen = screen.getPrimaryDisplay();
-  ipcMain.on("TestCoords", (event, args) => {
-    const Test = spawn("python", [
-      "C:/Users/shacx/Documents/GitHub/Reroll/EssenceObjectFactory.py",
-      args,
-      currentScreen.scaleFactor,
-    ]);
-    Test.stdout.on("data", (data) => {
-      console.log("\x1Bc");
-      console.log(data.toString());
-    });
-    Test.stderr.on("data", (error) => {
-      console.error("The error is: " + error);
-    });
-    console.log("Current factor: " + currentScreen.scaleFactor);
-  });
-
-  const template = [
+  template = [
     {
       label: "Hotkeys",
       submenu: [
@@ -106,11 +87,41 @@ app.whenReady().then(() => {
           role: "toggleDevTools",
           accelerator: "Ctrl+`",
         },
+        {
+          label: "Clear All stored coords",
+          click() {
+            win.webContents.send("ClearLocalStorage", "awd");
+            setTimeout(() => {
+              win.webContents.reload();
+            }, 100);
+          },
+          // role: "forceReload",
+        },
         { type: "separator" },
         { label: "Exit", role: "quit" },
       ],
     },
   ];
+};
+
+app.whenReady().then(() => {
+  CreateWindow();
+  const currentScreen = screen.getPrimaryDisplay();
+  ipcMain.on("TestCoords", (event, args) => {
+    const Test = spawn("python", [
+      "C:/Users/shacx/Documents/GitHub/Reroll/EssenceObjectFactory.py",
+      args,
+      currentScreen.scaleFactor,
+    ]);
+    Test.stdout.on("data", (data) => {
+      console.log("\x1Bc");
+      console.log(data.toString());
+    });
+    Test.stderr.on("data", (error) => {
+      console.error("The error is: " + error);
+    });
+    console.log("Current factor: " + currentScreen.scaleFactor);
+  });
 
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
