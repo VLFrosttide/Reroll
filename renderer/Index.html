@@ -40,20 +40,40 @@
 
     <div id="CurrencyDiv">
       <div id="ImageContainer">
-        <img
-          id="ChaosOrb"
-          class="Image Currency"
-          src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\ChaosOrb.png"
-          alt=""
-        />
-        <label id="ChaosOrbLabel">X:, Y:</label>
-        <img
-          id="OrbofAlteration"
-          class="Image Currency"
-          src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\AltOrb.png"
-          alt=""
-        />
-        <label id="OrbofAlterationLabel">X:, Y:</label>
+        <div class="CurrencyGroup">
+          <img
+            id="ChaosOrb"
+            class="Image Currency"
+            src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\ChaosOrb.png"
+            alt=""
+          />
+          <label id="ChaosOrbLabel" class="XYLabel AddBorder">X:, Y:</label>
+        </div>
+        <div class="CurrencyGroup">
+          <img
+            id="OrbofAlteration"
+            class="Image Currency"
+            src="C:\Users\shacx\Documents\GitHub\Reroll\renderer\AltOrb.png"
+            alt=""
+          />
+          <label id="OrbofAlterationLabel" class="XYLabel AddBorder"
+            >X:, Y:</label
+          >
+        </div>
+        <div class="CurrencyGroup" id="CurrencyTabDiv">
+          <div id="CurrencyTabItemSpot" class="AddBorder Tutorial Currency">
+            Currency tab <br />
+            Item spot
+          </div>
+          <label class="XYLabel" id="CurrencyTabItemSpotLabel">X:,Y:</label>
+        </div>
+        <div class="CurrencyGroup" id="EssenceTabDiv">
+          <div id="EssenceTabItemSpot" class="AddBorder Tutorial Currency">
+            Essence tab <br />
+            Item spot
+          </div>
+          <label class="XYLabel" id="EssenceTabItemSpotLabel">X:, Y:</label>
+        </div>
       </div>
     </div>
     <div id="Instructions2" class="Instructions">

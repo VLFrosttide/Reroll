@@ -26,7 +26,7 @@ let template;
 const CreateWindow = () => {
   const win = new BrowserWindow({
     width: 600,
-    height: 400,
+    height: 460,
     x: 490,
     y: 0,
     webPreferences: {
@@ -42,26 +42,14 @@ const CreateWindow = () => {
   });
 
   ipcMain.on("ResizeWindow", (event, arg) => {
-    console.log(arg);
     if (arg == "awd") {
-      win.setBounds({ x: 440, y: 0, width: 700, height: 900 });
+      win.setSize(700, 900);
     } else {
-      win.setBounds({ x: 490, y: 0, width: 600, height: 400 });
+      win.setSize(600, 460);
     }
   });
 
   win.loadFile("renderer/Index.html");
-
-  win.on("move", () => {
-    ScreenTimeout = setTimeout(() => {
-      const currentDisplay = screen.getDisplayNearestPoint({
-        x: win.getPosition()[0],
-        y: win.getPosition()[1],
-      });
-      DisplayNumber = currentDisplay.id;
-      console.log("Window is on display:", currentDisplay.id);
-    }, 400);
-  });
 
   template = [
     {

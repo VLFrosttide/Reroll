@@ -8,7 +8,9 @@ const CurrencyDiv = document.getElementById("CurrencyDiv");
 const StartButton = document.getElementById("Start");
 const ImageContainer = document.getElementById("ImageContainer");
 const Chaos = document.getElementById("ChaosOrb");
+const ChaosOrbLabel = document.getElementById("ChaosOrbLabel");
 const Alt = document.getElementById("OrbofAlteration");
+const AltLabel = document.getElementById("OrbofAlterationLabel");
 const EssenceContainer = document.getElementById("EssenceContainer");
 const EssenceImage = document.getElementById("EssenceImage");
 const EssenceClassList = document.getElementsByClassName("Essence");
@@ -16,6 +18,16 @@ const EssenceInput = document.getElementById("EssenceInput");
 const DeafeningEssencesLeft = document.querySelectorAll(".Deafening.Left");
 const ScreamingEssencesLeft = document.querySelectorAll(".Screaming.Left");
 const ShriekingEssenceLeft = document.querySelectorAll(".Shrieking.Left");
+const EssenceTabLocationLabel = document.getElementById(
+  "EssenceTabItemSpotLabel"
+);
+const EssenceTabItemCoords = document.getElementById("EssenceTabItemSpot");
+const CurrencyTabItemCoords = document.getElementById("CurrencyTabItemSpot");
+const CurrencyTabLocationLabel = document.getElementById(
+  "CurrencyTabItemSpotLabel"
+);
+const CurrencyTabDiv = document.getElementById("CurrencyTabDiv");
+const EssenceTabDiv = document.getElementById("EssenceTabDiv");
 const EssenceNameArray = [];
 const Insertion = document.getElementById("Insertion");
 const MaxRerolls = document.getElementById("MaxRerolls");
@@ -96,6 +108,14 @@ if (localStorage.length < 1) {
         EssenceTier = "Shrieking";
       } else if (RemoveTutorialString.includes("Screaming")) {
         EssenceTier = "Screaming";
+      } else if (
+        !RemoveTutorialString.includes("Deaf" || "Scream" || "Shriek" || "Spot")
+      ) {
+        EssenceTier = "Currency";
+      } else if (
+        !RemoveTutorialString.includes("Deaf" || "Scream" || "Shriek" || "Orb")
+      ) {
+        EssenceTier = "TabCoords";
       }
 
       ItemCoords[`${RemoveTutorialString}`] = {
@@ -113,13 +133,21 @@ if (localStorage.length < 1) {
   });
   //#endregion
 } else {
+  ChaosOrbLabel.remove();
+  AltLabel.remove();
+  EssenceTabDiv.remove();
+  CurrencyTabDiv.remove();
+  InstructionsDiv2.style.display = "none";
+  InstructionsDiv1.textContent =
+    " Type in the mod youre looking for and press enter then select the maximum number rerolls (you can use the scroll wheel) and click start  crafting. If input fields are not responsive , just alt tab quickly";
   for (let i = 0; i < CoordsLabelDivList.length; i++) {
     CoordsLabelDivList[i].id = `${EssenceClassList[i].id}Div`;
   }
+  console.log("Local storage length " + localStorage.length);
   StoreCoordsButton.remove();
   let RenderEssences = JSON.parse(localStorage.getItem("EssenceCoords"));
   let RemoveEssenceFromRender = [];
-
+  StartButton.style.display = "flex";
   for (const Item of CoordsLabelDivList) {
     let Re = Item.id.toString();
     Re = Re.replace("Div", "");
@@ -307,8 +335,14 @@ EssenceImage.addEventListener("click", function (e) {
     if (InputDiv.style.display == "flex") {
       EssenceInput.style.display = "flex";
     }
-    InstructionsDiv1.innerText = `Now repeat the same process for the highlighted essences. Once you're done , click on the button to store your coordinates and proceed`;
-    InstructionsDiv2.style.display = "none";
+    if (localStorage.length < 1) {
+      InstructionsDiv1.innerText = `Now repeat the same process for the highlighted essences. Once you're done , click on the button to store your coordinates and proceed`;
+      InstructionsDiv2.style.display = "none";
+    } else {
+      InstructionsDiv1.textContent =
+        " Type in the mod youre looking for and press enter then select the maximum number rerolls (you can use the scroll wheel) and click start  crafting. If input fields are not responsive , just alt tab quickly ";
+      InstructionsDiv2.style.display = "none";
+    }
     EssenceImage.classList.add("Clicked");
     for (let j = 0; j < Currencies.length; j++) {
       Currencies[j].classList.remove("Hover");
@@ -321,11 +355,17 @@ EssenceImage.addEventListener("click", function (e) {
     EssenceImage.src =
       "C:/Users/shacx/Documents/GitHub/Reroll/renderer/EssencePics/Arrow.png";
   } else {
-    InstructionsDiv2.style.display = "flex";
-    InstructionsDiv1.innerText = `Select a currency item (Left click), then 
-    while the program is focused (Click on the program and do not click anywhere else)
-    move your mouse cursor over the center of the matching item in game (without clicking),
-    then press F1 to record its coordinates`;
+    if (localStorage.length < 1) {
+      InstructionsDiv2.style.display = "flex";
+      InstructionsDiv1.innerText = `Select a currency item (Left click), then 
+      while the program is focused (Click on the program and do not click anywhere else)
+      move your mouse cursor over the center of the matching item in game (without clicking),
+      then press F1 to record its coordinates`;
+    } else {
+      InstructionsDiv1.textContent =
+        " Type in the mod youre looking for and press enter then select the maximum number rerolls (you can use the scroll wheel) and click start  crafting. If input fields are not responsive , just alt tab quickly ";
+      InstructionsDiv2.style.display = "none";
+    }
 
     for (const Item of EssenceClassList) {
       Item.style.opacity = 0.3;
@@ -372,23 +412,45 @@ StoreCoordsButton.addEventListener("click", function () {
   if (Object.keys(ItemCoords).length < 1) {
     alert("Please select at least one item's coords");
   } else {
-    StoreCoordsButton.style.display = "none";
-    localStorage.setItem("EssenceCoords", JSON.stringify(ItemCoords));
-    for (const Essence of CoordsLabelDivList) {
-      let Replace = Essence.id.replace("Div", "");
-      for (const Item in ItemCoords) {
-        if (ItemCoords[Item].Name.includes(Replace)) {
-          document.getElementById(`${Replace}Label`).style.display = "none";
-        } else {
-          if (!Essence.classList.contains("Selected")) {
-            ElementsToRemove.push(Essence);
+    ChaosOrbLabel.remove();
+    AltLabel.remove();
+    console.log(CurrencyTabLocationLabel.textContent);
+    if (CurrencyTabLocationLabel.value === "X:, Y:") {
+      alert(
+        "Please select the location of the item that will be rolled with alts and chaos ."
+      );
+    } else {
+      EssenceTabLocationLabel.remove();
+      if (EssenceTabLocationLabel.value === "X:, Y:") {
+        console.log(EssenceTabLocationLabel.value);
+        alert(
+          "Please select the location of the item that will be rolled with essences ."
+        );
+      } else {
+        CurrencyTabLocationLabel.remove();
+
+        InputDiv.style.display = "flex";
+        StartButton.style.display = "flex";
+        StoreCoordsButton.style.display = "none";
+        localStorage.setItem("EssenceCoords", JSON.stringify(ItemCoords));
+        for (const Essence of CoordsLabelDivList) {
+          let Replace = Essence.id.replace("Div", "");
+          for (const Item in ItemCoords) {
+            if (ItemCoords[Item].Name.includes(Replace)) {
+              document.getElementById(`${Replace}Label`).style.display = "none";
+            } else {
+              if (!Essence.classList.contains("Selected")) {
+                ElementsToRemove.push(Essence);
+              }
+            }
           }
         }
+        alert("Items have been stored!");
+        for (const Item of ElementsToRemove) {
+          Item.remove();
+        }
+        window.location.reload();
       }
-    }
-    alert("Items have been stored!");
-    for (const Item of ElementsToRemove) {
-      Item.remove();
     }
   }
 });
