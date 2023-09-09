@@ -21,8 +21,8 @@ const ShriekingEssenceLeft = document.querySelectorAll(".Shrieking.Left");
 const EssenceTabLocationLabel = document.getElementById(
   "EssenceTabItemSpotLabel"
 );
-const EssenceTabItemCoords = document.getElementById("EssenceTabItemSpot");
-const CurrencyTabItemCoords = document.getElementById("CurrencyTabItemSpot");
+const EssenceTabEssenceCoords = document.getElementById("EssenceTabItemSpot");
+const CurrencyTabEssenceCoords = document.getElementById("CurrencyTabItemSpot");
 const CurrencyTabLocationLabel = document.getElementById(
   "CurrencyTabItemSpotLabel"
 );
@@ -44,11 +44,11 @@ const Loathing = document.getElementById("DeafeningEssenceOfLoathing");
 const StoreCoordsButton = document.getElementById("StoreCoordsButton");
 const TutorialEssence = document.getElementsByClassName("Tutorial");
 const ElementsToRemove = [];
-const ItemCoords = {};
+const EssenceCoords = {};
+const EssenceTabCoordsObj = {};
+const CurrencyCoords = {};
+const CurrencyTabCoords = {};
 const XYLabelList = document.getElementsByClassName("XYLabel");
-const DeafeningCoordsLeftObj = {};
-const ShriekingEssenceLeftObj = {};
-const ScreamingEssencesLeftObj = {};
 let CoordsLabelDivList = document.getElementsByClassName("CoordsLabel");
 let TutorialCheck;
 let XDifferential;
@@ -87,6 +87,7 @@ if (localStorage.length < 1) {
   Container.style.display = "none";
   //#region Mouse Position
   window.api.MousePos((event, data) => {
+    console.log(data);
     let CoordsSplit = data.split(",");
     MouseCoordsX = CoordsSplit[0];
     MouseCoordsY = CoordsSplit[1];
@@ -102,33 +103,57 @@ if (localStorage.length < 1) {
       ChangingLabel.style.opacity = 1;
       let RemoveTutorialString = ChangingLabel.id.replace("Label", "");
       let EssenceTier;
-      if (RemoveTutorialString.includes("Deaf")) {
-        EssenceTier = "Deafening";
-      } else if (RemoveTutorialString.includes("Shrieking")) {
-        EssenceTier = "Shrieking";
-      } else if (RemoveTutorialString.includes("Screaming")) {
-        EssenceTier = "Screaming";
-      } else if (
-        !RemoveTutorialString.includes("Deaf" || "Scream" || "Shriek" || "Spot")
+      if (
+        RemoveTutorialString.includes("Deaf") ||
+        RemoveTutorialString.includes("Scream") ||
+        RemoveTutorialString.includes("Shriek")
       ) {
-        EssenceTier = "Currency";
+        if (RemoveTutorialString.includes("Deaf")) {
+          EssenceTier = "Deafening";
+        } else if (RemoveTutorialString.includes("Shrieking")) {
+          EssenceTier = "Shrieking";
+        } else if (RemoveTutorialString.includes("Screaming")) {
+          EssenceTier = "Screaming";
+        }
+        EssenceCoords[`${RemoveTutorialString}`] = {
+          //////////////////////////////////////////////////
+          Name: `${RemoveTutorialString}`,
+          Coords: [MouseCoordsX, MouseCoordsY],
+          Tier: EssenceTier,
+        };
       } else if (
-        !RemoveTutorialString.includes("Deaf" || "Scream" || "Shriek" || "Orb")
+        !RemoveTutorialString.includes("Spot") &&
+        !RemoveTutorialString.includes("Essence")
       ) {
-        EssenceTier = "TabCoords";
+        CurrencyCoords[`${RemoveTutorialString}`] = {
+          ///////////////////////////////////////////////
+          Name: `${RemoveTutorialString}`,
+          Coords: [MouseCoordsX, MouseCoordsY],
+        };
+      } else if (
+        !RemoveTutorialString.includes("Deafen") &&
+        !RemoveTutorialString.includes("Shriek") &&
+        !RemoveTutorialString.includes("Scream") &&
+        !RemoveTutorialString.includes("Orb") &&
+        !RemoveTutorialString.includes("Currency")
+      ) {
+        EssenceTabCoordsObj[`${RemoveTutorialString}`] = {
+          ///////////////////////////////////////////
+          Name: `${RemoveTutorialString}`,
+          Coords: [MouseCoordsX, MouseCoordsY],
+        };
+      } else if (
+        RemoveTutorialString.includes("Spot") &&
+        RemoveTutorialString.includes("Currency")
+      ) {
+        CurrencyTabCoords[`${RemoveTutorialString}`] = {
+          Name: `${RemoveTutorialString}`,
+          Coords: [MouseCoordsX, MouseCoordsY],
+        };
       }
-
-      ItemCoords[`${RemoveTutorialString}`] = {
-        Name: `${RemoveTutorialString}`,
-        Coords: [MouseCoordsX, MouseCoordsY],
-        Tier: EssenceTier,
-      };
 
       let RemoveTutorial = document.getElementById(`${RemoveTutorialString}`);
       RemoveTutorial.classList.remove("Tutorial");
-      document
-        .getElementById(`${RemoveTutorialString}Div`)
-        .classList.add("Selected");
     }
   });
   //#endregion
@@ -143,7 +168,6 @@ if (localStorage.length < 1) {
   for (let i = 0; i < CoordsLabelDivList.length; i++) {
     CoordsLabelDivList[i].id = `${EssenceClassList[i].id}Div`;
   }
-  console.log("Local storage length " + localStorage.length);
   StoreCoordsButton.remove();
   let RenderEssences = JSON.parse(localStorage.getItem("EssenceCoords"));
   let RemoveEssenceFromRender = [];
@@ -204,22 +228,17 @@ ModNameInput.addEventListener("keydown", (e) => {
 //#region Start Button Eventlistener
 let LengthCheck = document.getElementsByClassName("Hover");
 StartButton.addEventListener("click", function () {
-  // InfoArray.length = 0;
-  // if (
-  //   CraftMaterial === undefined ||
-  //   ModClass.length < 1 ||
-  //   LengthCheck.length < 1
-  // ) {
-  //   alert("Please select crafting method and mods");
-  // } else {
-  //   InfoArray.push(CraftMaterial);
-  //   for (let i = 0; i < ModClass.length; i++) {
-  //     InfoArray.push(ModClass[i].textContent);
-  //   }
-  //   InfoArray.push(MaxRerolls.value);
-  //   console.log(InfoArray);
-  //   window.api.SendModNames(InfoArray);
-  // }
+  if (localStorage.length < 1) {
+    alert("Select coords first");
+  } else {
+    InfoArray.push(CraftMaterial);
+    for (let i = 0; i < ModClass.length; i++) {
+      InfoArray.push(ModClass[i].textContent);
+    }
+    InfoArray.push(MaxRerolls.value);
+    console.log(InfoArray.length, InfoArray);
+    window.api.StartCrafting(InfoArray);
+  }
 });
 //#endregion
 
@@ -401,7 +420,9 @@ for (let i = 0; i < Currencies.length; i++) {
     if (!wasHovered) {
       e.target.classList.add("Hover");
       CraftMaterial = e.target.id;
-      ChangingLabel.classList.add("Modify");
+      if (ChangingLabel !== null) {
+        ChangingLabel.classList.add("Modify");
+      }
     }
   });
 }
@@ -409,34 +430,43 @@ for (let i = 0; i < Currencies.length; i++) {
 //#region Store Coords button
 
 StoreCoordsButton.addEventListener("click", function () {
-  if (Object.keys(ItemCoords).length < 1) {
+  if (
+    Object.keys(EssenceTabCoordsObj).length < 1 ||
+    Object.keys(CurrencyCoords).length < 1 ||
+    Object.keys(CurrencyTabCoords).length < 1
+  ) {
+    console.log(EssenceTabCoordsObj, CurrencyCoords, CurrencyTabCoords);
     alert("Please select at least one item's coords");
   } else {
     ChaosOrbLabel.remove();
     AltLabel.remove();
     console.log(CurrencyTabLocationLabel.textContent);
-    if (CurrencyTabLocationLabel.value === "X:, Y:") {
+    if (CurrencyTabLocationLabel.textContent === "X:, Y:") {
       alert(
         "Please select the location of the item that will be rolled with alts and chaos ."
       );
     } else {
       EssenceTabLocationLabel.remove();
-      if (EssenceTabLocationLabel.value === "X:, Y:") {
-        console.log(EssenceTabLocationLabel.value);
+      if (EssenceTabLocationLabel.textContent === "X:, Y:") {
+        console.log(EssenceTabLocationLabel.text);
         alert(
           "Please select the location of the item that will be rolled with essences ."
         );
       } else {
-        CurrencyTabLocationLabel.remove();
+        window.api.EssenceTabCoords(JSON.stringify(EssenceTabCoordsObj));
+        window.api.EssenceCoords(JSON.stringify(EssenceCoords));
+        window.api.CurrencyTabCoords(JSON.stringify(CurrencyTabCoords));
+        window.api.CurrencyCoords(JSON.stringify(CurrencyCoords));
 
+        CurrencyTabLocationLabel.remove();
         InputDiv.style.display = "flex";
         StartButton.style.display = "flex";
         StoreCoordsButton.style.display = "none";
-        localStorage.setItem("EssenceCoords", JSON.stringify(ItemCoords));
+        localStorage.setItem("EssenceCoords", JSON.stringify(EssenceCoords));
         for (const Essence of CoordsLabelDivList) {
           let Replace = Essence.id.replace("Div", "");
-          for (const Item in ItemCoords) {
-            if (ItemCoords[Item].Name.includes(Replace)) {
+          for (const Item in EssenceCoords) {
+            if (EssenceCoords[Item].Name.includes(Replace)) {
               document.getElementById(`${Replace}Label`).style.display = "none";
             } else {
               if (!Essence.classList.contains("Selected")) {
@@ -449,7 +479,7 @@ StoreCoordsButton.addEventListener("click", function () {
         for (const Item of ElementsToRemove) {
           Item.remove();
         }
-        window.location.reload();
+        // window.location.reload();
       }
     }
   }
@@ -462,3 +492,7 @@ window.api.ClearLocalStorage((event, data) => {
 //#endregion
 
 //#endregion
+
+window.api.UpdatedCurrencyCoords((event, data) => {
+  console.log(data);
+});

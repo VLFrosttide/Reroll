@@ -13,6 +13,7 @@ const EventEmitter = require("events");
 const { type } = require("os");
 const { test } = require("picomatch");
 const { error } = require("console");
+const { eventNames } = require("process");
 const CaptureMouseEvent = new EventEmitter();
 let DisplayNumber;
 let ItemName;
@@ -23,6 +24,11 @@ let PythonArgs = [];
 let ScreenTimeout;
 let ItemCoords;
 let template;
+let EssenceTabCoords;
+let CurrencyTabCoords;
+let EssenceCoords;
+let CurrencyCoords;
+let currentScreen;
 const CreateWindow = () => {
   const win = new BrowserWindow({
     width: 600,
@@ -35,10 +41,86 @@ const CreateWindow = () => {
       preload: "C:/Users/shacx/Documents/GitHub/Reroll/renderer/preload.js",
     },
   });
+  ipcMain.on("CurrencyTabCoords", (event, data) => {
+    CurrencyTabCoords = JSON.parse(data);
+    for (const Item of Object.keys(CurrencyTabCoords)) {
+      CurrencyTabCoords = [
+        parseInt(CurrencyTabCoords[Item].Coords[0]),
+        parseInt(CurrencyTabCoords[Item].Coords[1]),
+      ];
+    }
+  });
 
+  ipcMain.on("EssenceTabCoords", (event, data) => {
+    EssenceTabCoords = JSON.parse(data);
+    for (const Item of Object.keys(EssenceTabCoords)) {
+      EssenceTabCoords = [
+        parseInt(EssenceTabCoords[Item].Coords[0]),
+        parseInt(EssenceTabCoords[Item].Coords[1]),
+      ];
+    }
+  });
   CaptureMouseEvent.on("Coords", (data) => {
-    console.log(data);
     win.webContents.send("MouseCoords", data);
+  });
+  ipcMain.on("StartCrafting", (event, args) => {
+    let Coords;
+    let TabCoords;
+    let CurrencyName = args[0];
+    if (CurrencyName.includes("Orb")) {
+      for (const Item of Object.keys(CurrencyCoords)) {
+        if (CurrencyCoords[Item].Name == CurrencyName) {
+          Coords = CurrencyCoords[Item].Coords;
+          TabCoords = CurrencyTabCoords;
+        }
+      }
+    } else {
+      if (CurrencyName.toLowerCase().includes("essence")) {
+        for (const Item of Object.keys(EssenceCoords)) {
+          if (EssenceCoords[Item].Name == CurrencyName) {
+            Coords = EssenceCoords[Item].Coords;
+            TabCoords = EssenceTabCoords;
+          }
+        }
+      }
+    }
+
+    console.log(Coords);
+    const StartCrafting = spawn("python", [
+      "C:/Users/shacx/Documents/GitHub/Reroll/renderer/Reroll.py",
+      Coords,
+      args[1], // Mod to look for
+      args[2], // Max Rerolls
+      TabCoords,
+    ]);
+    StartCrafting.stdout.on("data", (data) => {
+      console.log(data.toString());
+    });
+    StartCrafting.stderr.on("error", (error) => {
+      console.error(error.message);
+    });
+    StartCrafting.on("exit", (code, signal) => {
+      if (code !== null) {
+        console.log(`Child process exited with code ${code}`);
+      } else if (signal !== null) {
+        console.log(`Child process was killed by signal ${signal}`);
+      } else {
+        console.log("Child process has exited");
+      }
+    });
+  });
+  ipcMain.on("CurrencyCoords", (event, data) => {
+    CurrencyCoords = JSON.parse(data);
+    for (const Item of Object.keys(CurrencyCoords)) {
+      CurrencyCoords[Item].Coords = [
+        parseInt(CurrencyCoords[Item].Coords[0] * currentScreen.scaleFactor),
+        parseInt(CurrencyCoords[Item].Coords[1] * currentScreen.scaleFactor),
+      ];
+    }
+    // console.log("Sending");
+    console.log(CurrencyCoords);
+    win.webContents.send("UpdatedCurrencyCoords", CurrencyCoords);
+    // console.log("Sent");
   });
 
   ipcMain.on("ResizeWindow", (event, arg) => {
@@ -94,21 +176,18 @@ const CreateWindow = () => {
 
 app.whenReady().then(() => {
   CreateWindow();
-  const currentScreen = screen.getPrimaryDisplay();
-  ipcMain.on("TestCoords", (event, args) => {
-    const Test = spawn("python", [
-      "C:/Users/shacx/Documents/GitHub/Reroll/EssenceObjectFactory.py",
-      args,
+  currentScreen = screen.getPrimaryDisplay();
+
+  ipcMain.on("EssenceCoords", (event, data) => {
+    // EssenceCoords = JSON.str(data);
+    const EssenceClass = spawn("python", [
+      "C:/Users/shacx/Documents/GitHub/Reroll/EssenceClass.py",
+      data,
       currentScreen.scaleFactor,
     ]);
-    Test.stdout.on("data", (data) => {
-      console.log("\x1Bc");
-      console.log(data.toString());
-    });
-    Test.stderr.on("data", (error) => {
+    EssenceClass.stderr.on("data", (error) => {
       console.error("The error is: " + error);
     });
-    console.log("Current factor: " + currentScreen.scaleFactor);
   });
 
   const menu = Menu.buildFromTemplate(template);
@@ -120,20 +199,5 @@ app.whenReady().then(() => {
 
   process.on("uncaughtException", (error) => {
     console.error("An uncaught exception occurred:", error);
-  });
-});
-
-ipcMain.on("ModNames", (event, args) => {
-  const Reroll = spawn("python", [
-    "C:/Users/shacx/Documents/GitHub/Reroll/renderer/Reroll.py",
-    args[0],
-    args[1],
-    args[2],
-  ]);
-  Reroll.stdout.on("data", (data) => {
-    console.log(data.toString());
-  });
-  Reroll.stderr.on("error", (error) => {
-    console.error(error.message);
   });
 });
