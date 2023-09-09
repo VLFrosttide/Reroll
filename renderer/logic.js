@@ -45,11 +45,13 @@ const StoreCoordsButton = document.getElementById("StoreCoordsButton");
 const TutorialEssence = document.getElementsByClassName("Tutorial");
 const ElementsToRemove = [];
 const EssenceCoords = {};
-const EssenceTabCoordsObj = {};
 const CurrencyCoords = {};
-const CurrencyTabCoords = {};
 const XYLabelList = document.getElementsByClassName("XYLabel");
 let CoordsLabelDivList = document.getElementsByClassName("CoordsLabel");
+let ChaosOrbCoords;
+let OrbofAlterationCoords;
+let EssenceTabCoords;
+let CurrencyTabCoords;
 let TutorialCheck;
 let XDifferential;
 let YDifferential;
@@ -61,6 +63,12 @@ let Timer;
 let MouseCoordsX;
 let MouseCoordsY;
 let ChangingLabel; // The X / Y label for each essence.
+let ScreenRatio;
+
+window.api.ScreenRatio("ScreenRatio");
+window.api.ScreenRatioValue((value) => {
+  ScreenRatio = value;
+});
 //#endregion
 for (const Essence of EssenceClassList) {
   EssenceNameArray.push(Essence.id);
@@ -87,10 +95,11 @@ if (localStorage.length < 1) {
   Container.style.display = "none";
   //#region Mouse Position
   window.api.MousePos((event, data) => {
+    console.log(ScreenRatio);
     console.log(data);
     let CoordsSplit = data.split(",");
-    MouseCoordsX = CoordsSplit[0];
-    MouseCoordsY = CoordsSplit[1];
+    MouseCoordsX = parseInt(CoordsSplit[0]);
+    MouseCoordsY = parseInt(CoordsSplit[1]);
 
     if (ChangingLabel == undefined) {
       alert("No currency selected.");
@@ -115,21 +124,33 @@ if (localStorage.length < 1) {
         } else if (RemoveTutorialString.includes("Screaming")) {
           EssenceTier = "Screaming";
         }
+
         EssenceCoords[`${RemoveTutorialString}`] = {
           //////////////////////////////////////////////////
           Name: `${RemoveTutorialString}`,
-          Coords: [MouseCoordsX, MouseCoordsY],
+          Coords: [
+            parseInt(MouseCoordsX * ScreenRatio),
+            parseInt(MouseCoordsY * ScreenRatio),
+          ],
           Tier: EssenceTier,
         };
       } else if (
         !RemoveTutorialString.includes("Spot") &&
         !RemoveTutorialString.includes("Essence")
       ) {
-        CurrencyCoords[`${RemoveTutorialString}`] = {
-          ///////////////////////////////////////////////
-          Name: `${RemoveTutorialString}`,
-          Coords: [MouseCoordsX, MouseCoordsY],
-        };
+        console.log(RemoveTutorialString);
+        if (RemoveTutorialString.includes("Chaos")) {
+          ChaosOrbCoords = [
+            parseInt(MouseCoordsX * ScreenRatio),
+            parseInt(MouseCoordsY * ScreenRatio),
+          ];
+        } else {
+          OrbofAlterationCoords = [
+            parseInt(MouseCoordsX * ScreenRatio),
+            parseInt(MouseCoordsY * ScreenRatio),
+          ];
+        }
+        console.log(OrbofAlterationCoords, ChaosOrbCoords);
       } else if (
         !RemoveTutorialString.includes("Deafen") &&
         !RemoveTutorialString.includes("Shriek") &&
@@ -137,19 +158,23 @@ if (localStorage.length < 1) {
         !RemoveTutorialString.includes("Orb") &&
         !RemoveTutorialString.includes("Currency")
       ) {
-        EssenceTabCoordsObj[`${RemoveTutorialString}`] = {
-          ///////////////////////////////////////////
-          Name: `${RemoveTutorialString}`,
-          Coords: [MouseCoordsX, MouseCoordsY],
-        };
+        console.log(MouseCoordsX);
+        console.log(ScreenRatio);
+        console.log(typeof MouseCoordsX);
+        console.log(typeof ScreenRatio);
+        console.log(MouseCoordsX * ScreenRatio);
+        EssenceTabCoords = [
+          parseInt(MouseCoordsX * ScreenRatio),
+          parseInt(MouseCoordsY * ScreenRatio),
+        ];
       } else if (
         RemoveTutorialString.includes("Spot") &&
         RemoveTutorialString.includes("Currency")
       ) {
-        CurrencyTabCoords[`${RemoveTutorialString}`] = {
-          Name: `${RemoveTutorialString}`,
-          Coords: [MouseCoordsX, MouseCoordsY],
-        };
+        CurrencyTabCoords = [
+          parseInt(MouseCoordsX * ScreenRatio),
+          parseInt(MouseCoordsY * ScreenRatio),
+        ];
       }
 
       let RemoveTutorial = document.getElementById(`${RemoveTutorialString}`);
@@ -430,14 +455,23 @@ for (let i = 0; i < Currencies.length; i++) {
 //#region Store Coords button
 
 StoreCoordsButton.addEventListener("click", function () {
-  if (
-    Object.keys(EssenceTabCoordsObj).length < 1 ||
-    Object.keys(CurrencyCoords).length < 1 ||
-    Object.keys(CurrencyTabCoords).length < 1
-  ) {
-    console.log(EssenceTabCoordsObj, CurrencyCoords, CurrencyTabCoords);
+  if (EssenceTabCoords.length < 1 || CurrencyTabCoords.length < 1) {
+    console.log(EssenceTabCoords, CurrencyCoords, CurrencyTabCoords);
     alert("Please select at least one item's coords");
   } else {
+    localStorage.setItem(
+      "CurrencyTabCoords",
+      JSON.stringify(CurrencyTabCoords)
+    );
+    localStorage.setItem("ChaosOrbCoords", JSON.stringify(ChaosOrbCoords));
+    localStorage.setItem(
+      "OrbofAlterationCoords",
+      JSON.stringify(OrbofAlterationCoords)
+    );
+    console.log(EssenceTabCoords);
+    console.log(JSON.stringify(EssenceTabCoords));
+    localStorage.setItem("EssenceTabCoords", JSON.stringify(EssenceTabCoords));
+
     ChaosOrbLabel.remove();
     AltLabel.remove();
     console.log(CurrencyTabLocationLabel.textContent);
@@ -453,11 +487,6 @@ StoreCoordsButton.addEventListener("click", function () {
           "Please select the location of the item that will be rolled with essences ."
         );
       } else {
-        window.api.EssenceTabCoords(JSON.stringify(EssenceTabCoordsObj));
-        window.api.EssenceCoords(JSON.stringify(EssenceCoords));
-        window.api.CurrencyTabCoords(JSON.stringify(CurrencyTabCoords));
-        window.api.CurrencyCoords(JSON.stringify(CurrencyCoords));
-
         CurrencyTabLocationLabel.remove();
         InputDiv.style.display = "flex";
         StartButton.style.display = "flex";
@@ -492,7 +521,3 @@ window.api.ClearLocalStorage((event, data) => {
 //#endregion
 
 //#endregion
-
-window.api.UpdatedCurrencyCoords((event, data) => {
-  console.log(data);
-});

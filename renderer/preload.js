@@ -5,25 +5,19 @@ contextBridge.exposeInMainWorld("api", {
   MousePos: (callback) => ipcRenderer.on("MouseCoords", callback),
   ClearLocalStorage: (callback) =>
     ipcRenderer.on("ClearLocalStorage", callback),
-  UpdatedCurrencyCoords: (callback) =>
-    ipcRenderer.on("UpdatedCurrencyCoords", callback),
   ResizeWindow: (callback) => {
     ipcRenderer.send("ResizeWindow", callback);
   },
   StartCrafting: (callback) => {
     ipcRenderer.send("StartCrafting", callback);
   },
-  EssenceTabCoords: (variable) => {
-    ipcRenderer.send("EssenceTabCoords", variable);
+  ScreenRatio: () => {
+    ipcRenderer.send("ScreenRatio");
   },
-  CurrencyTabCoords: (variable) => {
-    ipcRenderer.send("CurrencyTabCoords", variable); //
-  },
-  EssenceCoords: (variable) => {
-    ipcRenderer.send("EssenceCoords", variable); //
-  },
-  CurrencyCoords: (variable) => {
-    ipcRenderer.send("CurrencyCoords", variable);
+  ScreenRatioValue: (callback) => {
+    ipcRenderer.on("ScreenRatioValue", (event, ...args) => {
+      callback(...args);
+    });
   },
 });
 window.addEventListener("error", (event) => {

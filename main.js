@@ -28,9 +28,10 @@ let EssenceTabCoords;
 let CurrencyTabCoords;
 let EssenceCoords;
 let CurrencyCoords;
-let currentScreen;
+let win;
+let ScreenRatio;
 const CreateWindow = () => {
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 600,
     height: 460,
     x: 490,
@@ -40,25 +41,6 @@ const CreateWindow = () => {
       contextIsolation: true,
       preload: "C:/Users/shacx/Documents/GitHub/Reroll/renderer/preload.js",
     },
-  });
-  ipcMain.on("CurrencyTabCoords", (event, data) => {
-    CurrencyTabCoords = JSON.parse(data);
-    for (const Item of Object.keys(CurrencyTabCoords)) {
-      CurrencyTabCoords = [
-        parseInt(CurrencyTabCoords[Item].Coords[0]),
-        parseInt(CurrencyTabCoords[Item].Coords[1]),
-      ];
-    }
-  });
-
-  ipcMain.on("EssenceTabCoords", (event, data) => {
-    EssenceTabCoords = JSON.parse(data);
-    for (const Item of Object.keys(EssenceTabCoords)) {
-      EssenceTabCoords = [
-        parseInt(EssenceTabCoords[Item].Coords[0]),
-        parseInt(EssenceTabCoords[Item].Coords[1]),
-      ];
-    }
   });
   CaptureMouseEvent.on("Coords", (data) => {
     win.webContents.send("MouseCoords", data);
@@ -108,19 +90,6 @@ const CreateWindow = () => {
         console.log("Child process has exited");
       }
     });
-  });
-  ipcMain.on("CurrencyCoords", (event, data) => {
-    CurrencyCoords = JSON.parse(data);
-    for (const Item of Object.keys(CurrencyCoords)) {
-      CurrencyCoords[Item].Coords = [
-        parseInt(CurrencyCoords[Item].Coords[0] * currentScreen.scaleFactor),
-        parseInt(CurrencyCoords[Item].Coords[1] * currentScreen.scaleFactor),
-      ];
-    }
-    // console.log("Sending");
-    console.log(CurrencyCoords);
-    win.webContents.send("UpdatedCurrencyCoords", CurrencyCoords);
-    // console.log("Sent");
   });
 
   ipcMain.on("ResizeWindow", (event, arg) => {
@@ -176,19 +145,11 @@ const CreateWindow = () => {
 
 app.whenReady().then(() => {
   CreateWindow();
-  currentScreen = screen.getPrimaryDisplay();
-
-  ipcMain.on("EssenceCoords", (event, data) => {
-    // EssenceCoords = JSON.str(data);
-    const EssenceClass = spawn("python", [
-      "C:/Users/shacx/Documents/GitHub/Reroll/EssenceClass.py",
-      data,
-      currentScreen.scaleFactor,
-    ]);
-    EssenceClass.stderr.on("data", (error) => {
-      console.error("The error is: " + error);
-    });
+  ScreenRatio = screen.getPrimaryDisplay().scaleFactor;
+  ipcMain.on("ScreenRatio", (event) => {
+    event.reply("ScreenRatioValue", ScreenRatio);
   });
+  win.webContents.send("ScreenRatio", ScreenRatio);
 
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
