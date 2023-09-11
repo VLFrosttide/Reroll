@@ -1,119 +1,77 @@
 import pyautogui
 import pyperclip
+import traceback
+import time
 import sys
 Rarity = None
 Check = None
-# ItemName = sys.argv[1]
-# Mod = sys.argv[2].lower()
-# EssenceTabCoords = sys.argv[4]
-# CurrencyTabCoords = sys.argv[5]
 
-MoveTo = sys.argv[1]
-There = sys.argv[4]
-
-print(MoveTo, There)
-
-# if (sys.argv[3]==""):
-#     MaxRerolls = 9999
-# else:
-#     MaxRerolls = int(sys.argv[3])
-# print(MaxRerolls,flush=True)
-# Counter = 0
-# def ItemPosition():
-#     if "essence" in ItemName.lower():
-#         return (540, 880)
-#     else:
-#         return (450, 600)
-
-# Coords = ItemPosition()
-# def Reroll():
-#     global Counter
-#     global Check
-#     while  True:
-#         pyautogui.leftClick()
-#         pyperclip.copy("")
-#         pyautogui.keyDown("ctrl")
-#         pyautogui.press("c")
-#         pyautogui.keyUp("ctrl") 
-#         Check = pyperclip.paste().lower()
-#         Counter = Counter+1
-#         if Mod in Check.lower():
-#             print("found")
-#             break
-#         if Counter>=MaxRerolls:
-#             print("Maximum number of rerolls reached", flush=True)
-#             break
+try:
         
-# def Tier(Name):
-#     if ("deafen" in Name.lower()):
-#         return stash_location[0]
-#     elif("shriek" in Name.lower()):
-#         if stash_location[1] == 0:
-#             x = stash_location[0][0] + 70
-#             y = stash_location[0][1] 
-#             return [x,y]
-#         else:
-#                 x = stash_location[0][0] - 70
-#                 y = stash_location[0][1] 
-#                 return[x,y]
-#     elif("scream" in Name):
-#         if stash_location[1] == 0:
-#             x = stash_location[0][0] + 140
-#             y = stash_location[0][1] 
-#             return [x,y]
-#         else:
-#                 x = stash_location[0][0] - 140
-#                 y = stash_location[0][1]
-#                 return[x,y]    
+    ModName = sys.argv[1]
+    MaxRolls = sys.argv[2]
+    CurrencyCoords = sys.argv[3].split(",")
+    TabCoords = sys.argv[4].split(",")
+    CurrencyCoords = [int(CurrencyCoords[0]), int(CurrencyCoords[1])]
+    TabCoords = [int(TabCoords[0]),int(TabCoords[1])]
+
+    print(MaxRolls,type(MaxRolls),flush=True)
+
+    if (sys.argv[2]==""):
+        MaxRolls = 9999
+    else:
+        MaxRolls = int(sys.argv[2])
+        
+    Counter = 0
+
+    def Reroll():
+        global Counter
+        global Check
+        while  True:
+            pyautogui.leftClick()
+            pyperclip.copy("")
+            pyautogui.keyDown("ctrl")
+            pyautogui.press("c")
+            pyautogui.keyUp("ctrl") 
+            Check = pyperclip.paste().lower()
+            Counter = Counter+1
+            if ModName in Check.lower():
+                print("found", flush=True)
+                break
+            if Counter>=MaxRolls:
+                print("Maximum number of rerolls reached", flush=True)
+                break
+            
+        
+    pyautogui.moveTo(CurrencyCoords)
+    pyautogui.rightClick(CurrencyCoords)
+
+    pyautogui.moveTo(TabCoords)
     
-
-# def find_stash_location(ItemName, CurrencyList, EssenceList):
-#     ItemName = ItemName.lower()   
-#     if ("essence" in ItemName):
-#         for essence in EssenceList:
-#             if NewItemName in essence.name.lower():
-         
-  
-#                 return essence.StashLocation, essence.side
-#     else:
-#         for currency in CurrencyList:
-#             if currency.name.lower() == ItemName:
-#                 return currency.StashLocation
-#     return None
-# SubStr = "Essence"
-# if ("essence" in ItemName):
-#     Index = ItemName.find(SubStr)   
-#     NewItemName = ItemName[Index:].lower()
-#     stash_location = find_stash_location(NewItemName, CurrencyList, EssenceList)
-#     EssenceTier = Tier(ItemName)
-#     pyautogui.moveTo(EssenceTier)
-#     pyautogui.rightClick(EssenceTier)
-
-# else: 
-#     stash_location = find_stash_location(ItemName, CurrencyList, EssenceList)
-#     pyautogui.moveTo(stash_location)
-#     pyautogui.rightClick(stash_location)
+    pyautogui.keyDown("shift")
+    pyautogui.click(TabCoords)
+    pyperclip.copy("")
+    pyautogui.keyDown("ctrl")
+    pyautogui.press("c")
+    pyautogui.keyUp("ctrl") 
+    Check = pyperclip.paste().lower()
+    lines = Check.splitlines()
+    for line in lines:
+        if "rarity" in line:
+            Rarity = line.replace("rarity:", "").strip()
+            print(Rarity, flush=True) 
+    Reroll()
+    pyautogui.keyUp("shift")
 
 
 
 
 
-# pyautogui.moveTo(Coords)
-# pyautogui.leftClick()
-# pyperclip.copy("")
-# pyautogui.keyDown("ctrl")
-# pyautogui.press("c")
-# pyautogui.keyUp("ctrl") 
-# Check = pyperclip.paste().lower()
-# lines = Check.splitlines()
-# for line in lines:
-#     if "rarity" in line:
-#         Rarity = line.replace("rarity:", "").strip()
-#         print(Rarity, flush=True) 
-# pyautogui.keyDown("shift")
-# Reroll()
-# pyautogui.keyUp("shift")
+except Exception as e:
+    # Print the error message to stderr
+    traceback.print_exc()
 
-
-
+    print(f"Python Error: {str(e)}", file=sys.stderr)
+    # Exit with a non-zero status code to indicate an error
+    sys.exit(1)
 

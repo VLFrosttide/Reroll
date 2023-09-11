@@ -15,19 +15,8 @@ const { test } = require("picomatch");
 const { error } = require("console");
 const { eventNames } = require("process");
 const CaptureMouseEvent = new EventEmitter();
-let DisplayNumber;
-let ItemName;
 let MousePosition;
-let Mod;
-let Minroll;
-let PythonArgs = [];
-let ScreenTimeout;
-let ItemCoords;
 let template;
-let EssenceTabCoords;
-let CurrencyTabCoords;
-let EssenceCoords;
-let CurrencyCoords;
 let win;
 let ScreenRatio;
 const CreateWindow = () => {
@@ -46,40 +35,22 @@ const CreateWindow = () => {
     win.webContents.send("MouseCoords", data);
   });
   ipcMain.on("StartCrafting", (event, args) => {
-    let Coords;
-    let TabCoords;
-    let CurrencyName = args[0];
-    if (CurrencyName.includes("Orb")) {
-      for (const Item of Object.keys(CurrencyCoords)) {
-        if (CurrencyCoords[Item].Name == CurrencyName) {
-          Coords = CurrencyCoords[Item].Coords;
-          TabCoords = CurrencyTabCoords;
-        }
-      }
-    } else {
-      if (CurrencyName.toLowerCase().includes("essence")) {
-        for (const Item of Object.keys(EssenceCoords)) {
-          if (EssenceCoords[Item].Name == CurrencyName) {
-            Coords = EssenceCoords[Item].Coords;
-            TabCoords = EssenceTabCoords;
-          }
-        }
-      }
-    }
-
-    console.log(Coords);
+    let ModName = args[0];
+    let MaxRolls = args[1];
+    let CurrencyCoords = args[2];
+    let TabCoords = args[3];
     const StartCrafting = spawn("python", [
       "C:/Users/shacx/Documents/GitHub/Reroll/renderer/Reroll.py",
-      Coords,
-      args[1], // Mod to look for
-      args[2], // Max Rerolls
+      ModName,
+      MaxRolls,
+      CurrencyCoords,
       TabCoords,
     ]);
     StartCrafting.stdout.on("data", (data) => {
       console.log(data.toString());
     });
-    StartCrafting.stderr.on("error", (error) => {
-      console.error(error.message);
+    StartCrafting.stderr.on("data", (data) => {
+      console.error(data.toString()); // Log Python error messages
     });
     StartCrafting.on("exit", (code, signal) => {
       if (code !== null) {

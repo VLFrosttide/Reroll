@@ -2,3 +2,6 @@
 
 /////// WORK TO DO 
 add Max Rerolls eventlisteners
+Add a way to block user input. 
+Add a checkbox for the user to select if he wants it blocked
+Add a requirement for max roll to be more than 0 for it to work. 

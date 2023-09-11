@@ -52,6 +52,7 @@ let ChaosOrbCoords;
 let OrbofAlterationCoords;
 let EssenceTabCoords;
 let CurrencyTabCoords;
+let TabCoords;
 let TutorialCheck;
 let XDifferential;
 let YDifferential;
@@ -252,16 +253,39 @@ ModNameInput.addEventListener("keydown", (e) => {
 //#endregion
 //#region Start Button Eventlistener
 let LengthCheck = document.getElementsByClassName("Hover");
+let Coords;
 StartButton.addEventListener("click", function () {
   if (localStorage.length < 1) {
     alert("Select coords first");
   } else {
-    InfoArray.push(CraftMaterial);
+    InfoArray.length = 0;
     for (let i = 0; i < ModClass.length; i++) {
       InfoArray.push(ModClass[i].textContent);
     }
     InfoArray.push(MaxRerolls.value);
-    console.log(InfoArray.length, InfoArray);
+    if (CraftMaterial.includes("Essence")) {
+      TabCoords = localStorage.getItem("EssenceTabCoords");
+      Coords = JSON.parse(localStorage.getItem("EssenceCoords"));
+      console.log("awdawdawdadaw");
+      for (const Item of Object.keys(Coords)) {
+        console.log(Item);
+        if (Coords[Item].Name.includes(CraftMaterial)) {
+          Coords = Coords[Item].Coords;
+          Coords = JSON.stringify(Coords);
+          Coords = Coords.replace("[", "").replace("]", "");
+          break;
+        }
+      }
+    } else {
+      TabCoords = localStorage.getItem("CurrencyTabCoords");
+      TabCoords = TabCoords.replace("[", "").replace("]", "");
+      Coords = localStorage.getItem(`${CraftMaterial}Coords`);
+      Coords = Coords.replace("[", "").replace("]", "");
+    }
+    console.log(TabCoords);
+    InfoArray.push(Coords);
+    InfoArray.push(TabCoords);
+    // console.log(InfoArray.length, InfoArray);
     window.api.StartCrafting(InfoArray);
   }
 });
@@ -275,8 +299,6 @@ MaxRerolls.addEventListener("wheel", function (e) {
     MaxRerolls.stepUp();
   }
 });
-//#endregion
-
 //#endregion
 
 //#region Neutral
@@ -463,14 +485,14 @@ StoreCoordsButton.addEventListener("click", function () {
       "CurrencyTabCoords",
       JSON.stringify(CurrencyTabCoords)
     );
-    localStorage.setItem("ChaosOrbCoords", JSON.stringify(ChaosOrbCoords));
+    localStorage.setItem("ChaosOrbCoords", ChaosOrbCoords);
     localStorage.setItem(
       "OrbofAlterationCoords",
       JSON.stringify(OrbofAlterationCoords)
     );
     console.log(EssenceTabCoords);
     console.log(JSON.stringify(EssenceTabCoords));
-    localStorage.setItem("EssenceTabCoords", JSON.stringify(EssenceTabCoords));
+    localStorage.setItem("EssenceTabCoords", EssenceTabCoords);
 
     ChaosOrbLabel.remove();
     AltLabel.remove();
@@ -508,7 +530,7 @@ StoreCoordsButton.addEventListener("click", function () {
         for (const Item of ElementsToRemove) {
           Item.remove();
         }
-        // window.location.reload();
+        window.location.reload();
       }
     }
   }
@@ -518,6 +540,4 @@ StoreCoordsButton.addEventListener("click", function () {
 window.api.ClearLocalStorage((event, data) => {
   localStorage.clear();
 });
-//#endregion
-
 //#endregion
