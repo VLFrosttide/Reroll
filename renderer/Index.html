@@ -23,6 +23,14 @@
         placeholder="Mod youre looking for"
       />
       <input
+        type="number"
+        id="MinRoll"
+        class="Input"
+        step="10"
+        min="1"
+        placeholder="Minimum Roll of Mod"
+      />
+      <input
         class="Input"
         type="number"
         id="MaxRerolls"
@@ -653,6 +661,9 @@
     <button id="StoreCoordsButton">Store coordinates</button>
 
     <div id="Insertion"></div>
+    <label class="Instructions" hidden
+      >You can click on a mod to remove it from the list.</label
+    >
     <div id="Container" hidden>Mods to look for:</div>
     <div id="HideInstructions">
       <input type="checkbox" id="InstructionsCheckBox" />

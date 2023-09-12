@@ -31,6 +31,7 @@ const EssenceTabDiv = document.getElementById("EssenceTabDiv");
 const EssenceNameArray = [];
 const Insertion = document.getElementById("Insertion");
 const MaxRerolls = document.getElementById("MaxRerolls");
+const MinRoll = document.getElementById("MinRoll");
 const InputDiv = document.getElementById("InputDiv");
 const Instructions = document.getElementsByClassName("Instructions");
 const InstructionsDiv1 = document.getElementById("Instructions");
@@ -184,6 +185,20 @@ if (localStorage.length < 1) {
   });
   //#endregion
 } else {
+  let CheckBox = localStorage.getItem("InstructionsCheckBox");
+  console.log(CheckBox);
+  if (CheckBox === "checked") {
+    InstructionsCheckBox.checked = true;
+    for (const Item of Instructions) {
+      Item.style.display = "none";
+    }
+  } else {
+    InstructionsCheckBox.checked = false;
+    for (const Item of Instructions) {
+      Item.style.display = "flex";
+    }
+  }
+
   ChaosOrbLabel.remove();
   AltLabel.remove();
   EssenceTabDiv.remove();
@@ -300,15 +315,26 @@ MaxRerolls.addEventListener("wheel", function (e) {
   }
 });
 //#endregion
-
+//#region MinRoll step Eventlistener
+MinRoll.addEventListener("wheel", function (e) {
+  e.preventDefault();
+  if (e.deltaY > 0) {
+    MinRoll.stepDown();
+  } else MinRoll.stepUp();
+});
+//#endregion
 //#region Neutral
 //#region Instructions Eventlistener
 InstructionsCheckBox.addEventListener("change", function () {
   for (const Item of Instructions) {
     if (InstructionsCheckBox.checked) {
       Item.style.display = "none";
+      localStorage.setItem("InstructionsCheckBox", "checked");
+      console.log(localStorage.getItem("InstructionsCheckBox"));
     } else {
       Item.style.display = "flex";
+      localStorage.setItem("InstructionsCheckBox", "");
+      console.log(localStorage.getItem("InstructionsCheckBox"));
     }
   }
 });
