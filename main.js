@@ -20,6 +20,7 @@ let template;
 let win;
 let ScreenRatio;
 const CreateWindow = () => {
+  const PreloadPath = path.join(__dirname, "/renderer/preload.js")
   win = new BrowserWindow({
     width: 600,
     height: 460,
@@ -28,7 +29,7 @@ const CreateWindow = () => {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: "C:/Users/shacx/Documents/GitHub/Reroll/renderer/preload.js",
+      preload: PreloadPath,
     },
   });
   CaptureMouseEvent.on("Coords", (data) => {
@@ -39,8 +40,9 @@ const CreateWindow = () => {
     let MaxRolls = args[1];
     let CurrencyCoords = args[2];
     let TabCoords = args[3];
+    const RerollPath = path.join(__dirname, "/renderer/Reroll.py")
     const StartCrafting = spawn("python", [
-      "C:/Users/shacx/Documents/GitHub/Reroll/renderer/Reroll.py",
+      RerollPath,
       ModName,
       MaxRolls,
       CurrencyCoords,

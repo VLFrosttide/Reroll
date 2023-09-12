@@ -445,7 +445,7 @@ EssenceImage.addEventListener("click", function (e) {
     EssenceContainer.style.display = "flex";
     ImageContainer.style.flexDirection = "column";
     EssenceImage.src =
-      "C:/Users/shacx/Documents/GitHub/Reroll/renderer/EssencePics/Arrow.png";
+      "EssencePics/Arrow.png";
   } else {
     if (localStorage.length < 1) {
       InstructionsDiv2.style.display = "flex";
@@ -471,7 +471,7 @@ EssenceImage.addEventListener("click", function (e) {
     EssenceContainer.style.display = "none";
     ImageContainer.style.flexDirection = "row";
     EssenceImage.src =
-      "C:/Users/shacx/Documents/GitHub/Reroll/renderer/Torment.png";
+      "EssencePics/Torment/Deafening_Essence_of_Torment_inventory_icon.png";
   }
 });
 //#endregion
