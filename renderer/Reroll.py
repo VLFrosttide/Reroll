@@ -36,7 +36,7 @@ try:
             Check = pyperclip.paste().lower()
             Counter = Counter+1
             if ModName in Check.lower():
-                print("found", flush=True)
+                print(Check, flush=True)
                 break
             if Counter>=MaxRolls:
                 print("Maximum number of rerolls reached", flush=True)
