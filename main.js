@@ -1,4 +1,5 @@
 "use strict";
+//  Use electromon to start the program
 const path = require("path");
 const { spawn } = require("child_process");
 const {
@@ -20,7 +21,7 @@ let template;
 let win;
 let ScreenRatio;
 const CreateWindow = () => {
-  const PreloadPath = path.join(__dirname, "/renderer/preload.js")
+  const PreloadPath = path.join(__dirname, "/renderer/preload.js");
   win = new BrowserWindow({
     width: 600,
     height: 460,
@@ -40,7 +41,7 @@ const CreateWindow = () => {
     let MaxRolls = args[1];
     let CurrencyCoords = args[2];
     let TabCoords = args[3];
-    const RerollPath = path.join(__dirname, "/renderer/Reroll.py")
+    const RerollPath = path.join(__dirname, "/renderer/Reroll.py");
     const StartCrafting = spawn("python", [
       RerollPath,
       ModName,
