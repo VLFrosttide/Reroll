@@ -1,5 +1,4 @@
 const { ipcRenderer, contextBridge } = require("electron");
-const { call } = require("function-bind");
 console.log("Preload script is running");
 
 contextBridge.exposeInMainWorld("api", {
@@ -8,6 +7,8 @@ contextBridge.exposeInMainWorld("api", {
     ipcRenderer.on("ClearLocalStorage", callback),
 
   ItemError: (callback) => ipcRenderer.on("ItemError", callback),
+  GlobalKey: (callback) => ipcRenderer.on("GlobalKey", callback),
+
   ResizeWindow: (callback) => {
     ipcRenderer.send("ResizeWindow", callback);
   },
@@ -22,7 +23,6 @@ contextBridge.exposeInMainWorld("api", {
       callback(...args);
     });
   },
-  GlobalKey: (callback) => ipcRenderer.on("GlobalKey", call),
 });
 window.addEventListener("error", (event) => {
   console.log("Error event:", event);

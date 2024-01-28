@@ -269,7 +269,7 @@ ModNameInput.addEventListener("keydown", (e) => {
 //#region Start Button Eventlistener
 let LengthCheck = document.getElementsByClassName("Hover");
 let Coords;
-StartButton.addEventListener("click", function () {
+function StartCrafting() {
   if (localStorage.length < 1) {
     alert("Select coords first");
   } else {
@@ -311,11 +311,14 @@ StartButton.addEventListener("click", function () {
       alert("No mods selected");
     }
   }
+}
+StartButton.addEventListener("click", function () {
+  StartCrafting();
 });
 //#endregion
 //#region  Global hotkey
 window.api.GlobalKey((event, data) => {
-  console.log(data);
+  StartCrafting();
 });
 //#endregion
 //#region MaxRerolls Step event listeners

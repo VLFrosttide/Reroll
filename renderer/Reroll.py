@@ -2,6 +2,7 @@ import pyautogui
 import pyperclip
 import traceback
 import sys
+import time
 Rarity = None
 Check = None
 pyperclip.copy("")
@@ -25,7 +26,7 @@ try:
         global Counter
         global Check
         while True:
-            pyautogui.leftClick()
+            pyautogui.click()
             pyperclip.copy("")
             pyautogui.keyDown("ctrl")
             pyautogui.press("c")
@@ -46,11 +47,9 @@ try:
         
     pyautogui.moveTo(CurrencyCoords)
     pyautogui.rightClick(CurrencyCoords)
-
     pyautogui.moveTo(TabCoords)
     
     pyautogui.keyDown("shift")
-    pyautogui.click(TabCoords)
     pyautogui.keyDown("ctrl")
     pyautogui.press("c")
     pyautogui.keyUp("ctrl") 
