@@ -1,21 +1,18 @@
 import pyautogui
 import pyperclip
 import traceback
-import time
 import sys
 Rarity = None
 Check = None
+pyperclip.copy("")
 
 try:
-        
-    ModName = sys.argv[1]
+    ModName = sys.argv[1].split(",")  # Assuming ModName is a comma-separated string
     MaxRolls = sys.argv[2]
     CurrencyCoords = sys.argv[3].split(",")
     TabCoords = sys.argv[4].split(",")
     CurrencyCoords = [int(CurrencyCoords[0]), int(CurrencyCoords[1])]
     TabCoords = [int(TabCoords[0]),int(TabCoords[1])]
-
-    print(MaxRolls,type(MaxRolls),flush=True)
 
     if (sys.argv[2]==""):
         MaxRolls = 9999
@@ -27,21 +24,25 @@ try:
     def Reroll():
         global Counter
         global Check
-        while  True:
+        while True:
             pyautogui.leftClick()
             pyperclip.copy("")
             pyautogui.keyDown("ctrl")
             pyautogui.press("c")
             pyautogui.keyUp("ctrl") 
             Check = pyperclip.paste().lower()
+            if Check == "":
+                print("Item Not Found")
+                break
             Counter = Counter+1
-            if ModName in Check.lower():
+            if any(name in Check for name in ModName):
                 print(Check, flush=True)
                 break
             if Counter>=MaxRolls:
                 print("Maximum number of rerolls reached", flush=True)
                 break
-            
+
+
         
     pyautogui.moveTo(CurrencyCoords)
     pyautogui.rightClick(CurrencyCoords)
@@ -50,10 +51,10 @@ try:
     
     pyautogui.keyDown("shift")
     pyautogui.click(TabCoords)
-    pyperclip.copy("")
     pyautogui.keyDown("ctrl")
     pyautogui.press("c")
     pyautogui.keyUp("ctrl") 
+    pyperclip.copy("")
     Check = pyperclip.paste().lower()
     lines = Check.splitlines()
     for line in lines:

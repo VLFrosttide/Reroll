@@ -274,38 +274,50 @@ StartButton.addEventListener("click", function () {
     alert("Select coords first");
   } else {
     InfoArray.length = 0;
-    for (let i = 0; i < ModClass.length; i++) {
-      InfoArray.push(ModClass[i].textContent);
-    }
-    InfoArray.push(MaxRerolls.value);
-    if (CraftMaterial.includes("Essence")) {
-      TabCoords = localStorage.getItem("EssenceTabCoords");
-      Coords = JSON.parse(localStorage.getItem("EssenceCoords"));
-      console.log("awdawdawdadaw");
-      for (const Item of Object.keys(Coords)) {
-        console.log(Item);
-        if (Coords[Item].Name.includes(CraftMaterial)) {
-          Coords = Coords[Item].Coords;
-          Coords = JSON.stringify(Coords);
-          Coords = Coords.replace("[", "").replace("]", "");
-          break;
-        }
+    if (ModClass.length > 0) {
+      let ModArray = [];
+      for (let i = 0; i < ModClass.length; i++) {
+        console.log(ModClass[i]);
+        ModArray.push(ModClass[i].textContent);
       }
+      InfoArray.push(ModArray);
+
+      InfoArray.push(MaxRerolls.value);
+      if (CraftMaterial.includes("Essence")) {
+        TabCoords = localStorage.getItem("EssenceTabCoords");
+        Coords = JSON.parse(localStorage.getItem("EssenceCoords"));
+        console.log("awdawdawdadaw");
+        for (const Item of Object.keys(Coords)) {
+          console.log(Item);
+          if (Coords[Item].Name.includes(CraftMaterial)) {
+            Coords = Coords[Item].Coords;
+            Coords = JSON.stringify(Coords);
+            Coords = Coords.replace("[", "").replace("]", "");
+            break;
+          }
+        }
+      } else {
+        TabCoords = localStorage.getItem("CurrencyTabCoords");
+        TabCoords = TabCoords.replace("[", "").replace("]", "");
+        Coords = localStorage.getItem(`${CraftMaterial}Coords`);
+        Coords = Coords.replace("[", "").replace("]", "");
+      }
+      console.log(TabCoords);
+      InfoArray.push(Coords);
+      InfoArray.push(TabCoords);
+      console.log("InfoArray: ", InfoArray);
+      window.api.StartCrafting(InfoArray);
     } else {
-      TabCoords = localStorage.getItem("CurrencyTabCoords");
-      TabCoords = TabCoords.replace("[", "").replace("]", "");
-      Coords = localStorage.getItem(`${CraftMaterial}Coords`);
-      Coords = Coords.replace("[", "").replace("]", "");
+      alert("No mods selected");
     }
-    console.log(TabCoords);
-    InfoArray.push(Coords);
-    InfoArray.push(TabCoords);
-    // console.log(InfoArray.length, InfoArray);
-    window.api.StartCrafting(InfoArray);
   }
 });
 //#endregion
-
+//#region  Global hotkey
+window.api.GlobalKey((event, data) => {
+  console.log(data);
+});
+//#endregion
 //#region MaxRerolls Step event listeners
 MaxRerolls.addEventListener("wheel", function (e) {
   if (e.deltaY > 0) {
@@ -444,8 +456,7 @@ EssenceImage.addEventListener("click", function (e) {
     EssenceInput.style.display = "flex";
     EssenceContainer.style.display = "flex";
     ImageContainer.style.flexDirection = "column";
-    EssenceImage.src =
-      "EssencePics/Arrow.png";
+    EssenceImage.src = "EssencePics/Arrow.png";
   } else {
     if (localStorage.length < 1) {
       InstructionsDiv2.style.display = "flex";
@@ -562,6 +573,14 @@ StoreCoordsButton.addEventListener("click", function () {
   }
 });
 //#endregion
+
+//#region  ItemError:
+window.api.ItemError((event, data) => {
+  console.log("Data: ", data);
+  alert(`${data}`);
+});
+//#endregion
+
 //#region Clear Local Storage
 window.api.ClearLocalStorage((event, data) => {
   localStorage.clear();

@@ -1,6 +1,7 @@
 "use strict";
 //  Use electromon to start the program
 const path = require("path");
+
 const { spawn } = require("child_process");
 const {
   app,
@@ -9,12 +10,9 @@ const {
   Menu,
   MenuItem,
   screen,
+  globalShortcut,
 } = require("electron");
 const EventEmitter = require("events");
-const { type } = require("os");
-const { test } = require("picomatch");
-const { error } = require("console");
-const { eventNames } = require("process");
 const CaptureMouseEvent = new EventEmitter();
 let MousePosition;
 let template;
@@ -50,10 +48,14 @@ const CreateWindow = () => {
       TabCoords,
     ]);
     StartCrafting.stdout.on("data", (data) => {
-      console.log(data.toString());
+      console.log("MyData:", data.toString());
+      let PrintThis = String(data);
+      if (PrintThis.includes("Item Not Found")) {
+        win.webContents.send("ItemError", "Item Not Found");
+      }
     });
     StartCrafting.stderr.on("data", (data) => {
-      console.error(data.toString()); // Log Python error messages
+      console.error(data.toString());
     });
     StartCrafting.on("exit", (code, signal) => {
       if (code !== null) {
@@ -118,6 +120,10 @@ const CreateWindow = () => {
 };
 
 app.whenReady().then(() => {
+  const ret = globalShortcut.register("Control+Enter", () => {
+    console.log("awdawdawdadawdawdawd");
+    win.webContents.send("GlobalKey", "awd");
+  });
   CreateWindow();
   ScreenRatio = screen.getPrimaryDisplay().scaleFactor;
   ipcMain.on("ScreenRatio", (event) => {
