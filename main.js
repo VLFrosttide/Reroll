@@ -55,7 +55,7 @@ const CreateWindow = () => {
       }
     });
     StartCrafting.stderr.on("data", (data) => {
-      console.error(data.toString());
+      console.error("error: ", data.toString());
     });
     StartCrafting.on("exit", (code, signal) => {
       if (code !== null) {
@@ -67,7 +67,12 @@ const CreateWindow = () => {
       }
     });
   });
-
+  ipcMain.on("TriggerAddon", (event, args) => {
+    let ItemName = args;
+    console.log("Args from frontend: ", args);
+    const AddonPath = path.join(__dirname, "/renderer/Addon.py");
+    const Addon = spawn("python", [AddonPath, ItemName]);
+  });
   ipcMain.on("ResizeWindow", (event, arg) => {
     if (arg == "awd") {
       win.setSize(700, 900);
@@ -120,9 +125,29 @@ const CreateWindow = () => {
 };
 
 app.whenReady().then(() => {
-  const ret = globalShortcut.register("Control+Enter", () => {
+  const RerollAlteration = globalShortcut.register("Control+Enter", () => {
     console.log("awdawdawdadawdawdawd");
-    win.webContents.send("GlobalKey", "awd");
+    win.webContents.send("RerollAlteration", "awd");
+  });
+  const Scour = globalShortcut.register("Control+Backspace", () => {
+    console.log("Scour function triggered");
+    win.webContents.send("GlobalKey", "Scour");
+  });
+  const Augment = globalShortcut.register("Shift+Enter", () => {
+    console.log("Augment function triggered");
+    win.webContents.send("GlobalKey", "Augment");
+  });
+  const Annul = globalShortcut.register("Shift+Backspace", () => {
+    console.log("Annul function triggered");
+    win.webContents.send("GlobalKey", "Annul");
+  });
+  const Regal = globalShortcut.register("Control+Shift+Enter", () => {
+    console.log("Regal function triggered");
+    win.webContents.send("GlobalKey", "Regal");
+  });
+  const Transmute = globalShortcut.register("Control+Alt+Enter", () => {
+    console.log("Transmute function triggered");
+    win.webContents.send("GlobalKey", "Transmute");
   });
   CreateWindow();
   ScreenRatio = screen.getPrimaryDisplay().scaleFactor;

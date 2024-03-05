@@ -317,8 +317,13 @@ StartButton.addEventListener("click", function () {
 });
 //#endregion
 //#region  Global hotkey
-window.api.GlobalKey((event, data) => {
+window.api.RerollAlteration((event, data) => {
   StartCrafting();
+});
+window.api.GlobalKey((event, data) => {
+  //data = "Scour"
+  console.log(data);
+  window.api.TriggerAddon(data);
 });
 //#endregion
 //#region MaxRerolls Step event listeners

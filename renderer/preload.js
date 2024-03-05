@@ -7,8 +7,11 @@ contextBridge.exposeInMainWorld("api", {
     ipcRenderer.on("ClearLocalStorage", callback),
 
   ItemError: (callback) => ipcRenderer.on("ItemError", callback),
+  RerollAlteration: (callback) => ipcRenderer.on("RerollAlteration", callback),
   GlobalKey: (callback) => ipcRenderer.on("GlobalKey", callback),
-
+  TriggerAddon: (callback) => {
+    ipcRenderer.send("TriggerAddon", callback);
+  },
   ResizeWindow: (callback) => {
     ipcRenderer.send("ResizeWindow", callback);
   },

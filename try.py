@@ -1,9 +1,12 @@
-# from Essence import EssenceList
-# from Currency import CurrencyList
-import pyperclip
-# import pyautogui
+import re
 
-# pyautogui.moveTo([56, 162]
-# pyperclip.copy("")
-print("awd")
-print(pyperclip.paste())
+# your list
+lst = ['sawdtr5', 'life8', 'abc123', 'xyz456']
+numbers = [int(num) for s in lst for num in re.findall('\d+', s)]
+lst = [re.sub('\d+', '', s) for s in lst]
+dic = dict(zip(lst, numbers))
+
+print(dic)
+
+
+print(numbers)
