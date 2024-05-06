@@ -14,6 +14,15 @@ pyperclip.copy("")
 # print(dic)
 # Check = Check.lower()
 # Check_lines = Check.split('\n')
+Orbs = {
+    "OrbofAlteration": "magic",
+    "ChaosOrb": "rare"
+}
+def CheckRarity(Mats, Rarity):
+    if Rarity == Orbs[Mats]:
+        return True
+    else:
+        return False
 
 
 try:
@@ -30,7 +39,8 @@ try:
     print(TabCoords, flush=True)
     CurrencyCoords = [int(CurrencyCoords[0]), int(CurrencyCoords[1])]
     TabCoords = [int(TabCoords[0]),int(TabCoords[1])]
-
+    CraftMaterial = sys.argv[5]
+    print(CraftMaterial)
 
     if (sys.argv[2]==""):
         MaxRolls = 9999
@@ -83,15 +93,18 @@ try:
     pyautogui.keyDown("ctrl")
     pyautogui.press("c")
     pyautogui.keyUp("ctrl") 
-    pyperclip.copy("")
     Check = pyperclip.paste().lower()
     lines = Check.splitlines()
     for line in lines:
         if "rarity" in line:
             Rarity = line.replace("rarity:", "").strip()
             print(Rarity, flush=True) 
-    Reroll()
     
+    pyperclip.copy("")
+    if CheckRarity(CraftMaterial,Rarity):
+        Reroll()
+    else: 
+        print("Rarity Does Not Match!",  flush=True)
     pyautogui.keyUp("shift")
 
 

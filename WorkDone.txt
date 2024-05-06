@@ -1,9 +1,40 @@
+Item Class: Utility Flasks
+Rarity: Normal
+Amethyst Flask
+--------
+Lasts 6.50 Seconds
+Consumes 35 of 65 Charges on use
+Currently has 0 Charges
++35% to Chaos Resistance     //<< Implicit 
+--------
+Requirements:
+Level: 18
+--------
+Item Level: 77
+--------
+Right click to drink. Can only hold charges while in belt. Refills as you kill monsters.
 
 
-/////// WORK TO DO 
-add Max Rerolls eventlisteners
-Add a way to block user input. 
-Add a checkbox for the user to select if he wants it blocked
-Add a requirement for max roll to be more than 0 for it to work. 
 
-CHECK IF ITEM IS MAGIC / RARE ETC!!!!!!!
+Item Class: Wands
+Rarity: Magic
+Crackling Imbued Wand of Havoc
+--------
+Wand
+Physical Damage: 29-53
+Elemental Damage: 3-60 (augmented)
+Critical Strike Chance: 7.00%
+Attacks per Second: 1.50
+--------
+Requirements:
+Level: 59
+Int: 188
+--------
+Sockets: B-B 
+--------
+Item Level: 61
+--------
+33% increased Spell Damage (implicit)
+--------
+Adds 3 to 60 Lightning Damage
+31% increased Critical Strike Chance for Spells

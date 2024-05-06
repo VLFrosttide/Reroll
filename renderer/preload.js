@@ -2,12 +2,14 @@ const { ipcRenderer, contextBridge } = require("electron");
 console.log("Preload script is running");
 
 contextBridge.exposeInMainWorld("api", {
+  RarityError: (callback) => ipcRenderer.on("ItemError", callback),
   MousePos: (callback) => ipcRenderer.on("MouseCoords", callback),
   ClearLocalStorage: (callback) =>
     ipcRenderer.on("ClearLocalStorage", callback),
 
-  ItemError: (callback) => ipcRenderer.on("ItemError", callback),
-  RerollAlteration: (callback) => ipcRenderer.on("RerollAlteration", callback),
+  ItemError: (callback) => ipcRenderer.on("RarityError", callback),
+
+  StartCraft: (callback) => ipcRenderer.on("StartCraft", callback),
   GlobalKey: (callback) => ipcRenderer.on("GlobalKey", callback),
   TriggerAddon: (callback) => {
     ipcRenderer.send("TriggerAddon", callback);

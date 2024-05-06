@@ -305,6 +305,8 @@ function StartCrafting() {
       console.log(TabCoords);
       InfoArray.push(Coords);
       InfoArray.push(TabCoords);
+      InfoArray.push(CraftMaterial);
+      console.log("CraftMaterial: ", CraftMaterial);
       console.log("InfoArray: ", InfoArray);
       window.api.StartCrafting(InfoArray);
     } else {
@@ -317,7 +319,7 @@ StartButton.addEventListener("click", function () {
 });
 //#endregion
 //#region  Global hotkey
-window.api.RerollAlteration((event, data) => {
+window.api.StartCraft((event, data) => {
   StartCrafting();
 });
 window.api.GlobalKey((event, data) => {
@@ -585,6 +587,10 @@ StoreCoordsButton.addEventListener("click", function () {
 //#region  ItemError:
 window.api.ItemError((event, data) => {
   console.log("Data: ", data);
+  alert(`${data}`);
+});
+window.api.RarityError((event, data) => {
+  console.log("RarityError: Rarity Missmatch ");
   alert(`${data}`);
 });
 //#endregion

@@ -1,19 +1,18 @@
-"use strict";
-
-let num = 42;
-
-let str = num.toString();
-
-`--------
-requirements:
-level: 40
+let text = `Item Class: Utility Flasks
+Rarity: Magic
+Wide Quicksilver Flask
 --------
-item level: 84
+Lasts 6 Seconds
+Consumes 30 of 78 (augmented) Charges on use
+Currently has 0 Charges
+40% increased Movement Speed
 --------
-adds 12 passive skills (enchant)
-2 added passive skills are jewel sockets (enchant)
-added small passive skills grant: 10% increased spell damage (enchant)
+Requirements:
+Level: 4
 --------
-1 added passive skill is burden projection
+Item Level: 4
 --------
-place into an allocated large jewel socket on the passive skill tree. added passives do not interact with jewel radiuses. right click to remove from the socket`;
++18 to Maximum Charges
+--------
+Right click to drink. Can only hold charges while in belt. Refills as you kill monsters.
+`;

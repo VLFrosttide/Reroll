@@ -1,5 +1,6 @@
 "use strict";
 //  Use electromon to start the program
+
 const path = require("path");
 
 const { spawn } = require("child_process");
@@ -39,6 +40,8 @@ const CreateWindow = () => {
     let MaxRolls = args[1];
     let CurrencyCoords = args[2];
     let TabCoords = args[3];
+    let CraftMaterial = args[4];
+    console.log("CraftMats: ", CraftMaterial);
     const RerollPath = path.join(__dirname, "/renderer/Reroll.py");
     const StartCrafting = spawn("python", [
       RerollPath,
@@ -46,10 +49,17 @@ const CreateWindow = () => {
       MaxRolls,
       CurrencyCoords,
       TabCoords,
+      CraftMaterial,
     ]);
     StartCrafting.stdout.on("data", (data) => {
       console.log("MyData:", data.toString());
       let PrintThis = String(data);
+      if (PrintThis.includes("Rarity")) {
+        win.webContents.send(
+          "RarityError",
+          "The currency you're trying to use does not match the rarity of your item"
+        );
+      }
       if (PrintThis.includes("Item Not Found")) {
         win.webContents.send("ItemError", "Item Not Found");
       }
@@ -125,9 +135,9 @@ const CreateWindow = () => {
 };
 
 app.whenReady().then(() => {
-  const RerollAlteration = globalShortcut.register("Control+Enter", () => {
-    console.log("awdawdawdadawdawdawd");
-    win.webContents.send("RerollAlteration", "awd");
+  const StartCraft = globalShortcut.register("Control+Enter", () => {
+    console.log("Crafting Started!");
+    win.webContents.send("StartCraft", "Crafting Started");
   });
   const Scour = globalShortcut.register("Control+Backspace", () => {
     console.log("Scour function triggered");
