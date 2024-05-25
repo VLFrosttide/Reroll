@@ -1,0 +1,11 @@
+Python script spawned[]
+['1065', '1056']
+['1164', '933']
+ChaosOrb
+Rarity Does Not Match!
+Child process exited with code 0Python script spawned[]
+['1065', '1056']
+['1164', '933']
+ChaosOrb
+Rarity Does Not Match!
+Child process exited with code 0

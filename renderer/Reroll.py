@@ -7,16 +7,10 @@ import time
 Rarity = None
 Check = None
 pyperclip.copy("")
-# lst = ['sawdtr5', 'life8', 'abc123', 'xyz456']
-# numbers = [int(num) for s in lst for num in re.findall('\d+', s)]
-# ModName  = [re.sub('\d+', '', s) for s in lst]
-# dic = dict(zip(ModName, numbers))
-# print(dic)
-# Check = Check.lower()
-# Check_lines = Check.split('\n')
 Orbs = {
     "OrbofAlteration": "magic",
-    "ChaosOrb": "rare"
+    "ChaosOrb": "rare",
+    "essence" : "rare"
 }
 def CheckRarity(Mats, Rarity):
     if Rarity == Orbs[Mats]:
@@ -55,6 +49,8 @@ try:
         global Check_lines
         stop = False
         while stop == False:
+            pyautogui.keyDown("shift")
+
             pyautogui.click()
             pyperclip.copy("")
             pyautogui.keyDown("ctrl")
@@ -83,13 +79,13 @@ try:
             else:
                 if any(name in Check for name in ModName):
                     print(Check, flush=True)
+                    pyautogui.keyUp("shift")
                     stop = True
 
     pyautogui.moveTo(CurrencyCoords)
     pyautogui.rightClick(CurrencyCoords)
     pyautogui.moveTo(TabCoords)
     
-    pyautogui.keyDown("shift")
     pyautogui.keyDown("ctrl")
     pyautogui.press("c")
     pyautogui.keyUp("ctrl") 
@@ -101,6 +97,8 @@ try:
             print(Rarity, flush=True) 
     
     pyperclip.copy("")
+    if "essence" in CraftMaterial.lower():
+        CraftMaterial = "essence"
     if CheckRarity(CraftMaterial,Rarity):
         Reroll()
     else: 
@@ -112,10 +110,7 @@ try:
 
 
 except Exception as e:
-    # Print the error message to stderr
     traceback.print_exc()
-
     print(f"Python Error: {str(e)}", file=sys.stderr)
-    # Exit with a non-zero status code to indicate an error
     sys.exit(1)
 

@@ -11,6 +11,7 @@ const Chaos = document.getElementById("ChaosOrb");
 const ChaosOrbLabel = document.getElementById("ChaosOrbLabel");
 const Alt = document.getElementById("OrbofAlteration");
 const AltLabel = document.getElementById("OrbofAlterationLabel");
+const ManualContainer = document.getElementById("ManualContainer");
 const EssenceContainer = document.getElementById("EssenceContainer");
 const EssenceImage = document.getElementById("EssenceImage");
 const EssenceClassList = document.getElementsByClassName("Essence");
@@ -48,7 +49,14 @@ const ElementsToRemove = [];
 const EssenceCoords = {};
 const CurrencyCoords = {};
 const XYLabelList = document.getElementsByClassName("XYLabel");
+console.log("XYLabelList: ", XYLabelList);
 let CoordsLabelDivList = document.getElementsByClassName("CoordsLabel");
+let ManualCurrency = document.getElementsByClassName("Manual");
+let AnnulOrbCoords;
+let ScourOrbCoords;
+let TransmuteOrbCoords;
+let AugOrbCoords;
+let RegalOrbCoords;
 let ChaosOrbCoords;
 let OrbofAlterationCoords;
 let EssenceTabCoords;
@@ -71,13 +79,16 @@ window.api.ScreenRatio("ScreenRatio");
 window.api.ScreenRatioValue((value) => {
   ScreenRatio = value;
 });
+window.api.Logfile((event, data) => {
+  console.log("Logfile data: ", data);
+});
+
 //#endregion
 for (const Essence of EssenceClassList) {
   EssenceNameArray.push(Essence.id);
   Essence.style.opacity = 0.3;
 }
-
-if (localStorage.length < 1) {
+if (localStorage.length < 2) {
   for (let i = 0; i < CoordsLabelDivList.length; i++) {
     CoordsLabelDivList[i].id = `${EssenceClassList[i].id}Div`;
     let CoordsLabel = document.createElement("label");
@@ -97,12 +108,9 @@ if (localStorage.length < 1) {
   Container.style.display = "none";
   //#region Mouse Position
   window.api.MousePos((event, data) => {
-    console.log(ScreenRatio);
-    console.log(data);
     let CoordsSplit = data.split(",");
     MouseCoordsX = parseInt(CoordsSplit[0]);
     MouseCoordsY = parseInt(CoordsSplit[1]);
-
     if (ChangingLabel == undefined) {
       alert("No currency selected.");
     }
@@ -113,6 +121,7 @@ if (localStorage.length < 1) {
       ChangingLabel.innerText = `X: ${MouseCoordsX}, Y: ${MouseCoordsY}`;
       ChangingLabel.style.opacity = 1;
       let RemoveTutorialString = ChangingLabel.id.replace("Label", "");
+      console.log("RemoveTTString: ", RemoveTutorialString);
       let EssenceTier;
       if (
         RemoveTutorialString.includes("Deaf") ||
@@ -140,19 +149,42 @@ if (localStorage.length < 1) {
         !RemoveTutorialString.includes("Spot") &&
         !RemoveTutorialString.includes("Essence")
       ) {
-        console.log(RemoveTutorialString);
         if (RemoveTutorialString.includes("Chaos")) {
           ChaosOrbCoords = [
             parseInt(MouseCoordsX * ScreenRatio),
             parseInt(MouseCoordsY * ScreenRatio),
           ];
-        } else {
+        } else if (RemoveTutorialString.includes("Alteration")) {
           OrbofAlterationCoords = [
             parseInt(MouseCoordsX * ScreenRatio),
             parseInt(MouseCoordsY * ScreenRatio),
           ];
+        } else if (RemoveTutorialString.includes("Annul")) {
+          AnnulOrbCoords = [
+            parseInt(MouseCoordsX * ScreenRatio),
+            parseInt(MouseCoordsY * ScreenRatio),
+          ];
+        } else if (RemoveTutorialString.includes("Regal")) {
+          RegalOrbCoords = [
+            parseInt(MouseCoordsX * ScreenRatio),
+            parseInt(MouseCoordsY * ScreenRatio),
+          ];
+        } else if (RemoveTutorialString.includes("Transmute")) {
+          TransmuteOrbCoords = [
+            parseInt(MouseCoordsX * ScreenRatio),
+            parseInt(MouseCoordsY * ScreenRatio),
+          ];
+        } else if (RemoveTutorialString.includes("Scour")) {
+          ScourOrbCoords = [
+            parseInt(MouseCoordsX * ScreenRatio),
+            parseInt(MouseCoordsY * ScreenRatio),
+          ];
+        } else if (RemoveTutorialString.includes("Aug")) {
+          AugOrbCoords = [
+            parseInt(MouseCoordsX * ScreenRatio),
+            parseInt(MouseCoordsY * ScreenRatio),
+          ];
         }
-        console.log(OrbofAlterationCoords, ChaosOrbCoords);
       } else if (
         !RemoveTutorialString.includes("Deafen") &&
         !RemoveTutorialString.includes("Shriek") &&
@@ -160,11 +192,6 @@ if (localStorage.length < 1) {
         !RemoveTutorialString.includes("Orb") &&
         !RemoveTutorialString.includes("Currency")
       ) {
-        console.log(MouseCoordsX);
-        console.log(ScreenRatio);
-        console.log(typeof MouseCoordsX);
-        console.log(typeof ScreenRatio);
-        console.log(MouseCoordsX * ScreenRatio);
         EssenceTabCoords = [
           parseInt(MouseCoordsX * ScreenRatio),
           parseInt(MouseCoordsY * ScreenRatio),
@@ -186,7 +213,6 @@ if (localStorage.length < 1) {
   //#endregion
 } else {
   let CheckBox = localStorage.getItem("InstructionsCheckBox");
-  console.log(CheckBox);
   if (CheckBox === "checked") {
     InstructionsCheckBox.checked = true;
     for (const Item of Instructions) {
@@ -199,8 +225,12 @@ if (localStorage.length < 1) {
     }
   }
 
-  ChaosOrbLabel.remove();
-  AltLabel.remove();
+  // ChaosOrbLabel.remove();
+  // AltLabel.remove();
+  for (let i = XYLabelList.length - 1; i >= 0; i--) {
+    console.log(XYLabelList[i]);
+    XYLabelList[i].remove();
+  }
   EssenceTabDiv.remove();
   CurrencyTabDiv.remove();
   InstructionsDiv2.style.display = "none";
@@ -286,7 +316,8 @@ function StartCrafting() {
       if (CraftMaterial.includes("Essence")) {
         TabCoords = localStorage.getItem("EssenceTabCoords");
         Coords = JSON.parse(localStorage.getItem("EssenceCoords"));
-        console.log("awdawdawdadaw");
+        console.log("TabCoords: ", TabCoords);
+        console.log("Coords: ", Coords);
         for (const Item of Object.keys(Coords)) {
           console.log(Item);
           if (Coords[Item].Name.includes(CraftMaterial)) {
@@ -372,14 +403,14 @@ EssenceContainer.addEventListener("click", function (e) {
       .getElementById(`${e.target.id}`)
       .classList.add("Hover", "Highlight");
     for (const Item of EssenceClassList) {
-      Item.style.opacity = 0.3;
+      Item.style.opacity = 0.4;
       if (ChangingLabel) {
         ChangingLabel.classList.remove("Modify");
       }
       Item.classList.remove("Hover", "Highlight");
     }
     for (const Item of XYLabelList) {
-      Item.style.opacity = 0.1;
+      Item.style.opacity = 0.2;
     }
     if (!HoverHighlight) {
       if (ChangingLabel) {
@@ -533,17 +564,17 @@ StoreCoordsButton.addEventListener("click", function () {
       JSON.stringify(CurrencyTabCoords)
     );
     localStorage.setItem("ChaosOrbCoords", ChaosOrbCoords);
+    localStorage.setItem("AnnulOrbCoords", AnnulOrbCoords);
+    localStorage.setItem("RegalOrbCoords", RegalOrbCoords);
+    localStorage.setItem("ScourOrbCoords", ScourOrbCoords);
+    localStorage.setItem("TransmuteOrbCoords", TransmuteOrbCoords);
+    localStorage.setItem("AugOrbCoords", AugOrbCoords);
     localStorage.setItem(
       "OrbofAlterationCoords",
       JSON.stringify(OrbofAlterationCoords)
     );
-    console.log(EssenceTabCoords);
-    console.log(JSON.stringify(EssenceTabCoords));
     localStorage.setItem("EssenceTabCoords", EssenceTabCoords);
 
-    ChaosOrbLabel.remove();
-    AltLabel.remove();
-    console.log(CurrencyTabLocationLabel.textContent);
     if (CurrencyTabLocationLabel.textContent === "X:, Y:") {
       alert(
         "Please select the location of the item that will be rolled with alts and chaos ."
@@ -556,6 +587,10 @@ StoreCoordsButton.addEventListener("click", function () {
           "Please select the location of the item that will be rolled with essences ."
         );
       } else {
+        for (let i = 0; i < ManualCurrency.length; i++) {
+          ManualCurrency[i].classList.remove("Currency");
+          console.log(ManualCurrency[i]);
+        }
         CurrencyTabLocationLabel.remove();
         InputDiv.style.display = "flex";
         StartButton.style.display = "flex";
@@ -577,8 +612,12 @@ StoreCoordsButton.addEventListener("click", function () {
         for (const Item of ElementsToRemove) {
           Item.remove();
         }
-        window.location.reload();
+        // window.location.reload();
       }
+    }
+    for (let i = XYLabelList.length - 1; i > 0; i--) {
+      console.log(XYLabelList[i]);
+      XYLabelList[i].remove();
     }
   }
 });

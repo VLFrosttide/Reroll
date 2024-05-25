@@ -1,9 +1,11 @@
 const { ipcRenderer, contextBridge } = require("electron");
+// const { call } = require("function-bind");
 console.log("Preload script is running");
 
 contextBridge.exposeInMainWorld("api", {
   RarityError: (callback) => ipcRenderer.on("ItemError", callback),
   MousePos: (callback) => ipcRenderer.on("MouseCoords", callback),
+  Logfile: (callback) => ipcRenderer.on("Logfile", callback),
   ClearLocalStorage: (callback) =>
     ipcRenderer.on("ClearLocalStorage", callback),
 

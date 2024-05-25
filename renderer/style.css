@@ -2,7 +2,8 @@ body {
   background-color: black;
   color: rgb(255, 255, 255);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: center;
   align-items: center;
 }
 .Instructions {
@@ -64,8 +65,9 @@ body {
 #ImageContainer {
   position: relative;
   display: flex;
+  flex-direction: column;
   justify-items: center;
-  align-items: flex-end;
+  align-items: center;
   margin-bottom: 5px;
   user-select: none;
 }
@@ -121,4 +123,20 @@ body {
 #InstructionsCheckBox {
   filter: brightness(40%);
   accent-color: rgb(0, 0, 0);
+}
+.XYLabel {
+  opacity: 0.2;
+}
+#ManualContainer {
+  display: flex;
+  flex-direction: row;
+}
+#AutoContainer {
+  display: flex;
+  flex-direction: row;
+}
+#Main {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }

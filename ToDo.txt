@@ -1,0 +1,5 @@
+Rework addon. Add coords selection for side currency.
+Make the 5 additional hotkeys customizable.
+ChangingLabel error not popping
+Add new currency to orbs in reroll.py 
+Place a spot when hovering , to show current coords.  

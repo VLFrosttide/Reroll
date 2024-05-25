@@ -1,9 +1,11 @@
 "use strict";
-//  Use electromon to start the program
+//  Use npm start to start the program
 
 const path = require("path");
 
 const { spawn } = require("child_process");
+const fs = require("fs");
+
 const {
   app,
   BrowserWindow,
@@ -19,6 +21,22 @@ let MousePosition;
 let template;
 let win;
 let ScreenRatio;
+const DocPath = app.getPath("documents");
+let ExePath = app.getPath("exe");
+ExePath = ExePath.substring(0, ExePath.lastIndexOf("\\"));
+console.log("ExePath: ", ExePath);
+const RerollFolder = path.join(DocPath, "RerollLogs");
+if (!fs.existsSync(RerollFolder)) {
+  fs.mkdirSync(RerollFolder, { recursive: true });
+}
+const LogFile = path.join(RerollFolder, "/Logs.txt");
+try {
+  fs.appendFileSync(LogFile, "Program works");
+  console.log("Log written successfully");
+} catch (err) {
+  console.error("Error writing to log file:", err);
+}
+
 const CreateWindow = () => {
   const PreloadPath = path.join(__dirname, "/renderer/preload.js");
   win = new BrowserWindow({
@@ -28,21 +46,39 @@ const CreateWindow = () => {
     y: 0,
     webPreferences: {
       nodeIntegration: false,
+      sandbox: true,
       contextIsolation: true,
       preload: PreloadPath,
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["self"],
+          scriptSrc: ["self"],
+          styleSrc: ["self"],
+          imgSrc: ["self"],
+          fontSrc: ["self"],
+          connectSrc: ["self"],
+          manifestSrc: ["self"],
+          // Add more directives as needed for your app
+        },
+      },
     },
   });
+  win.webContents.send("Logfile", String(LogFile));
   CaptureMouseEvent.on("Coords", (data) => {
     win.webContents.send("MouseCoords", data);
   });
   ipcMain.on("StartCrafting", (event, args) => {
+    fs.appendFileSync(LogFile, "Start craft works");
+    fs.appendFileSync(LogFile, "Python script spawned");
     let ModName = args[0];
     let MaxRolls = args[1];
     let CurrencyCoords = args[2];
     let TabCoords = args[3];
     let CraftMaterial = args[4];
-    console.log("CraftMats: ", CraftMaterial);
-    const RerollPath = path.join(__dirname, "/renderer/Reroll.py");
+    console.log("CurrencyCoords: ", CurrencyCoords);
+    console.log("TabCoords: ", TabCoords);
+    const RerollPath = path.join(ExePath, "/renderer/Reroll.py");
+
     const StartCrafting = spawn("python", [
       RerollPath,
       ModName,
@@ -53,6 +89,7 @@ const CreateWindow = () => {
     ]);
     StartCrafting.stdout.on("data", (data) => {
       console.log("MyData:", data.toString());
+      fs.appendFileSync(LogFile, String(data));
       let PrintThis = String(data);
       if (PrintThis.includes("Rarity")) {
         win.webContents.send(
@@ -66,21 +103,28 @@ const CreateWindow = () => {
     });
     StartCrafting.stderr.on("data", (data) => {
       console.error("error: ", data.toString());
+      fs.appendFileSync(LogFile, `Error: ${String(data)}`);
     });
     StartCrafting.on("exit", (code, signal) => {
       if (code !== null) {
         console.log(`Child process exited with code ${code}`);
+        fs.appendFileSync(LogFile, `Child process exited with code ${code}`);
       } else if (signal !== null) {
         console.log(`Child process was killed by signal ${signal}`);
+        fs.appendFileSync(
+          LogFile,
+          `Child process was killed by signal ${signal}`
+        );
       } else {
         console.log("Child process has exited");
+        fs.appendFileSync(LogFile, "Child process has exited");
       }
     });
   });
   ipcMain.on("TriggerAddon", (event, args) => {
     let ItemName = args;
     console.log("Args from frontend: ", args);
-    const AddonPath = path.join(__dirname, "/renderer/Addon.py");
+    const AddonPath = path.join(ExePath, "/renderer/Addon.py");
     const Addon = spawn("python", [AddonPath, ItemName]);
   });
   ipcMain.on("ResizeWindow", (event, arg) => {
