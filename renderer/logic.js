@@ -3,7 +3,6 @@
 const ModNameInput = document.getElementById("ModInput");
 const Container = document.getElementById("Container");
 const ModClass = document.getElementsByClassName("ModName");
-const Currencies = document.getElementsByClassName("Currency");
 const CurrencyDiv = document.getElementById("CurrencyDiv");
 const StartButton = document.getElementById("Start");
 const ImageContainer = document.getElementById("ImageContainer");
@@ -49,7 +48,7 @@ const ElementsToRemove = [];
 const EssenceCoords = {};
 const CurrencyCoords = {};
 const XYLabelList = document.getElementsByClassName("XYLabel");
-console.log("XYLabelList: ", XYLabelList);
+let Currencies = document.getElementsByClassName("Currency");
 let CoordsLabelDivList = document.getElementsByClassName("CoordsLabel");
 let ManualCurrency = document.getElementsByClassName("Manual");
 let AnnulOrbCoords;
@@ -74,7 +73,15 @@ let MouseCoordsX;
 let MouseCoordsY;
 let ChangingLabel; // The X / Y label for each essence.
 let ScreenRatio;
-
+//#region Hotkey Object
+let Hotkeys = {
+  RegalOrb: "Ctrl+Shift+Enter",
+  AnnulOrb: "Shift+Backspace",
+  ScourOrb: "Ctrl+Backspace",
+  TransmuteOrb: "Ctrl+Alt+Enter",
+  AugOrb: "Shift+Enter",
+};
+//#endregion
 window.api.ScreenRatio("ScreenRatio");
 window.api.ScreenRatioValue((value) => {
   ScreenRatio = value;
@@ -86,9 +93,10 @@ window.api.Logfile((event, data) => {
 //#endregion
 for (const Essence of EssenceClassList) {
   EssenceNameArray.push(Essence.id);
-  Essence.style.opacity = 0.3;
+  Essence.style.opacity = 0.2;
 }
 if (localStorage.length < 2) {
+  StoreCoordsButton.style.display = "none";
   for (let i = 0; i < CoordsLabelDivList.length; i++) {
     CoordsLabelDivList[i].id = `${EssenceClassList[i].id}Div`;
     let CoordsLabel = document.createElement("label");
@@ -106,6 +114,7 @@ if (localStorage.length < 2) {
   EssenceInput.style.display = "none";
 
   Container.style.display = "none";
+
   //#region Mouse Position
   window.api.MousePos((event, data) => {
     let CoordsSplit = data.split(",");
@@ -212,6 +221,28 @@ if (localStorage.length < 2) {
   });
   //#endregion
 } else {
+  for (let i = 0; i < ManualCurrency.length; i++) {
+    ManualCurrency[i].classList.remove("Currency");
+    ManualCurrency[i].style.opacity = 0.2;
+  }
+  ManualContainer.addEventListener("mouseover", function (e) {
+    if (e.target.classList.contains("Manual")) {
+      e.target.style.opacity = 1;
+      let HoverTooltip = document.createElement("div");
+      HoverTooltip.textContent = Hotkeys[e.target.id];
+      HoverTooltip.classList.add("HoverTooltip");
+      Insertion.appendChild(HoverTooltip);
+    }
+  });
+  ManualContainer.addEventListener("mouseout", function (e) {
+    if (e.target.classList.contains("Manual")) {
+      e.target.style.opacity = 0.2;
+      let HoverTooltip = document.getElementsByClassName("HoverTooltip");
+      for (let i = HoverTooltip.length - 1; i >= 0; i--) {
+        HoverTooltip[i].remove();
+      }
+    }
+  });
   let CheckBox = localStorage.getItem("InstructionsCheckBox");
   if (CheckBox === "checked") {
     InstructionsCheckBox.checked = true;
@@ -228,14 +259,13 @@ if (localStorage.length < 2) {
   // ChaosOrbLabel.remove();
   // AltLabel.remove();
   for (let i = XYLabelList.length - 1; i >= 0; i--) {
-    console.log(XYLabelList[i]);
     XYLabelList[i].remove();
   }
   EssenceTabDiv.remove();
   CurrencyTabDiv.remove();
   InstructionsDiv2.style.display = "none";
-  InstructionsDiv1.textContent =
-    " Type in the mod youre looking for and press enter then select the maximum number rerolls (you can use the scroll wheel) and click start  crafting. If input fields are not responsive , just alt tab quickly";
+  InstructionsDiv1.textContent = `Type in the mod youre looking for and press enter then select the maximum number rerolls (you can use the scroll wheel)
+    and click start  crafting. If input fields are not responsive , just alt tab quickly`;
   for (let i = 0; i < CoordsLabelDivList.length; i++) {
     CoordsLabelDivList[i].id = `${EssenceClassList[i].id}Div`;
   }
@@ -354,9 +384,15 @@ window.api.StartCraft((event, data) => {
   StartCrafting();
 });
 window.api.GlobalKey((event, data) => {
-  //data = "Scour"
-  console.log(data);
-  window.api.TriggerAddon(data);
+  //data = "ScourOrb"
+  let HotkeyCurrencyCoords = localStorage.getItem(`${data}Coords`);
+  let ItemCoords = localStorage.getItem("CurrencyTabCoords");
+  let DataArray = [];
+  DataArray.push(HotkeyCurrencyCoords);
+  DataArray.push(ItemCoords);
+  console.log(DataArray);
+
+  window.api.TriggerAddon(DataArray);
 });
 //#endregion
 //#region MaxRerolls Step event listeners
@@ -368,14 +404,7 @@ MaxRerolls.addEventListener("wheel", function (e) {
   }
 });
 //#endregion
-//#region MinRoll step Eventlistener
-MinRoll.addEventListener("wheel", function (e) {
-  e.preventDefault();
-  if (e.deltaY > 0) {
-    MinRoll.stepDown();
-  } else MinRoll.stepUp();
-});
-//#endregion
+
 //#region Neutral
 //#region Instructions Eventlistener
 InstructionsCheckBox.addEventListener("change", function () {
@@ -403,14 +432,14 @@ EssenceContainer.addEventListener("click", function (e) {
       .getElementById(`${e.target.id}`)
       .classList.add("Hover", "Highlight");
     for (const Item of EssenceClassList) {
-      Item.style.opacity = 0.4;
+      Item.style.opacity = 0.2;
       if (ChangingLabel) {
         ChangingLabel.classList.remove("Modify");
       }
       Item.classList.remove("Hover", "Highlight");
     }
     for (const Item of XYLabelList) {
-      Item.style.opacity = 0.2;
+      Item.style.opacity = 0.1;
     }
     if (!HoverHighlight) {
       if (ChangingLabel) {
@@ -475,17 +504,21 @@ EssenceImage.addEventListener("click", function (e) {
   for (const Item of AllowLabelModification) {
     Item.classList.remove("Modify");
   }
+  if (localStorage.length < 2) {
+    StoreCoordsButton.style.display = "flex";
+  }
 
   if (e.target == EssenceImage && !EssenceImage.classList.contains("Clicked")) {
     if (InputDiv.style.display == "flex") {
       EssenceInput.style.display = "flex";
     }
     if (localStorage.length < 1) {
-      InstructionsDiv1.innerText = `Now repeat the same process for the highlighted essences. Once you're done , click on the button to store your coordinates and proceed`;
+      InstructionsDiv1.innerText = `Now repeat the same process for the highlighted essences. Once you're done , 
+      click on the button at the bottom of the page to store your coordinates and proceed`;
       InstructionsDiv2.style.display = "none";
     } else {
-      InstructionsDiv1.textContent =
-        " Type in the mod youre looking for and press enter then select the maximum number rerolls (you can use the scroll wheel) and click start  crafting. If input fields are not responsive , just alt tab quickly ";
+      InstructionsDiv1.textContent = ` Type in the mod youre looking for and press enter then select the maximum number rerolls (you can use the scroll wheel)
+         and click start  crafting. If input fields are not responsive , just alt tab quickly `;
       InstructionsDiv2.style.display = "none";
     }
     EssenceImage.classList.add("Clicked");
@@ -506,8 +539,8 @@ EssenceImage.addEventListener("click", function (e) {
       move your mouse cursor over the center of the matching item in game (without clicking),
       then press F1 to record its coordinates`;
     } else {
-      InstructionsDiv1.textContent =
-        " Type in the mod youre looking for and press enter then select the maximum number rerolls (you can use the scroll wheel) and click start  crafting. If input fields are not responsive , just alt tab quickly ";
+      InstructionsDiv1.textContent = `Type in the mod youre looking for and press enter then select the maximum number rerolls (you can use the scroll wheel)
+         and click start  crafting. If input fields are not responsive , just alt tab quickly `;
       InstructionsDiv2.style.display = "none";
     }
 
@@ -521,15 +554,16 @@ EssenceImage.addEventListener("click", function (e) {
     window.api.ResizeWindow("abruvwd");
     EssenceInput.style.display = "none";
     EssenceContainer.style.display = "none";
-    ImageContainer.style.flexDirection = "row";
+    ImageContainer.style.flexDirection = "column";
     EssenceImage.src =
       "EssencePics/Torment/Deafening_Essence_of_Torment_inventory_icon.png";
   }
 });
 //#endregion
 //#region Currencies eventlistener
-for (let i = 0; i < Currencies.length; i++) {
-  Currencies[i].addEventListener("click", (e) => {
+
+CurrencyDiv.addEventListener("click", (e) => {
+  if (e.target.classList.contains("Currency")) {
     let wasHovered = e.target.classList.contains("Hover");
     ChangingLabel = document.getElementById(`${e.target.id}` + "Label");
 
@@ -549,8 +583,8 @@ for (let i = 0; i < Currencies.length; i++) {
         ChangingLabel.classList.add("Modify");
       }
     }
-  });
-}
+  }
+});
 //#endregion
 //#region Store Coords button
 
@@ -559,21 +593,17 @@ StoreCoordsButton.addEventListener("click", function () {
     console.log(EssenceTabCoords, CurrencyCoords, CurrencyTabCoords);
     alert("Please select at least one item's coords");
   } else {
-    localStorage.setItem(
-      "CurrencyTabCoords",
-      JSON.stringify(CurrencyTabCoords)
-    );
-    localStorage.setItem("ChaosOrbCoords", ChaosOrbCoords);
-    localStorage.setItem("AnnulOrbCoords", AnnulOrbCoords);
-    localStorage.setItem("RegalOrbCoords", RegalOrbCoords);
-    localStorage.setItem("ScourOrbCoords", ScourOrbCoords);
-    localStorage.setItem("TransmuteOrbCoords", TransmuteOrbCoords);
-    localStorage.setItem("AugOrbCoords", AugOrbCoords);
-    localStorage.setItem(
-      "OrbofAlterationCoords",
-      JSON.stringify(OrbofAlterationCoords)
-    );
-    localStorage.setItem("EssenceTabCoords", EssenceTabCoords);
+    console.log("CurrencyCoords: ", CurrencyTabCoords);
+    console.log("AltCoords: ", OrbofAlterationCoords);
+    localStorage.setItem("CurrencyTabCoords", `${CurrencyTabCoords}`);
+    localStorage.setItem("ChaosOrbCoords", `${ChaosOrbCoords}`);
+    localStorage.setItem("AnnulOrbCoords", `${AnnulOrbCoords}`);
+    localStorage.setItem("RegalOrbCoords", `${RegalOrbCoords}`);
+    localStorage.setItem("ScourOrbCoords", `${ScourOrbCoords}`);
+    localStorage.setItem("TransmuteOrbCoords", `${TransmuteOrbCoords}`);
+    localStorage.setItem("AugOrbCoords", `${AugOrbCoords}`);
+    localStorage.setItem("OrbofAlterationCoords", `${OrbofAlterationCoords}`);
+    localStorage.setItem("EssenceTabCoords", `${EssenceTabCoords}`);
 
     if (CurrencyTabLocationLabel.textContent === "X:, Y:") {
       alert(
@@ -587,11 +617,9 @@ StoreCoordsButton.addEventListener("click", function () {
           "Please select the location of the item that will be rolled with essences ."
         );
       } else {
-        for (let i = 0; i < ManualCurrency.length; i++) {
-          ManualCurrency[i].classList.remove("Currency");
-          console.log(ManualCurrency[i]);
-        }
-        CurrencyTabLocationLabel.remove();
+        // CurrencyTabLocationLabel.remove();
+        Currencies = document.getElementsByClassName("Currency");
+        console.log("Currencies: ", Currencies);
         InputDiv.style.display = "flex";
         StartButton.style.display = "flex";
         StoreCoordsButton.style.display = "none";
@@ -612,11 +640,10 @@ StoreCoordsButton.addEventListener("click", function () {
         for (const Item of ElementsToRemove) {
           Item.remove();
         }
-        // window.location.reload();
+        window.location.reload();
       }
     }
     for (let i = XYLabelList.length - 1; i > 0; i--) {
-      console.log(XYLabelList[i]);
       XYLabelList[i].remove();
     }
   }

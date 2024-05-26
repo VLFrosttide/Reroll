@@ -40,8 +40,8 @@ try {
 const CreateWindow = () => {
   const PreloadPath = path.join(__dirname, "/renderer/preload.js");
   win = new BrowserWindow({
-    width: 600,
-    height: 460,
+    width: 800,
+    height: 550,
     x: 490,
     y: 0,
     webPreferences: {
@@ -122,10 +122,24 @@ const CreateWindow = () => {
     });
   });
   ipcMain.on("TriggerAddon", (event, args) => {
-    let ItemName = args;
-    console.log("Args from frontend: ", args);
+    let CurrencyCoords = args[0];
+    let ItemCoords = args[1];
+    // console.log(args);
     const AddonPath = path.join(ExePath, "/renderer/Addon.py");
-    const Addon = spawn("python", [AddonPath, ItemName]);
+    const Addon = spawn("python", [AddonPath, CurrencyCoords, ItemCoords]);
+    Addon.stdout.on("data", (data) => {
+      console.log(String(data));
+      fs.appendFileSync(LogFile, `${String(data)}`);
+    });
+
+    Addon.stderr.on("data", (data) => {
+      console.error(`stderr: ${data}`);
+      fs.appendFileSync(LogFile, `${data}`);
+    });
+
+    Addon.on("close", (code) => {
+      console.log(`child process exited with code ${code}`);
+    });
   });
   ipcMain.on("ResizeWindow", (event, arg) => {
     if (arg == "awd") {
@@ -185,23 +199,23 @@ app.whenReady().then(() => {
   });
   const Scour = globalShortcut.register("Control+Backspace", () => {
     console.log("Scour function triggered");
-    win.webContents.send("GlobalKey", "Scour");
+    win.webContents.send("GlobalKey", "ScourOrb");
   });
   const Augment = globalShortcut.register("Shift+Enter", () => {
     console.log("Augment function triggered");
-    win.webContents.send("GlobalKey", "Augment");
+    win.webContents.send("GlobalKey", "AugOrb");
   });
   const Annul = globalShortcut.register("Shift+Backspace", () => {
     console.log("Annul function triggered");
-    win.webContents.send("GlobalKey", "Annul");
+    win.webContents.send("GlobalKey", "AnnulOrb");
   });
   const Regal = globalShortcut.register("Control+Shift+Enter", () => {
     console.log("Regal function triggered");
-    win.webContents.send("GlobalKey", "Regal");
+    win.webContents.send("GlobalKey", "RegalOrb");
   });
   const Transmute = globalShortcut.register("Control+Alt+Enter", () => {
     console.log("Transmute function triggered");
-    win.webContents.send("GlobalKey", "Transmute");
+    win.webContents.send("GlobalKey", "TransmuteOrb");
   });
   CreateWindow();
   ScreenRatio = screen.getPrimaryDisplay().scaleFactor;

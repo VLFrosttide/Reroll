@@ -24,14 +24,7 @@
           id="ModInput"
           placeholder="Mod youre looking for"
         />
-        <input
-          type="number"
-          id="MinRoll"
-          class="Input"
-          step="10"
-          min="1"
-          placeholder="Minimum Roll of Mod"
-        />
+
         <input
           class="Input"
           type="number"
@@ -138,10 +131,11 @@
           </div>
         </div>
       </div>
-      <div id="Instructions2" class="Instructions">
-        After you're done setting the chaos and alt coords, click on the essence
-        and set the coords of at least one essence and then press the "Store
-        coordinates" button, .
+      <div id="Instructions2" class="Instructions Tutorial">
+        After you're done setting the basic currency coords, click on the
+        essence to open the essence tab and set the coords of at least one
+        essence and then press the "Store coordinates" button on the bottom of
+        the page.
       </div>
 
       <img id="EssenceImage" src="Torment.png" class="Image" alt="" />
@@ -708,7 +702,7 @@
         </div>
         <div id="EssenceSpecial"></div>
       </div>
-      <button id="StoreCoordsButton">Store coordinates</button>
+      <button id="StoreCoordsButton" class="button">Store coordinates</button>
 
       <div id="Insertion"></div>
       <label class="Instructions" hidden
@@ -719,7 +713,7 @@
         <input type="checkbox" id="InstructionsCheckBox" />
         <label>Hide Instructions</label>
       </div>
-      <button id="Start" hidden>Start crafting</button>
+      <button id="Start" class="button" hidden>Start crafting</button>
     </div>
   </body>
   <script src="logic.js"></script>

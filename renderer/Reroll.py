@@ -31,12 +31,12 @@ try:
     TabCoords = sys.argv[4].split(",")
     print(CurrencyCoords,  flush=True)
     print(TabCoords, flush=True)
-    CurrencyCoords = [int(CurrencyCoords[0]), int(CurrencyCoords[1])]
-    TabCoords = [int(TabCoords[0]),int(TabCoords[1])]
+    CurrencyCoords = (int(CurrencyCoords[0]), int(CurrencyCoords[1]))
+    TabCoords = (int(TabCoords[0]),int(TabCoords[1]))
     CraftMaterial = sys.argv[5]
     print(CraftMaterial)
 
-    if (sys.argv[2]==""):
+    if (sys.argv[2]==""):   
         MaxRolls = 9999
     else:
         MaxRolls = int(sys.argv[2])
