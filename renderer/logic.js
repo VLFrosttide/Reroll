@@ -4,7 +4,7 @@ const ModNameInput = document.getElementById("ModInput");
 const Container = document.getElementById("Container");
 const ModClass = document.getElementsByClassName("ModName");
 const CurrencyDiv = document.getElementById("CurrencyDiv");
-const StartButton = document.getElementById("Start");
+const StartButton = document.getElementById("StartButton");
 const ImageContainer = document.getElementById("ImageContainer");
 const Chaos = document.getElementById("ChaosOrb");
 const ChaosOrbLabel = document.getElementById("ChaosOrbLabel");
@@ -37,6 +37,7 @@ const Instructions = document.getElementsByClassName("Instructions");
 const InstructionsDiv1 = document.getElementById("Instructions");
 const InstructionsDiv2 = document.getElementById("Instructions2");
 const InstructionsCheckBox = document.getElementById("InstructionsCheckBox");
+const FractureCheckBox = document.getElementById("FractureCheckBox");
 const AllowLabelModification = document.getElementsByClassName("Modify");
 const Greed1 = document.getElementById("DeafeningEssenceOfGreed");
 const Greed2 = document.getElementById("ShriekingEssenceOfGreed");
@@ -336,9 +337,11 @@ function StartCrafting() {
     InfoArray.length = 0;
     if (ModClass.length > 0) {
       let ModArray = [];
+      let Fracture = FractureCheckBox.checked;
+      console.log("Fracture: ", Fracture);
       for (let i = 0; i < ModClass.length; i++) {
         console.log(ModClass[i]);
-        ModArray.push(ModClass[i].textContent);
+        ModArray.push(ModClass[i].textContent.toLocaleLowerCase());
       }
       InfoArray.push(ModArray);
 
@@ -367,7 +370,7 @@ function StartCrafting() {
       InfoArray.push(Coords);
       InfoArray.push(TabCoords);
       InfoArray.push(CraftMaterial);
-      console.log("CraftMaterial: ", CraftMaterial);
+      InfoArray.push(Fracture);
       console.log("InfoArray: ", InfoArray);
       window.api.StartCrafting(InfoArray);
     } else {

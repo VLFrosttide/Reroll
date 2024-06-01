@@ -710,10 +710,16 @@
       >
       <div id="Container" hidden>Mods to look for:</div>
       <div id="HideInstructions">
-        <input type="checkbox" id="InstructionsCheckBox" />
+        <input type="checkbox" id="InstructionsCheckBox" class="CheckBox" />
         <label>Hide Instructions</label>
       </div>
-      <button id="Start" class="button" hidden>Start crafting</button>
+      <div id="Start">
+        <button id="StartButton" class="button" hidden>Start crafting</button>
+        <div id="Fractures">
+          <input type="checkbox" id="FractureCheckBox" class="CheckBox" />
+          <label>Ignore fractures</label>
+        </div>
+      </div>
     </div>
   </body>
   <script src="logic.js"></script>

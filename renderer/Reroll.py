@@ -3,7 +3,6 @@ import pyperclip
 import sys
 import traceback
 import re
-import time
 Rarity = None
 Check = None
 pyperclip.copy("")
@@ -21,26 +20,29 @@ def CheckRarity(Mats, Rarity):
 
 try:
     ModArray = sys.argv[1].split(",")
-    ModNums = [int(num) for s in ModArray for num in re.findall('\d+', s)]
-    ModName = [re.sub('\d+', '', s) for s in ModArray]
-    print(ModNums, flush=True)
-    if len(ModNums)>0:
-        ModObject = dict(zip(ModName, ModNums))
-        print(ModObject)
-    CurrencyCoords = sys.argv[3].split(",")
-    TabCoords = sys.argv[4].split(",")
-    print(CurrencyCoords,  flush=True)
-    print(TabCoords, flush=True)
-    CurrencyCoords = (int(CurrencyCoords[0]), int(CurrencyCoords[1]))
-    TabCoords = (int(TabCoords[0]),int(TabCoords[1]))
-    CraftMaterial = sys.argv[5]
-    print(CraftMaterial)
-
     if (sys.argv[2]==""):   
         MaxRolls = 9999
     else:
         MaxRolls = int(sys.argv[2])
         
+    CurrencyCoords = sys.argv[3].split(",")
+    ModNums = [int(num) for s in ModArray for num in re.findall('\d+', s)]
+    ModName = [re.sub('\d+', '', s) for s in ModArray]
+    TabCoords = sys.argv[4].split(",")
+    CraftMaterial = sys.argv[5]
+    Fracture = sys.argv[6]
+    
+    CurrencyCoords = (int(CurrencyCoords[0]), int(CurrencyCoords[1]))
+    TabCoords = (int(TabCoords[0]),int(TabCoords[1]))
+    if len(ModNums)>0:
+        ModObject = dict(zip(ModName, ModNums))
+        print(ModObject)
+    print(CurrencyCoords,  flush=True)
+    print(TabCoords, flush=True)
+    print(ModNums, flush=True)
+    print(CraftMaterial)
+
+
     Counter = 0
 
     def Reroll():
@@ -65,6 +67,8 @@ try:
             Counter = Counter+1
             if len(ModNums)>0:    
                 for line in Check_lines:
+                    if Fracture and "fractured" in line:
+                        continue
                     for name in ModName:
                         if name in line:
                             match = re.search('\d+', line)

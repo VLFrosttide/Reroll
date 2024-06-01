@@ -1,11 +1,17 @@
-Python script spawned[]
-['1065', '1056']
-['1164', '933']
-ChaosOrb
-Rarity Does Not Match!
-Child process exited with code 0Python script spawned[]
-['1065', '1056']
-['1164', '933']
-ChaosOrb
-Rarity Does Not Match!
-Child process exited with code 0
+Item Class: Abyss Jewels
+Rarity: Magic
+Beryl Hypnotic Eye Jewel of the Assassin
+--------
+Abyss
+--------
+Requirements:
+Level: 20
+--------
+Item Level: 83
+--------
++14% to Critical Strike Multiplier if you've Killed Recently (fractured)
++23 to maximum Mana
+--------
+Place into an Abyssal Socket on an Item or into an allocated Jewel Socket on the Passive Skill Tree. Right click to remove from the Socket.
+--------
+Fractured Item

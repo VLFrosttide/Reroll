@@ -75,6 +75,7 @@ const CreateWindow = () => {
     let CurrencyCoords = args[2];
     let TabCoords = args[3];
     let CraftMaterial = args[4];
+    let Fracture = args[5];
     console.log("CurrencyCoords: ", CurrencyCoords);
     console.log("TabCoords: ", TabCoords);
     const RerollPath = path.join(ExePath, "/renderer/Reroll.py");
@@ -86,6 +87,7 @@ const CreateWindow = () => {
       CurrencyCoords,
       TabCoords,
       CraftMaterial,
+      Fracture,
     ]);
     StartCrafting.stdout.on("data", (data) => {
       console.log("MyData:", data.toString());

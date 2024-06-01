@@ -117,10 +117,7 @@ body {
   bottom: 1%;
   right: 1%;
 }
-#InstructionsCheckBox {
-  filter: brightness(40%);
-  accent-color: rgb(0, 0, 0);
-}
+
 .XYLabel {
   opacity: 0.2;
 }
@@ -139,4 +136,14 @@ body {
 }
 .button {
   user-select: none;
+}
+#Start {
+  display: block;
+}
+#StartButton {
+  margin: 0.5rem;
+}
+.CheckBox {
+  filter: brightness(40%);
+  accent-color: rgb(0, 0, 0);
 }
