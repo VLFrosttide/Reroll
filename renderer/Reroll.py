@@ -2,7 +2,7 @@ import pyautogui
 import pyperclip
 import sys
 import traceback
-import re
+import re 
 Rarity = None
 Check = None
 pyperclip.copy("")
