@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="Main">
+      <div id="SavedCrafts">Saved Crafts</div>
+      <div id="Gallery" hidden>
+        <img
+          src="SaveIconPics/SilverFlaskJewel.png"
+          alt=""
+          class="Image GalleryImage"
+        />
+        <img
+          src="SaveIconPics/SearchingEyeJewel.png"
+          class="Image GalleryImage"
+          alt=""
+        />
+        <img
+          src="SaveIconPics/GhastlyEyeJewel.png"
+          class="Image GalleryImage"
+          alt=""
+        />
+        <img
+          src="SaveIconPics/MurderEyeJewel.png"
+          class="Image GalleryImage"
+          alt=""
+        />
+        <img
+          src="SaveIconPics/HypnoticEyeJewel.png"
+          class="Image GalleryImage"
+          alt=""
+        />
+        <img
+          src="SaveIconPics/CobaltJewel.png"
+          class="Image GalleryImage"
+          alt=""
+        />
+        <img
+          src="SaveIconPics/CrimsonJewel.png"
+          class="Image GalleryImage"
+          alt=""
+        />
+        <img
+          src="SaveIconPics/ViridianJewel.png"
+          class="Image GalleryImage"
+          alt=""
+        />
+        <img
+          src="SaveIconPics/LargeClusterJewel.png"
+          class="Image GalleryImage"
+          alt=""
+        />
+      </div>
+      <div id="Instructions" class="Instructions">
+        Select a currency item (Left Mouse click), then <br />
+        while the program is focused (Click on the program and do not click
+        anywhere else) <br />
+        move your mouse cursor over the center of the matching item in game
+        (without clicking), <br />
+        then press F1 to record its coordinates. <br />Remember that the program
+        window must be on focus for it to record the coords.
+      </div>
+      <div id="InputDiv">
+        <input
+          class="Input"
+          type="text"
+          id="ExcludeModInput"
+          placeholder="Exclude mods that contain"
+        />
+        <input
+          class="Input"
+          type="text"
+          id="ModInput"
+          placeholder="Mod youre looking for"
+        />
+        <input
+          class="Input"
+          type="number"
+          id="MaxRerolls"
+          step="20"
+          min="1"
+          placeholder="Maximum rerolls"
+        />
+        <input
+          class="Input"
+          type="text"
+          id="EssenceInput"
+          placeholder="Essence Highlight"
+        />
+      </div>
+
+      <div id="CurrencyDiv">
+        <div id="ImageContainer">
+          <div id="ManualContainer">
+            <div class="CurrencyGroup">
+              <img
+                id="RegalOrb"
+                class="Image Currency Manual"
+                src="CurrencyPics/Regal.png"
+                alt=""
+              />
+              <label id="RegalOrbLabel" class="XYLabel AddBorder">X:, Y:</label>
+            </div>
+            <div class="CurrencyGroup">
+              <img
+                id="AnnulOrb"
+                class="Image Currency Manual"
+                src="CurrencyPics/Annul.png"
+                alt=""
+              />
+              <label id="AnnulOrbLabel" class="XYLabel AddBorder">X:, Y:</label>
+            </div>
+            <div class="CurrencyGroup">
+              <img
+                id="ScourOrb"
+                class="Image Currency Manual"
+                src="CurrencyPics/Scour.png"
+                alt=""
+              />
+              <label id="ScourOrbLabel" class="XYLabel AddBorder">X:, Y:</label>
+            </div>
+            <div class="CurrencyGroup">
+              <img
+                id="TransmuteOrb"
+                class="Image Currency Manual"
+                src="CurrencyPics/Transmute.png"
+                alt=""
+              />
+              <label id="TransmuteOrbLabel" class="XYLabel AddBorder"
+                >X:, Y:</label
+              >
+            </div>
+            <div class="CurrencyGroup">
+              <img
+                id="AugOrb"
+                class="Image Currency Manual"
+                src="CurrencyPics/Aug.png"
+                alt=""
+              />
+              <label id="AugOrbLabel" class="XYLabel AddBorder">X:, Y:</label>
+            </div>
+          </div>
+          <div id="AutoContainer" class="Auto">
+            <div class="CurrencyGroup">
+              <img
+                id="ChaosOrb"
+                class="Image Currency"
+                src="CurrencyPics/ChaosOrb.png"
+                alt=""
+              />
+              <label id="ChaosOrbLabel" class="XYLabel AddBorder">X:, Y:</label>
+            </div>
+            <div class="CurrencyGroup">
+              <img
+                id="OrbofAlteration"
+                class="Image Currency"
+                src="CurrencyPics/AltOrb.png"
+                alt=""
+              />
+              <label id="OrbofAlterationLabel" class="XYLabel AddBorder"
+                >X:, Y:</label
+              >
+            </div>
+
+            <div class="CurrencyGroup" id="CurrencyTabDiv">
+              <div id="CurrencyTabItemSpot" class="AddBorder Tutorial Currency">
+                Currency tab <br />
+                Item spot
+              </div>
+              <label class="XYLabel" id="CurrencyTabItemSpotLabel">X:,Y:</label>
+            </div>
+            <div class="CurrencyGroup" id="EssenceTabDiv">
+              <div id="EssenceTabItemSpot" class="AddBorder Tutorial Currency">
+                Essence tab <br />
+                Item spot
+              </div>
+              <label class="XYLabel" id="EssenceTabItemSpotLabel">X:, Y:</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="Instructions2" class="Instructions Tutorial">
+        After you're done setting the basic currency coords, click on the
+        essence to open the essence tab and set the coords of at least one
+        essence and then press the "Store coordinates" button on the bottom of
+        the page.
+      </div>
+
+      <img
+        id="EssenceImage"
+        src="CurrencyPics/Torment.png"
+        class="Image"
+        alt=""
+      />
+      <div id="EssenceContainer" hidden>
+        <div id="EssenceLeftSide">
+          <div id="Greed" class="EssenceDiv">
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Greed\Deafening_Essence_of_Greed_inventory_icon.png"
+                alt=""
+                class="Image Left Tutorial Essence Deafening"
+                id="DeafeningEssenceOfGreed"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Greed\Shrieking_Essence_of_Greed_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Shrieking"
+                id="ShriekingEssenceOfGreed"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Greed\Screaming_Essence_of_Greed_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Screaming"
+                id="ScreamingEssenceOfGreed"
+              />
+            </div>
+          </div>
+          <div id="Contempt" class="EssenceDiv">
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Contempt\Deafening_Essence_of_Contempt_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Deafening"
+                id="DeafeningEssenceOfContempt"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Contempt\Shrieking_Essence_of_Contempt_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Shrieking"
+                id="ShriekingEssenceOfContempt"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Contempt\Screaming_Essence_of_Contempt_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Screaming"
+                id="ScreamingEssenceOfContempt"
+              />
+            </div>
+          </div>
+          <div id="Hatred" class="EssenceDiv">
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Hatred\Deafening_Essence_of_Hatred_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Deafening"
+                id="DeafeningEssenceOfHatred"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Hatred\Shrieking_Essence_of_Hatred_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Shrieking"
+                id="ShriekingEssenceOfHatred"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Hatred\Screaming_Essence_of_Hatred_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Screaming"
+                id="ScreamingEssenceOfHatred"
+              />
+            </div>
+          </div>
+          <div id="Woe" class="EssenceDiv">
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Woe\Deafening_Essence_of_Woe_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Deafening"
+                id="DeafeningEssenceOfWoe"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Woe\Shrieking_Essence_of_Woe_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Shrieking"
+                id="ShriekingEssenceOfWoe"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Woe\Screaming_Essence_of_Woe_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Screaming"
+                id="ScreamingEssenceOfWoe"
+              />
+            </div>
+          </div>
+          <div id="Fear" class="EssenceDiv">
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Fear\Deafening_Essence_of_Fear_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Deafening"
+                id="DeafeningEssenceOfFear"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Fear\Shrieking_Essence_of_Fear_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Shrieking"
+                id="ShriekingEssenceOfFear"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Fear\Screaming_Essence_of_Fear_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Screaming"
+                id="ScreamingEssenceOfFear"
+              />
+            </div>
+          </div>
+          <div id="Anger" class="EssenceDiv">
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Anger\Deafening_Essence_of_Anger_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Deafening"
+                id="DeafeningEssenceOfAnger"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Anger\Shrieking_Essence_of_Anger_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Shrieking"
+                id="ShriekingEssenceOfAnger"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Anger\Screaming_Essence_of_Anger_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Screaming"
+                id="ScreamingEssenceOfAnger"
+              />
+            </div>
+          </div>
+          <div id="Torment" class="EssenceDiv">
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Torment\Deafening_Essence_of_Torment_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Deafening"
+                id="DeafeningEssenceOfTorment"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Torment\Shrieking_Essence_of_Torment_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Shrieking"
+                id="ShriekingEssenceOfTorment"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Torment\Screaming_Essence_of_Torment_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Screaming"
+                id="ScreamingEssenceOfTorment"
+              />
+            </div>
+          </div>
+          <div id="Sorrow" class="EssenceDiv">
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Sorrow\Deafening_Essence_of_Sorrow_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Deafening"
+                id="DeafeningEssenceOfSorrow"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Sorrow\Shrieking_Essence_of_Sorrow_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Shrieking"
+                id="ShriekingEssenceOfSorrow"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Sorrow\Screaming_Essence_of_Sorrow_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Screaming"
+                id="ScreamingEssenceOfSorrow"
+              />
+            </div>
+          </div>
+          <div id="Rage" class="EssenceDiv">
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Rage\Deafening_Essence_of_Rage_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Deafening"
+                id="DeafeningEssenceOfRage"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Rage\Shrieking_Essence_of_Rage_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Shrieking"
+                id="ShriekingEssenceOfRage"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Rage\Screaming_Essence_of_Rage_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Screaming"
+                id="ScreamingEssenceOfRage"
+              />
+            </div>
+          </div>
+          <div id="Suffering" class="EssenceDiv">
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Suffering\Deafening_Essence_of_Suffering_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Deafening"
+                id="DeafeningEssenceOfSuffering"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Suffering\Shrieking_Essence_of_Suffering_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Shrieking"
+                id="ShriekingEssenceOfSuffering"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Suffering\Screaming_Essence_of_Suffering_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Screaming"
+                id="ScreamingEssenceOfSuffering"
+              />
+            </div>
+          </div>
+          <div id="Wrath" class="EssenceDiv">
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Wrath\Deafening_Essence_of_Wrath_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Deafening"
+                id="DeafeningEssenceOfWrath"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Wrath\Shrieking_Essence_of_Wrath_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Shrieking"
+                id="ShriekingEssenceOfWrath"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Wrath\Screaming_Essence_of_Wrath_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Screaming"
+                id="ScreamingEssenceOfWrath"
+              />
+            </div>
+          </div>
+          <div id="Doubt" class="EssenceDiv">
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Doubt\Deafening_Essence_of_Doubt_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Deafening"
+                id="DeafeningEssenceOfDoubt"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Doubt\Shrieking_Essence_of_Doubt_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Shrieking"
+                id="ShriekingEssenceOfDoubt"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Doubt\Screaming_Essence_of_Doubt_inventory_icon.png"
+                alt=""
+                class="Image Essence Left Tutorial Screaming"
+                id="ScreamingEssenceOfDoubt"
+              />
+            </div>
+          </div>
+        </div>
+        <br />
+        <div id="EssenceRightSide">
+          <div id="Loathing" class="EssenceDiv">
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Loathing\Screaming_Essence_of_Loathing_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Screaming"
+                id="ScreamingEssenceOfLoathing"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Loathing\Shrieking_Essence_of_Loathing_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Shrieking"
+                id="ShriekingEssenceOfLoathing"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Loathing\Deafening_Essence_of_Loathing_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Deafening"
+                id="DeafeningEssenceOfLoathing"
+              />
+            </div>
+          </div>
+          <div id="Zeal" class="EssenceDiv">
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Zeal\Screaming_Essence_of_Zeal_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Screaming"
+                id="ScreamingEssenceOfZeal"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Zeal\Shrieking_Essence_of_Zeal_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Shrieking"
+                id="ShriekingEssenceOfZeal"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Zeal\Deafening_Essence_of_Zeal_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Deafening"
+                id="DeafeningEssenceOfZeal"
+              />
+            </div>
+          </div>
+
+          <div id="Anguish" class="EssenceDiv">
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Anguish\Screaming_Essence_of_Anguish_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Screaming"
+                id="ScreamingEssenceOfAnguish"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Anguish\Shrieking_Essence_of_Anguish_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Shrieking"
+                id="ShriekingEssenceOfAnguish"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Anguish\Deafening_Essence_of_Anguish_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Deafening"
+                id="DeafeningEssenceOfAnguish"
+              />
+            </div>
+          </div>
+          <div id="Spite" class="EssenceDiv">
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Spite\Screaming_Essence_of_Spite_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Screaming"
+                id="ScreamingEssenceOfSpite"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Spite\Shrieking_Essence_of_Spite_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Shrieking"
+                id="ShriekingEssenceOfSpite"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Spite\Deafening_Essence_of_Spite_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Deafening"
+                id="DeafeningEssenceOfSpite"
+              />
+            </div>
+          </div>
+          <div id="Scorn" class="EssenceDiv">
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Scorn\Screaming_Essence_of_Scorn_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Screaming"
+                id="ScreamingEssenceOfScorn"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Scorn\Shrieking_Essence_of_Scorn_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Shrieking"
+                id="ShriekingEssenceOfScorn"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Scorn\Deafening_Essence_of_Scorn_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Deafening"
+                id="DeafeningEssenceOfScorn"
+              />
+            </div>
+          </div>
+          <div id="Envy" class="EssenceDiv">
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Envy\Screaming_Essence_of_Envy_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Screaming"
+                id="ScreamingEssenceOfEnvy"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Envy\Shrieking_Essence_of_Envy_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Shrieking"
+                id="ShriekingEssenceOfEnvy"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Envy\Deafening_Essence_of_Envy_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Deafening"
+                id="DeafeningEssenceOfEnvy"
+              />
+            </div>
+          </div>
+          <div id="Misery" class="EssenceDiv">
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Misery\Screaming_Essence_of_Misery_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Screaming"
+                id="ScreamingEssenceOfMisery"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Misery\Shrieking_Essence_of_Misery_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Shrieking"
+                id="ShriekingEssenceOfMisery"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Misery\Deafening_Essence_of_Misery_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Deafening"
+                id="DeafeningEssenceOfMisery"
+              />
+            </div>
+          </div>
+          <div id="Dread" class="EssenceDiv">
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Dread\Screaming_Essence_of_Dread_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Screaming"
+                id="ScreamingEssenceOfDread"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Dread\Shrieking_Essence_of_Dread_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Shrieking"
+                id="ShriekingEssenceOfDread"
+              />
+            </div>
+            <div class="CoordsLabel">
+              <img
+                src="EssencePics\Dread\Deafening_Essence_of_Dread_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Deafening"
+                id="DeafeningEssenceOfDread"
+              />
+            </div>
+          </div>
+          <div id="SpecialEssenceDiv">
+            <div id="Insanity" class="EssenceDiv CoordsLabel">
+              <img
+                src="EssencePics\Insanity\Essence_of_Insanity_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Special"
+                id="EssenceOfInsanity"
+              />
+            </div>
+            <div id="Horror" class="EssenceDiv CoordsLabel">
+              <img
+                src="EssencePics\Horror\Essence_of_Horror_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Special"
+                id="EssenceOfHorror"
+              />
+            </div>
+            <div id="Delirium" class="EssenceDiv CoordsLabel">
+              <img
+                src="EssencePics\Delirium\Essence_of_Delirium_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Special"
+                id="EssenceOfDelirium"
+              />
+            </div>
+            <div id="Hysteria" class="EssenceDiv CoordsLabel">
+              <img
+                src="EssencePics\Hysteria\Essence_of_Hysteria_inventory_icon.png"
+                alt=""
+                class="Image Essence Right Tutorial Special"
+                id="EssenceOfHysteria"
+              />
+            </div>
+          </div>
+        </div>
+        <div id="EssenceSpecial"></div>
+      </div>
+      <button id="StoreCoordsButton" class="button">Store coordinates</button>
+
+      <div id="Insertion"></div>
+      <label class="Instructions" hidden
+        >You can click on a mod to remove it from the list.</label
+      >
+      <div id="Container" hidden>Mods to look for:</div>
+      <div id="ExclusionContainer">Exclude mods that contain:</div>
+      <div id="HideInstructions">
+        <input type="checkbox" id="InstructionsCheckBox" class="CheckBox" />
+        <label>Hide Instructions</label>
+      </div>
+      <div id="Start">
+        <button id="StartButton" class="button" hidden>Start crafting</button>
+        <button id="SaveCraftButton" class="button">Save craft</button>
+        <div id="Fractures" hidden>
+          <input type="checkbox" id="FractureCheckBox" class="CheckBox" />
+          <label>Ignore fractures</label>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="logic.js" defer></script>
+</html>

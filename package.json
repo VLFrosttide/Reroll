@@ -1,0 +1,44 @@
+{
+  "name": "reroll",
+  "version": "1.0.0",
+  "description": "Automatically rerolls an item",
+  "main": "main.js",
+  "type": "module",
+  "build": {
+    "appId": "PoeAutoReroll",
+    "extraFiles": [
+      {
+        "from": "python/Reroll.py",
+        "to": "python/Reroll.py"
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "frosttide23.ico"
+    },
+    "nsis": {
+      "oneClick": true,
+      "uninstallDisplayName": "RemovePoeAutoReroll",
+      "installerIcon": "frosttide23.ico",
+      "allowElevation": true,
+      "perMachine": true
+    }
+  },
+  "files": [
+    "main.js",
+    "renderer/*",
+    "HelperFunctions/*"
+  ],
+  "scripts": {
+    "start": "set NODE_ENV=D&&electron .",
+    "build": "set NODE_ENV=production && electron-builder",
+    "pack": "set NODE_ENV=production && electron-builder --dir",
+    "dist": "set NODE_ENV=production && electron-builder"
+  },
+  "author": "Frosttide",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^32.1.2",
+    "electron-builder": "^25.0.5"
+  }
+}

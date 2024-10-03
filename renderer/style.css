@@ -1,0 +1,194 @@
+body {
+  background-color: black;
+  color: rgb(255, 255, 255);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.Instructions {
+  text-align: center;
+  user-select: none;
+}
+.CurrencyGroup {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 10px;
+}
+#CurrencyTabItemSpot,
+#EssenceTabItemSpot {
+  margin: 5px;
+}
+
+.AddBorder {
+  text-align: center;
+}
+#InputDiv {
+  display: flex;
+}
+.CoordsLabel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#EssenceImage {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+#Container,
+#ExclusionContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+}
+#SpecialEssenceDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}
+.Image {
+  height: 40px;
+  width: 40px;
+  object-fit: contain;
+  display: flex;
+  border: 3px solid transparent;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  -webkit-user-drag: none;
+  transition: width 0.3s, height 0.3s;
+}
+
+#ImageContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+  margin-bottom: 5px;
+  user-select: none;
+}
+.Hover {
+  border: 3px double;
+  border-color: rgb(213, 9, 80);
+}
+.HoverTooltip {
+  display: flex;
+  font-size: 20px;
+}
+#EssenceContainer {
+  -webkit-user-drag: none;
+  user-select: none;
+  flex-direction: row;
+}
+#EssenceLeftSide {
+  flex-direction: row;
+  border-right: 50px solid transparent;
+}
+#EssenceRightSide {
+  border-left: 50px solid transparent;
+}
+.EssenceDiv {
+  display: flex;
+  flex-direction: row;
+}
+#Insertion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 10px;
+  width: 300px;
+  height: 50px;
+}
+.Currency {
+  margin: 5px;
+}
+.Input {
+  background-color: rgb(15, 15, 15);
+  color: aliceblue;
+  margin: 10px;
+}
+#CurrencyDiv {
+  display: flex;
+}
+#HideInstructions {
+  position: absolute;
+  bottom: 1%;
+  right: 1%;
+}
+
+.XYLabel {
+  opacity: 0.2;
+}
+#ManualContainer {
+  display: flex;
+  flex-direction: row;
+}
+#AutoContainer {
+  display: flex;
+  flex-direction: row;
+}
+#Main {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.button {
+  user-select: none;
+  margin: 0.5rem;
+}
+#Start {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.CheckBox {
+  filter: brightness(40%);
+  accent-color: rgb(0, 0, 0);
+}
+.SelectNone {
+  user-select: none;
+}
+#Gallery {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+#SaveCraftIconSelector {
+  position: absolute;
+  top: 5rem;
+  left: 5rem;
+}
+.Hidden {
+  display: none;
+}
+#SavedCrafts {
+  /* display: flex; */
+  position: absolute;
+  bottom: 5rem;
+  left: 5rem;
+}
+#DeleteMenu {
+  position: absolute;
+  background-color: aliceblue;
+  color: black;
+  user-select: none;
+}
+.HoverSaved {
+  border: 3px double;
+  border-color: rgb(176, 183, 181);
+}
+.ExclusionMod {
+  color: rgb(255, 62, 28);
+}
+.ModName {
+  color: rgb(112, 255, 112);
+}
+.Instructions {
+  color: rgba(158, 206, 206, 0.884);
+}
