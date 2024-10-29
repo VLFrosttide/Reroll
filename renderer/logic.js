@@ -10,6 +10,8 @@ const CurrencyDiv = document.getElementById("CurrencyDiv");
 const StartButton = document.getElementById("StartButton");
 const SavedCrafts = document.getElementById("SavedCrafts");
 let DeleteSaveButton;
+let Counter;
+
 const SaveCraftButton = document.getElementById("SaveCraftButton");
 const ImageContainer = document.getElementById("ImageContainer");
 const SaveGallery = document.getElementById("Gallery");
@@ -517,7 +519,7 @@ const AddModElement = function (InputElement, ParentElement, ClassToAdd) {
   NewMod.textContent = InputElement.value;
   // NewMod.setAttribute("id", "ModString" + ModNumber);
   // ModNumber += 1;
-  NewMod.classList.add(ClassToAdd);
+  NewMod.classList.add(...ClassToAdd);
   ParentElement.appendChild(NewMod);
   InputElement.value = "";
 };
@@ -526,9 +528,20 @@ Container.addEventListener("click", (e) => {
     Container.removeChild(e.target);
   }
 });
+Container.addEventListener("mouseover", (e) => {
+  if (e.target.classList.contains("Mod")) {
+    e.target.style.opacity = 0.5;
+  }
+});
+Container.addEventListener("mouseout", (e) => {
+  if (e.target.classList.contains("Mod")) {
+    e.target.style.opacity = 1;
+  }
+});
+
 ModNameInput.addEventListener("keydown", (e) => {
   if (e.key == "Enter") {
-    AddModElement(ModNameInput, Container, "ModName");
+    AddModElement(ModNameInput, Container, ["ModName", "Mod"]);
   }
 });
 //#endregion
@@ -541,7 +554,17 @@ ExclusionContainer.addEventListener("click", (e) => {
 });
 ExcludeModInput.addEventListener("keydown", (e) => {
   if (e.key == "Enter") {
-    AddModElement(ExcludeModInput, ExclusionContainer, "ExclusionMod");
+    AddModElement(ExcludeModInput, ExclusionContainer, ["ExclusionMod", "Mod"]);
+  }
+});
+ExclusionContainer.addEventListener("mouseover", (e) => {
+  if (e.target.classList.contains("Mod")) {
+    e.target.style.opacity = 0.5;
+  }
+});
+ExclusionContainer.addEventListener("mouseout", (e) => {
+  if (e.target.classList.contains("Mod")) {
+    e.target.style.opacity = 1;
   }
 });
 //#endregion
@@ -626,7 +649,7 @@ window.api.GlobalKey((event, data) => {
   DataArray.push(HotkeyCurrencyCoords);
   DataArray.push(ItemCoords);
 
-  // window.api.TriggerAddon(DataArray);
+  window.api.TriggerCurrencyUse(DataArray);
 });
 //#endregion
 //#region MaxRerolls Step event listeners
@@ -1119,5 +1142,26 @@ window.api.ClearLocalStorage((event, data) => {
   console.log("Signal's here");
   localStorage.clear();
   location.reload();
+});
+//#endregion
+
+//#region Counter
+window.api.Counter((event, data) => {
+  console.log("Counter: ", data);
+  let CounterElement = document.getElementById("Counter");
+  console.log("CounterElement: ", CounterElement);
+  if (CounterElement === null) {
+    Counter = 1;
+    CreateElementFn(
+      "label",
+      "Counter",
+      "HoverTooltip",
+      `Currency Used: ${Counter}`,
+      Insertion
+    );
+  } else {
+    Counter++;
+    CounterElement.textContent = `Currency Used: ${Counter}`;
+  }
 });
 //#endregion

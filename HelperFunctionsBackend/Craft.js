@@ -9,6 +9,7 @@ const RerollFolder = path.join(DocPath, "RerollLogs");
 let LogFilePath = path.join(RerollFolder, "/Logs.txt");
 let ExePath = app.getPath("exe");
 ExePath = ExePath.substring(0, ExePath.lastIndexOf("\\"));
+let LiftKeysPath = path.join(ExePath, "/python/LiftKeys.py");
 
 ipcMain.on("StartCrafting", (event, args) => {
   WriteToLog(LogFilePath, "Program started crafting");
@@ -33,12 +34,15 @@ ipcMain.on("StartCrafting", (event, args) => {
   ]);
 
   StartCrafting.stdout.on("data", (data) => {
-    console.log("MyData:", data.toString());
-
-    WriteToLog(LogFilePathPath, String(data));
     let PrintThis = String(data);
+    console.log("MyData:", PrintThis);
+    if (PrintThis.includes("MyCounter")) {
+      win.webContents.send("Counter", "awd");
+    }
+
+    WriteToLog(LogFilePath, PrintThis);
     if (PrintThis.includes("Matching Line")) {
-      win.webContents.send("Match");
+      // win.webContents.send("Match");
       console.log("Print: ", PrintThis);
     }
     if (PrintThis.includes("RarityError")) {
@@ -54,13 +58,30 @@ ipcMain.on("StartCrafting", (event, args) => {
   });
 
   StartCrafting.stderr.on("data", (data) => {
-    console.error("error: ", data.toString());
+    console.error("error: ", String(data));
+    let FailSafeArray = [
+      "failSafeCheck",
+      "fail-safe",
+      "mouse moving to a corner",
+      "FailSafeException",
+      "FAILSAFE",
+    ];
     let MyError = `Error with crafting: ${String(data)}`;
-    WriteToLog(LogFilePath, `${MyError}`);
-    win.webContents.send("ItemError", MyError);
+    WriteToLog(LogFilePath, `MyError: ${MyError}`);
+
+    if (!FailSafeArray.some((element) => MyError.includes(element))) {
+      WriteToLog(LogFilePath, `${MyError}`);
+      win.webContents.send("ItemError", MyError);
+    }
   });
 
   StartCrafting.on("exit", (code, signal) => {
+    const LiftKeys = spawn("python", [LiftKeysPath]);
+    LiftKeys.stderr.on("data", (data) => {
+      console.error("Error with liftkeys: ", String(data));
+      WriteToLog(LogFilePath, `${String(data)}`);
+    });
+
     if (code !== null) {
       console.log(`Crafting script exited with code ${code}`);
       WriteToLog(LogFilePath, `Crafting script exited with code ${code}`);

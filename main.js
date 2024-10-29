@@ -8,20 +8,30 @@ import {
   Menu,
 } from "electron";
 import { EventEmitter } from "events";
-import "./HelperFunctions/LogFiles.js";
-import { CreateLogs } from "./HelperFunctions/LogFiles.js";
-import { CheckPython, CheckPyPackage } from "./HelperFunctions/PythonCheck.js";
-import "./HelperFunctions/Craft.js";
+import "./HelperFunctionsBackend/LogFiles.js";
+import {
+  CreateLogs,
+  Deletefile,
+  OpenFile,
+  WriteToLog,
+} from "./HelperFunctionsBackend/LogFiles.js";
+import {
+  CheckPython,
+  CheckPyPackage,
+} from "./HelperFunctionsBackend/PythonCheck.js";
+import "./HelperFunctionsBackend/Craft.js";
+import "./HelperFunctionsBackend/UseCurrency.js";
 let win;
 let LogFilePath;
 let ScreenRatio;
 let NewMenuTemplate;
 let CaptureMouseEvent = new EventEmitter();
 let MousePosition;
+let ExePath = app.getPath("exe");
+ExePath = ExePath.substring(0, ExePath.lastIndexOf("\\"));
+let PreloadPath = path.join(app.getAppPath(), "/renderer/preload.js");
 
 const CreateWindow = () => {
-  let PreloadPath =
-    "C:/Users/shacx/Documents/GitHub/Reroll-Improved/renderer/preload.js";
   win = new BrowserWindow({
     width: 800,
     height: 550,
@@ -69,7 +79,6 @@ app.whenReady().then(() => {
   });
   const StartCraft = globalShortcut.register("Control+Enter", () => {
     console.log("Crafting hotkey working!");
-
     win.webContents.send("StartCraft", "Crafting Started");
   });
 
@@ -133,6 +142,39 @@ app.whenReady().then(() => {
           label: "Clear All stored coords",
           click() {
             win.webContents.send("ClearLocalStorage", "awd");
+          },
+        },
+        {
+          label: "Open logs",
+          accelerator: "F2",
+          click() {
+            try {
+              OpenFile(LogFilePath);
+            } catch (err) {
+              WriteToLog(LogFilePath, "Error opening the logfile: " + err);
+              win.webContents.send(
+                "error",
+                "Error opening the logfile: " + err
+              );
+            }
+          },
+        },
+        {
+          label: "Delete logs",
+          accelerator: "F4",
+          click() {
+            try {
+              Deletefile(LogFilePath);
+            } catch (err) {
+              WriteToLog(
+                LogFilePath,
+                `Error deleting the ${LogFilePath} file: " + err`
+              );
+              win.webContents.send(
+                "error",
+                `Error deleting the file ${LogFilePath} :  + ${err}`
+              );
+            }
           },
         },
         { type: "separator" },

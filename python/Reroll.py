@@ -67,7 +67,7 @@ try:
                 print("Item Not Found")
                 break
             Counter = Counter+1
-            # if len(ModNums)>0:    
+            print("MyCounter: ", Counter,flush= True)
             for line in Check_lines:
                 if Fracture:
                     if "fractured" in line:

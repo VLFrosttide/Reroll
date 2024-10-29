@@ -192,3 +192,6 @@ body {
 .Instructions {
   color: rgba(158, 206, 206, 0.884);
 }
+#Counter {
+  color: rgb(165, 31, 31);
+}

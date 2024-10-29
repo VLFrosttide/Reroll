@@ -10,6 +10,14 @@
       {
         "from": "python/Reroll.py",
         "to": "python/Reroll.py"
+      },
+      {
+        "from": "python/UseCurrency.py",
+        "to": "python/UseCurrency.py"
+      },
+      {
+        "from": "python/LiftKeys.py",
+        "to": "python/LiftKeys.py"
       }
     ],
     "win": {
@@ -27,7 +35,7 @@
   "files": [
     "main.js",
     "renderer/*",
-    "HelperFunctions/*"
+    "HelperFunctionsBackend/*"
   ],
   "scripts": {
     "start": "set NODE_ENV=D&&electron .",

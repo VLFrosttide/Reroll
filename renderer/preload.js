@@ -13,8 +13,9 @@ contextBridge.exposeInMainWorld("api", {
 
   StartCraft: (callback) => ipcRenderer.on("StartCraft", callback),
   GlobalKey: (callback) => ipcRenderer.on("GlobalKey", callback),
-  TriggerAddon: (callback) => {
-    ipcRenderer.send("TriggerAddon", callback);
+  Counter: (callback) => ipcRenderer.on("Counter", callback),
+  TriggerCurrencyUse: (callback) => {
+    ipcRenderer.send("TriggerCurrencyUse", callback);
   },
   ResizeWindow: (callback) => {
     ipcRenderer.send("ResizeWindow", callback);
