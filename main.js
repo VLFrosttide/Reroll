@@ -30,7 +30,7 @@ let MousePosition;
 let ExePath = app.getPath("exe");
 ExePath = ExePath.substring(0, ExePath.lastIndexOf("\\"));
 let PreloadPath = path.join(app.getAppPath(), "/renderer/preload.js");
-
+//awd
 const CreateWindow = () => {
   win = new BrowserWindow({
     width: 800,
