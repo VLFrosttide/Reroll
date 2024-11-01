@@ -4,6 +4,7 @@ import { WriteToLog } from "./LogFiles.js";
 import { spawn } from "child_process";
 
 import path from "path";
+import { write } from "fs";
 const DocPath = app.getPath("documents");
 const RerollFolder = path.join(DocPath, "RerollLogs");
 let LogFilePath = path.join(RerollFolder, "/Logs.txt");
@@ -40,7 +41,6 @@ ipcMain.on("StartCrafting", (event, args) => {
       win.webContents.send("Counter", "awd");
     }
 
-    WriteToLog(LogFilePath, PrintThis);
     if (PrintThis.includes("Matching Line")) {
       // win.webContents.send("Match");
       console.log("Print: ", PrintThis);
@@ -92,5 +92,10 @@ ipcMain.on("StartCrafting", (event, args) => {
       console.log("Crafting script has exited");
       WriteToLog(LogFilePath, "Crafting script has exited");
     }
+
+    WriteToLog(
+      LogFilePath,
+      "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    );
   });
 });

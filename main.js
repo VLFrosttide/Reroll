@@ -51,7 +51,7 @@ const CreateWindow = () => {
           fontSrc: ["self"],
           connectSrc: ["self"],
           manifestSrc: ["self"],
-          // Add more directives as needed for your app
+          // Add more directives as needed
         },
       },
     },
