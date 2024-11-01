@@ -40,7 +40,14 @@ ipcMain.on("StartCrafting", (event, args) => {
     if (PrintThis.includes("MyCounter")) {
       win.webContents.send("Counter", "awd");
     }
+    if (PrintThis.includes("CurrentBase")) {
+      WriteToLog(
+        LogFilePath,
+        "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      );
 
+      WriteToLog(LogFilePath, PrintThis);
+    }
     if (PrintThis.includes("Matching Line")) {
       // win.webContents.send("Match");
       console.log("Print: ", PrintThis);

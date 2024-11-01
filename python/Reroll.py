@@ -126,6 +126,7 @@ try:
     pyautogui.press("c")
     pyautogui.keyUp("ctrl") 
     Check = pyperclip.paste().lower()
+    print("CurrentBase: "+Check)
     lines = Check.splitlines()
     for line in lines:
         if "rarity" in line:
