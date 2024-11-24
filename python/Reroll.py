@@ -56,7 +56,6 @@ try:
         stop = False
         while stop == False:
             time.sleep(SleepTimer)
-            print("Sleeping for: ", SleepTimer)
             pyautogui.keyDown("shift")
 
             pyautogui.click()
@@ -97,7 +96,7 @@ try:
                             NumberInLine = re.findall(r'\d+', line)  #[1,70]
                             NumberInLine = int(NumberInLine[-1])  #70
                             if NumberInLine is not None:
-                                print("ModObject: ", ModObject)
+                                # print("ModObject: ", ModObject)
                                 if name in ModObject and NumberInLine >= ModObject[name]: 
                                     print("Stopped because of this!",flush= True)
 
@@ -107,7 +106,6 @@ try:
                                     print("Number was an issue")
                                     print(name in ModObject)
                                     print("Number in line: ", NumberInLine)
-                                    print("ModObject: ", ModObject[name])
                                     continue
                         else: 
                             stop = True

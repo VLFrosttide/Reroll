@@ -591,6 +591,7 @@ function StartCrafting() {
     console.log("Craft Started");
     InfoArray.length = 0;
     if (ModClass.length > 0) {
+      let Fracture = FractureCheckBox.checked;
       let ModArray = [];
       let ExclusionModArray = [];
       if (ExclusionModClass.length > 0) {
@@ -600,15 +601,19 @@ function StartCrafting() {
           );
         }
       }
-      let Fracture = FractureCheckBox.checked;
       for (let i = 0; i < ModClass.length; i++) {
-        ModArray.push(ModClass[i].textContent.toLocaleLowerCase().trim());
+        let MyMod = ModClass[i].textContent.toLocaleLowerCase().trim();
+        let HasNumber = /\d/.test(MyMod);
+        if (!HasNumber) {
+          MyMod = MyMod + "0";
+        }
+        ModArray.push(MyMod);
       }
       // console.log("ModArray: ", ModArray);
-      InfoArray.push(ModArray);
+      console.log("ModArray: ", ModArray);
+      InfoArray.push(ModArray); //0
 
-      InfoArray.push(MaxRerolls.value);
-      console.log("Craftmaterial: ", CraftMaterial);
+      InfoArray.push(MaxRerolls.value); //1
 
       if (CraftMaterial.includes("Essence")) {
         TabCoords = localStorage.getItem("EssenceTabCoords");
@@ -628,13 +633,13 @@ function StartCrafting() {
         Coords = Coords.replace("[", "").replace("]", "");
       }
 
-      InfoArray.push(Coords);
-      InfoArray.push(TabCoords);
-      InfoArray.push(CraftMaterial);
-      InfoArray.push(Fracture);
-      InfoArray.push(ExclusionModArray);
-      InfoArray.push(Number(LagInput.value));
-      console.log("InfoArray: ", InfoArray);
+      InfoArray.push(Coords); //2
+      InfoArray.push(TabCoords); //3
+      InfoArray.push(CraftMaterial); //4
+      InfoArray.push(Fracture); //5
+      InfoArray.push(ExclusionModArray); //6
+      InfoArray.push(Number(LagInput.value)); //7
+      console.log("InfoArray: ", InfoArray); //8
       window.api.StartCrafting(InfoArray);
     } else {
       alert("No mods selected");
