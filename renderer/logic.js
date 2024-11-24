@@ -341,7 +341,7 @@ if (localStorage.length < 2) {
   });
   SavedCrafts.addEventListener("mouseover", (e) => {
     if (e.target.classList.contains("Image")) {
-      CreateElementFn("div", "", "HoverTooltip", `${e.target.id}`, Insertion);
+      CreateElementFn("div", "", ["HoverTooltip"], `${e.target.id}`, Insertion);
     }
   });
   SavedCrafts.addEventListener("mouseout", (e) => {
@@ -892,7 +892,7 @@ document.addEventListener("keydown", (e) => {
  * Creates a new element, sets its properties, and inserts it into the specified parent element.
  * @param {string} ElType - The type of the element to create (e.g., 'div', 'label', 'span').
  * @param {string} [ElID] - Optional The ID attribute of the new element.
- * @param {string} ElClass - The class attribute of the new element.
+ * @param {Array} ElClass - The class attribute of the new element.
  * @param {string} ElText - The text content of the new element.
  * @param {HTMLElement} ElParent - The parent element where the new element will be inserted.
  */
@@ -1174,7 +1174,7 @@ window.api.Counter((event, data) => {
     CreateElementFn(
       "label",
       "Counter",
-      "HoverTooltip",
+      ["HoverTooltip"],
       `Currency Used: ${Counter}`,
       Insertion
     );
