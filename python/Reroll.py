@@ -56,6 +56,7 @@ try:
         stop = False
         while stop == False:
             time.sleep(SleepTimer)
+            print("Sleeping for: ", SleepTimer)
             pyautogui.keyDown("shift")
 
             pyautogui.click()

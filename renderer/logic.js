@@ -633,7 +633,7 @@ function StartCrafting() {
       InfoArray.push(CraftMaterial);
       InfoArray.push(Fracture);
       InfoArray.push(ExclusionModArray);
-      InfoArray.push(LagInput.value);
+      InfoArray.push(Number(LagInput.value));
       console.log("InfoArray: ", InfoArray);
       window.api.StartCrafting(InfoArray);
     } else {
@@ -693,6 +693,7 @@ LagCheckBox.addEventListener("change", function () {
     localStorage.setItem("LagCheckBox", "checked");
   } else {
     localStorage.setItem("LagCheckBox", "");
+    LagInput.value = "";
   }
 });
 //#endregion
