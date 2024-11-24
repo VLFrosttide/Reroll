@@ -15,6 +15,6 @@ export function OpenFile(FilePath) {
   exec(`start "" "${FilePath}"`);
 }
 
-export function Deletefile(LogfilePath) {
-  fs.unlinkSync(FilePath);
+export function Deletefile(FilePath) {
+  fs.writeFileSync(FilePath, "");
 }

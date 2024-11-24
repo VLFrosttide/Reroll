@@ -141,9 +141,6 @@ window.api.ScreenRatio("ScreenRatio");
 window.api.ScreenRatioValue((value) => {
   ScreenRatio = value;
 });
-window.api.Logfile((event, data) => {
-  console.log("Logfile data: ", data);
-});
 
 //#endregion
 for (const Essence of EssenceClassList) {
@@ -1188,4 +1185,11 @@ window.api.Counter((event, data) => {
     CounterElement.textContent = `Currency Used: ${Counter}`;
   }
 });
+//#endregion
+
+//#region Logfiles
+window.api.Logfile((event, data) => {
+  alert(data);
+});
+
 //#endregion

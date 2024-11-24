@@ -177,14 +177,16 @@ app.whenReady().then(() => {
           accelerator: "F4",
           click() {
             try {
+              console.log("LogfilePath: ", LogFilePath);
               Deletefile(LogFilePath);
+              win.webContents.send("Logfile", "Deleted the log files!");
             } catch (err) {
               WriteToLog(
                 LogFilePath,
                 `Error deleting the ${LogFilePath} file: " + err`
               );
               win.webContents.send(
-                "error",
+                "Logfile",
                 `Error deleting the file ${LogFilePath} :  + ${err}`
               );
             }
