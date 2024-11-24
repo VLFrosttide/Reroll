@@ -771,6 +771,19 @@
       <div id="HideInstructions">
         <input type="checkbox" id="InstructionsCheckBox" class="CheckBox" />
         <label>Hide Instructions</label>
+        <div id="LagContainer">
+          <input type="checkbox" id="LagCheckBox" class="CheckBox" />
+          <label>Reroll delay</label>
+          <input
+            type="number"
+            placeholder="0"
+            step="0.1"
+            min="0"
+            max="2"
+            class="Input"
+            id="LagInput"
+          />
+        </div>
       </div>
       <div id="Start">
         <button id="StartButton" class="button" hidden>Start crafting</button>

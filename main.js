@@ -37,6 +37,8 @@ const CreateWindow = () => {
     height: 550,
     x: 490,
     y: 0,
+    title: "Reroll",
+
     webPreferences: {
       nodeIntegration: false,
       sandbox: true,
@@ -144,6 +146,17 @@ app.whenReady().then(() => {
             win.webContents.send("ClearLocalStorage", "awd");
           },
         },
+
+        { type: "separator" },
+        { label: "Exit", role: "quit" },
+      ],
+    },
+    {
+      label: "Options",
+    },
+    {
+      label: "Logs",
+      submenu: [
         {
           label: "Open logs",
           accelerator: "F2",
@@ -177,8 +190,6 @@ app.whenReady().then(() => {
             }
           },
         },
-        { type: "separator" },
-        { label: "Exit", role: "quit" },
       ],
     },
   ];

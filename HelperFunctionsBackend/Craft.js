@@ -21,6 +21,7 @@ ipcMain.on("StartCrafting", (event, args) => {
   let CraftMaterial = args[4];
   let Fracture = args[5];
   let ExclusionMods = args[6];
+  let SleepTimer = args[7];
   let RerollPath = path.join(ExePath, "/python/Reroll.py");
   console.log(MaxRolls);
   const StartCrafting = spawn("python", [

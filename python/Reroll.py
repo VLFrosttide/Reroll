@@ -1,4 +1,5 @@
 import pyautogui
+import time
 import pyperclip
 import sys
 import traceback
@@ -24,7 +25,7 @@ try:
     ExclusionModArray = sys.argv[7].split(",")
     ExclusionModArray = [item for item in ExclusionModArray if item]
     ExclusionModArray = [item for item in ExclusionModArray if item.strip()]
-
+    SleepTimer = sys.argv[8]
     if (sys.argv[2]==""):   
         MaxRolls = 9999
     else:
@@ -53,6 +54,7 @@ try:
         global Check_lines
         stop = False
         while stop == False:
+            time.sleep(SleepTimer)
             pyautogui.keyDown("shift")
 
             pyautogui.click()

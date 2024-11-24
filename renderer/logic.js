@@ -41,12 +41,15 @@ const EssenceTabDiv = document.getElementById("EssenceTabDiv");
 const EssenceNameArray = [];
 const Insertion = document.getElementById("Insertion"); // Used for saving crafts
 const MaxRerolls = document.getElementById("MaxRerolls");
+const LagInput = document.getElementById("LagInput");
 const MinRoll = document.getElementById("MinRoll");
 const InputDiv = document.getElementById("InputDiv");
 const Instructions = document.getElementsByClassName("Instructions");
 const InstructionsDiv1 = document.getElementById("Instructions");
 const InstructionsDiv2 = document.getElementById("Instructions2");
 const InstructionsCheckBox = document.getElementById("InstructionsCheckBox");
+const LagCheckBox = document.getElementById("LagCheckBox");
+const CheckBoxClass = document.getElementsByClassName("CheckBox");
 const FractureCheckBox = document.getElementById("FractureCheckBox");
 const AllowLabelModification = document.getElementsByClassName("Modify");
 const Greed1 = document.getElementById("DeafeningEssenceOfGreed");
@@ -86,6 +89,12 @@ let MouseCoordsY;
 let ChangingLabel; // The X / Y label for each essence.
 let ScreenRatio;
 //#endregion
+let LagInputLS = localStorage.getItem("LagInput");
+if (LagInputLS) {
+  console.log("LagInput: ", LagInputLS);
+  LagInput.value = Number(LagInputLS);
+}
+
 function GetLSSaves(Prefix) {
   let Items = {};
   for (let i = 0; i < localStorage.length; i++) {
@@ -443,8 +452,9 @@ if (localStorage.length < 2) {
       HoverTooltip[i].remove();
     }
   });
-  let CheckBox = localStorage.getItem("InstructionsCheckBox");
-  if (CheckBox === "checked") {
+
+  let InstructionsBox = localStorage.getItem("InstructionsCheckBox");
+  if (InstructionsBox === "checked") {
     InstructionsCheckBox.checked = true;
     for (const Item of Instructions) {
       Item.style.display = "none";
@@ -455,9 +465,13 @@ if (localStorage.length < 2) {
       Item.style.display = "flex";
     }
   }
+  let LagBox = localStorage.getItem("LagCheckBox");
+  if (LagBox === "checked") {
+    LagCheckBox.checked = true;
+  } else {
+    LagCheckBox.checked = false;
+  }
 
-  // ChaosOrbLabel.remove();
-  // AltLabel.remove();
   for (let i = XYLabelList.length - 1; i >= 0; i--) {
     XYLabelList[i].remove();
   }
@@ -622,6 +636,7 @@ function StartCrafting() {
       InfoArray.push(CraftMaterial);
       InfoArray.push(Fracture);
       InfoArray.push(ExclusionModArray);
+      InfoArray.push(LagInput.value);
       console.log("InfoArray: ", InfoArray);
       window.api.StartCrafting(InfoArray);
     } else {
@@ -652,17 +667,18 @@ window.api.GlobalKey((event, data) => {
   window.api.TriggerCurrencyUse(DataArray);
 });
 //#endregion
-//#region MaxRerolls Step event listeners
-MaxRerolls.addEventListener("wheel", function (e) {
-  if (e.deltaY > 0) {
-    MaxRerolls.stepDown();
-  } else {
-    MaxRerolls.stepUp();
-  }
-});
+//#region  StepUp/Down event listeners
+MaxRerolls.addEventListener("wheel", function (e) {});
+
+LagInput.addEventListener("wheel", function (e) {});
+
 //#endregion
 
-//#region Instructions Eventlistener
+//#region CheckBox Eventlistener
+LagInput.addEventListener("blur", function () {
+  localStorage.setItem("LagInput", LagInput.value);
+});
+//Loop through all instructions and show/hide them based on the checkbox
 InstructionsCheckBox.addEventListener("change", function () {
   for (const Item of Instructions) {
     if (InstructionsCheckBox.checked) {
@@ -672,6 +688,14 @@ InstructionsCheckBox.addEventListener("change", function () {
       Item.style.display = "flex";
       localStorage.setItem("InstructionsCheckBox", "");
     }
+  }
+});
+
+LagCheckBox.addEventListener("change", function () {
+  if (LagCheckBox.checked) {
+    localStorage.setItem("LagCheckBox", "checked");
+  } else {
+    localStorage.setItem("LagCheckBox", "");
   }
 });
 //#endregion
