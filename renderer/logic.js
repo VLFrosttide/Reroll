@@ -374,7 +374,6 @@ if (localStorage.length < 2) {
               OldModArray[i].remove();
             }
           }
-          // let ModArray = JSON.parse(LSSavedItems[key]).split("NegativeMods");
           let ModArray = LSSavedItems[key];
           let PositiveMods;
           let NegativeMods;
@@ -392,7 +391,7 @@ if (localStorage.length < 2) {
               CreateElementFn(
                 "label",
                 "",
-                "ModName",
+                ["ModName", "Mod"],
                 PositiveMods[i],
                 Container
               );
@@ -404,7 +403,7 @@ if (localStorage.length < 2) {
               CreateElementFn(
                 "label",
                 "",
-                "ExclusionMod",
+                ["ExclusionMod", "Mod"],
                 NegativeMods[i],
                 ExclusionContainer
               );
@@ -903,13 +902,7 @@ function CreateElementFn(ElType, ElID = "", ElClass = "", ElText, ElParent) {
     NewElement.id = ElID;
   }
   if (ElClass) {
-    if (Array.isArray(ElClass)) {
-      for (let i = 0; i < ElClass.length; i++) {
-        NewElement.classList.add(ElClass[i]);
-      }
-    } else {
-      NewElement.classList.add(ElClass);
-    }
+    NewElement.classList.add(...ElClass);
   }
   if (ElText) {
     NewElement.textContent = ElText;
@@ -928,7 +921,6 @@ SaveCraftButton.addEventListener("click", function () {
     console.log("SelectedName: ", SelectedName);
     let PositiveModArray = [];
     let NegativeModArray = [];
-    // ModClass = document.getElementsByClassName("ModName");
     for (let i = 0; i < ExclusionModClass.length; i++) {
       NegativeModArray.push(
         ExclusionModClass[i].textContent.toLocaleLowerCase()
