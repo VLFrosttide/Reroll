@@ -33,6 +33,7 @@ ipcMain.on("StartCrafting", (event, args) => {
     CraftMaterial,
     Fracture,
     ExclusionMods,
+    SleepTimer,
   ]);
 
   StartCrafting.stdout.on("data", (data) => {
