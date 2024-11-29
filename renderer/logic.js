@@ -637,8 +637,13 @@ function StartCrafting() {
       InfoArray.push(CraftMaterial); //4
       InfoArray.push(Fracture); //5
       InfoArray.push(ExclusionModArray); //6
-      InfoArray.push(Number(LagInput.value)); //7
-      console.log("InfoArray: ", InfoArray); //8
+      let LagInputNumber;
+      if (LagCheckBox.checked) {
+        LagInputNumber = Number(LagInput.value);
+      } else {
+        LagInputNumber = 0;
+      }
+      InfoArray.push(Number(LagInputNumber)); //7
       window.api.StartCrafting(InfoArray);
     } else {
       alert("No mods selected");
