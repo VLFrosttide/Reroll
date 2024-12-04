@@ -298,6 +298,12 @@ if (localStorage.length < 2) {
   }
 
   //#region Saved crafts  ev.listeners
+  window.addEventListener("keydown", function (e) {
+    let SaveCraftWindow = document.getElementById("SaveCraftIconSelector");
+    if (e.key === "Escape" && SaveCraftWindow) {
+      SaveCraftWindow.remove();
+    }
+  });
 
   SavedCrafts.addEventListener("mousedown", (e) => {
     if (e.button === 0) {
