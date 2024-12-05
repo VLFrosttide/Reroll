@@ -15,7 +15,7 @@ const StartButton = document.getElementById("StartButton");
 const SavedCrafts = document.getElementById("SavedCrafts");
 let DeleteSaveButton;
 let Counter;
-
+const ExportFileOKButton = document.getElementById("ExportFileOKButton");
 const SaveCraftButton = document.getElementById("SaveCraftButton");
 const ImageContainer = document.getElementById("ImageContainer");
 const SaveGallery = document.getElementById("Gallery");
@@ -178,6 +178,7 @@ if (localStorage.length < 2) {
     MouseCoordsY = parseInt(CoordsSplit[1]);
     if (ChangingLabel == undefined) {
       alert("No currency selected.");
+      FixFocus();
     }
     if (
       ChangingLabel !== undefined &&
@@ -303,9 +304,18 @@ if (localStorage.length < 2) {
 
   //#region Saved crafts  ev.listeners
   window.addEventListener("keydown", function (e) {
-    let SaveCraftWindow = document.getElementById("SaveCraftIconSelector");
-    if (e.key === "Escape" && SaveCraftWindow) {
-      SaveCraftWindow.remove();
+    if (e.key === "Escape") {
+      document.body.classList.remove("Blur");
+      let SaveCraftWindow = document.getElementById("SaveCraftIconSelector");
+      if (SaveCraftWindow) {
+        SaveCraftWindow.remove();
+        document.body.focus();
+      }
+      let ActiveElement = this.document.activeElement;
+      console.log(ActiveElement);
+      if (ActiveElement.classList.contains("Input")) {
+        ActiveElement.value = "";
+      }
     }
   });
 
@@ -596,6 +606,7 @@ function StartCrafting() {
   console.log("Crafting triggered");
   if (localStorage.length < 1) {
     alert("Select coords first");
+    FixFocus();
   } else if (Hover.length > 0) {
     console.log("Craft Started");
     InfoArray.length = 0;
@@ -657,9 +668,11 @@ function StartCrafting() {
       window.api.StartCrafting(InfoArray);
     } else {
       alert("No mods selected");
+      FixFocus();
     }
   } else {
     alert("Select currency to roll with by clicking (Chaos, alt or essence)");
+    FixFocus();
   }
 }
 StartButton.addEventListener("click", function () {
@@ -1058,15 +1071,19 @@ SaveCraftButton.addEventListener("click", function () {
                   IconSelector.remove();
                 } else {
                   alert("Please select mods for the craft you want  to save");
+                  FixFocus();
                 }
               } else {
                 alert("Name already taken, please select another one");
+                FixFocus();
               }
             } else if (e.key === "Enter" && SaveName === "") {
               alert("Please select a name for the save");
+              FixFocus();
             }
           } else if (e.key === "Enter" && SaveIcon === undefined) {
             alert("Please select an icon for the save");
+            FixFocus();
           }
         }
       });
@@ -1189,8 +1206,36 @@ window.api.ExportItemsListener((event, data) => {
   let Mods = GetCurrentItem(); // Mods[0] = positive, Mods[1] = negative
   let FileNameDialog = document.getElementById("FileNameDialog");
   FileNameDialog.showModal();
-
-  window.api.ReturnExportData(Mods);
+  document.body.classList.add("Blur");
+  ExportFileOKButton.addEventListener("click", function (e) {
+    let FileName = document.getElementById("ExportFileInput").value;
+    if (FileName.length > 0) {
+      Mods.push(FileName);
+      window.api.ReturnExportData(Mods);
+      document.body.classList.remove("Blur");
+    } else {
+      e.preventDefault();
+      alert("File name cannot be empty");
+      FixFocus();
+    }
+  });
 });
 
+//#endregion
+
+//#region Focux fix function
+
+function FixFocus() {
+  window.api.FocusFix("FixME!");
+}
+
+//#endregion
+
+//#region Clear Mods
+window.api.ClearMods((event, data) => {
+  let RemoveModsArray = Array.from(document.getElementsByClassName("Mod"));
+  for (let i = 0; i < RemoveModsArray.length; i++) {
+    RemoveModsArray[i].remove();
+  }
+});
 //#endregion

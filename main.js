@@ -6,6 +6,7 @@ import {
   screen,
   ipcMain,
   Menu,
+  nativeTheme,
 } from "electron";
 import { EventEmitter } from "events";
 import "./HelperFunctionsBackend/LogFiles.js";
@@ -14,6 +15,7 @@ import {
   DeleteFileContent,
   OpenFile,
   WriteToFile,
+  ExportItemToFile,
 } from "./HelperFunctionsBackend/LogFiles.js";
 import {
   CheckPython,
@@ -21,6 +23,8 @@ import {
 } from "./HelperFunctionsBackend/PythonCheck.js";
 import "./HelperFunctionsBackend/Craft.js";
 import "./HelperFunctionsBackend/UseCurrency.js";
+nativeTheme.themeSource = "dark";
+
 let win;
 let LogFilePath;
 let ItemExportPath;
@@ -102,9 +106,15 @@ app.whenReady().then(() => {
     win.webContents.send("GlobalKey", "TransmuteOrb");
   });
   ipcMain.on("ExportItem", (event, data) => {
-    ItemExportPath = path.join(RerollFolder, "/Logs.txt");
-
-    console.log(data);
+    //data[0] = Positive mods
+    //data[1] = Negative mods
+    //data[2] = File name
+    ItemExportPath = path.join(RerollFolder, `/${data[2]}.txt`);
+    ExportItemToFile(ItemExportPath, data[0], data[1]);
+  });
+  ipcMain.on("FocusFix", (e, d) => {
+    win.blur();
+    win.focus();
   });
   ScreenRatio = screen.getPrimaryDisplay().scaleFactor;
   ipcMain.on("ScreenRatio", (event) => {
@@ -149,9 +159,18 @@ app.whenReady().then(() => {
         },
         {
           label: "Export Current Item",
+          accelerator: "Ctrl+e",
+
           click() {
             win.webContents.send("ExportItem", "awd");
-            console.log("Data Sent!");
+          },
+        },
+        {
+          label: "Clear all mods",
+          accelerator: "Ctrl+w",
+
+          click() {
+            win.webContents.send("ClearMods", "awd");
           },
         },
 
