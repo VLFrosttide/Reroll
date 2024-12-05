@@ -6,6 +6,7 @@ contextBridge.exposeInMainWorld("api", {
   RarityError: (callback) => ipcRenderer.on("ItemError", callback),
   MousePos: (callback) => ipcRenderer.on("MouseCoords", callback),
   Logfile: (callback) => ipcRenderer.on("Logfile", callback),
+  ExportItemsListener: (callback) => ipcRenderer.on("ExportItem", callback),
   ClearLocalStorage: (callback) =>
     ipcRenderer.on("ClearLocalStorage", callback),
 
@@ -16,6 +17,9 @@ contextBridge.exposeInMainWorld("api", {
   Counter: (callback) => ipcRenderer.on("Counter", callback),
   TriggerCurrencyUse: (callback) => {
     ipcRenderer.send("TriggerCurrencyUse", callback);
+  },
+  ReturnExportData: (callback) => {
+    ipcRenderer.send("ExportItem", callback);
   },
   ResizeWindow: (callback) => {
     ipcRenderer.send("ResizeWindow", callback);

@@ -1,6 +1,6 @@
 import { spawn } from "child_process";
 import { app, ipcMain } from "electron";
-import { WriteToLog } from "./LogFiles.js";
+import { WriteToFile } from "./LogFiles.js";
 import path from "path";
 const DocPath = app.getPath("documents");
 const RerollFolder = path.join(DocPath, "RerollLogs");
@@ -20,12 +20,12 @@ ipcMain.on("TriggerCurrencyUse", (event, args) => {
   ]);
   TriggerCurrencyUse.stdout.on("data", (data) => {
     console.log(String(data));
-    WriteToLog(LogFile, String(data));
+    WriteToFile(LogFile, String(data));
   });
 
   TriggerCurrencyUse.stderr.on("data", (data) => {
     console.error(`stderr: ${data}`);
-    WriteToLog(LogFilePath, String(data));
+    WriteToFile(LogFilePath, String(data));
   });
 
   TriggerCurrencyUse.on("close", (code) => {

@@ -1,6 +1,6 @@
 import { app, ipcMain } from "electron";
 import { win } from "../main.js";
-import { WriteToLog } from "./LogFiles.js";
+import { WriteToFile } from "./LogFiles.js";
 import { spawn } from "child_process";
 
 import path from "path";
@@ -13,7 +13,7 @@ ExePath = ExePath.substring(0, ExePath.lastIndexOf("\\"));
 let LiftKeysPath = path.join(ExePath, "/python/LiftKeys.py");
 
 ipcMain.on("StartCrafting", (event, args) => {
-  WriteToLog(LogFilePath, "Program started crafting");
+  WriteToFile(LogFilePath, "Program started crafting");
   let ModName = args[0];
   let MaxRolls = args[1];
   let CurrencyCoords = args[2];
@@ -43,12 +43,12 @@ ipcMain.on("StartCrafting", (event, args) => {
       win.webContents.send("Counter", "awd");
     }
     if (PrintThis.includes("CurrentBase")) {
-      WriteToLog(
+      WriteToFile(
         LogFilePath,
         "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
       );
 
-      WriteToLog(LogFilePath, PrintThis);
+      WriteToFile(LogFilePath, PrintThis);
     }
     if (PrintThis.includes("Matching Line")) {
       // win.webContents.send("Match");
@@ -76,10 +76,10 @@ ipcMain.on("StartCrafting", (event, args) => {
       "FAILSAFE",
     ];
     let MyError = `Error with crafting: ${String(data)}`;
-    WriteToLog(LogFilePath, `MyError: ${MyError}`);
+    WriteToFile(LogFilePath, `MyError: ${MyError}`);
 
     if (!FailSafeArray.some((element) => MyError.includes(element))) {
-      WriteToLog(LogFilePath, `${MyError}`);
+      WriteToFile(LogFilePath, `${MyError}`);
       win.webContents.send("ItemError", MyError);
     }
   });
@@ -88,21 +88,24 @@ ipcMain.on("StartCrafting", (event, args) => {
     const LiftKeys = spawn("python", [LiftKeysPath]);
     LiftKeys.stderr.on("data", (data) => {
       console.error("Error with liftkeys: ", String(data));
-      WriteToLog(LogFilePath, `${String(data)}`);
+      WriteToFile(LogFilePath, `${String(data)}`);
     });
 
     if (code !== null) {
       console.log(`Crafting script exited with code ${code}`);
-      WriteToLog(LogFilePath, `Crafting script exited with code ${code}`);
+      WriteToFile(LogFilePath, `Crafting script exited with code ${code}`);
     } else if (signal !== null) {
       console.log(`Crafting script was killed by signal ${signal}`);
-      WriteToLog(LogFilePath, `Crafting script was killed by signal ${signal}`);
+      WriteToFile(
+        LogFilePath,
+        `Crafting script was killed by signal ${signal}`
+      );
     } else {
       console.log("Crafting script has exited");
-      WriteToLog(LogFilePath, "Crafting script has exited");
+      WriteToFile(LogFilePath, "Crafting script has exited");
     }
 
-    WriteToLog(
+    WriteToFile(
       LogFilePath,
       "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
     );

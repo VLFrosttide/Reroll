@@ -1,5 +1,9 @@
 "use strict";
 //#region Declarations
+import {
+  CreateElementFn,
+  GetCurrentItem,
+} from "../HelperFunctionsFrontend/HelperFn.js";
 const ModNameInput = document.getElementById("ModInput");
 const ExcludeModInput = document.getElementById("ExcludeModInput");
 const Container = document.getElementById("Container");
@@ -882,8 +886,8 @@ CurrencyDiv.addEventListener("click", (e) => {
 //#region Delete Saved Crafts
 
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Delete") {
-    let SelectedItem = document.getElementsByClassName("SavedSelectedIcon");
+  let SelectedItem = document.getElementsByClassName("SavedSelectedIcon");
+  if (e.key === "Delete" && SelectedItem) {
     SelectedItem = SelectedItem[0];
     console.log(SelectedItem);
     DeleteLSSaveItem(SelectedItem.id);
@@ -899,30 +903,6 @@ document.addEventListener("keydown", (e) => {
 
 //#region Save craft
 // Create label
-/**
- * Creates a new element, sets its properties, and inserts it into the specified parent element.
- * @param {string} ElType - The type of the element to create (e.g., 'div', 'label', 'span').
- * @param {string} [ElID] - Optional The ID attribute of the new element.
- * @param {Array} ElClass - The class attribute of the new element.
- * @param {string} ElText - The text content of the new element.
- * @param {HTMLElement} ElParent - The parent element where the new element will be inserted.
- */
-function CreateElementFn(ElType, ElID = "", ElClass = "", ElText, ElParent) {
-  let NewElement = document.createElement(ElType);
-  if (ElID) {
-    NewElement.id = ElID;
-  }
-  if (ElClass) {
-    NewElement.classList.add(...ElClass);
-  }
-  if (ElText) {
-    NewElement.textContent = ElText;
-  }
-  if (ElParent) {
-    ElParent.appendChild(NewElement, document.body.firstElementChild);
-  }
-  return NewElement;
-}
 //SavedSelectedIcon
 SaveCraftButton.addEventListener("click", function () {
   let SavedSelectedIcon = document.getElementsByClassName("SavedSelectedIcon");
@@ -1199,6 +1179,18 @@ window.api.Counter((event, data) => {
 //#region Logfiles
 window.api.Logfile((event, data) => {
   alert(data);
+});
+
+//#endregion
+
+//#region Export Items as files
+window.api.ExportItemsListener((event, data) => {
+  console.log("It works");
+  let Mods = GetCurrentItem(); // Mods[0] = positive, Mods[1] = negative
+  let FileNameDialog = document.getElementById("FileNameDialog");
+  FileNameDialog.showModal();
+
+  window.api.ReturnExportData(Mods);
 });
 
 //#endregion

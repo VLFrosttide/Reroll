@@ -1,26 +1,26 @@
 import { exec, spawn } from "child_process";
-import { WriteToLog } from "./LogFiles.js";
+import { WriteToFile } from "./LogFiles.js";
 export function CheckPyPackage(PackageName, LogFilePath) {
   exec(`pip show ${PackageName}`, (error, stdout, stderr) => {
     if (error || stderr) {
-      WriteToLog(LogFilePath, `${PackageName} not found`);
+      WriteToFile(LogFilePath, `${PackageName} not found`);
       if (
         error.includes("WARNING: Package(s) not found:") ||
         stderr.includes("WARNING: Package(s) not found:")
       ) {
-        WriteToLog(LogFilePath, `attempting to install ${PackageName}... `);
+        WriteToFile(LogFilePath, `attempting to install ${PackageName}... `);
         exec(
           `pip install ${PackageName}`,
           (installError, installStdout, installStderr) => {
             if (installError || installStderr) {
-              WriteToLog(
+              WriteToFile(
                 logfile,
                 `Error installing ${PackageName}: ${
                   installError || installStderr
                 }`
               );
             } else {
-              WriteToLog(
+              WriteToFile(
                 LogFilePath,
                 `${PackageName} has been installed successfully`
               );
@@ -31,7 +31,7 @@ export function CheckPyPackage(PackageName, LogFilePath) {
       return;
     }
     if (stdout.includes("Version")) {
-      WriteToLog(LogFilePath, `${PackageName} is already installed`);
+      WriteToFile(LogFilePath, `${PackageName} is already installed`);
     }
   });
 }
@@ -39,11 +39,11 @@ export function CheckPyPackage(PackageName, LogFilePath) {
 export function CheckPython(LogFilePath) {
   exec("python --version", (error, stdout, stderr) => {
     if (error) {
-      WriteToLog(LogFilePath, error);
+      WriteToFile(LogFilePath, error);
       return;
     }
 
     console.log(`Python is installed: ${stdout || stderr}`);
-    WriteToLog(LogFilePath, `Python is installed: ${stdout || stderr}`);
+    WriteToFile(LogFilePath, `Python is installed: ${stdout || stderr}`);
   });
 }

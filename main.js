@@ -10,10 +10,10 @@ import {
 import { EventEmitter } from "events";
 import "./HelperFunctionsBackend/LogFiles.js";
 import {
-  CreateLogs,
-  Deletefile,
+  CreateLogFolder,
+  DeleteFileContent,
   OpenFile,
-  WriteToLog,
+  WriteToFile,
 } from "./HelperFunctionsBackend/LogFiles.js";
 import {
   CheckPython,
@@ -23,6 +23,7 @@ import "./HelperFunctionsBackend/Craft.js";
 import "./HelperFunctionsBackend/UseCurrency.js";
 let win;
 let LogFilePath;
+let ItemExportPath;
 let ScreenRatio;
 let NewMenuTemplate;
 let CaptureMouseEvent = new EventEmitter();
@@ -53,7 +54,6 @@ const CreateWindow = () => {
           fontSrc: ["self"],
           connectSrc: ["self"],
           manifestSrc: ["self"],
-          // Add more directives as needed
         },
       },
     },
@@ -68,14 +68,11 @@ app.whenReady().then(() => {
   const DocPath = app.getPath("documents");
   const RerollFolder = path.join(DocPath, "RerollLogs");
   LogFilePath = path.join(RerollFolder, "/Logs.txt");
-  CreateLogs(RerollFolder, DocPath);
+  CreateLogFolder(RerollFolder, DocPath);
   CheckPython(LogFilePath);
   CheckPyPackage("pyautogui", LogFilePath);
   CheckPyPackage("pyperclip", LogFilePath);
 
-  // CaptureMouseEvent.on("Coords", (data) => {
-  //   win.webContents.send("MouseCoords", data);
-  // });
   app.on("window-all-closed", () => {
     if (process.platform !== "darwin") app.quit();
   });
@@ -104,7 +101,11 @@ app.whenReady().then(() => {
     console.log("Transmute function triggered");
     win.webContents.send("GlobalKey", "TransmuteOrb");
   });
+  ipcMain.on("ExportItem", (event, data) => {
+    ItemExportPath = path.join(RerollFolder, "/Logs.txt");
 
+    console.log(data);
+  });
   ScreenRatio = screen.getPrimaryDisplay().scaleFactor;
   ipcMain.on("ScreenRatio", (event) => {
     event.reply("ScreenRatioValue", ScreenRatio);
@@ -146,6 +147,13 @@ app.whenReady().then(() => {
             win.webContents.send("ClearLocalStorage", "awd");
           },
         },
+        {
+          label: "Export Current Item",
+          click() {
+            win.webContents.send("ExportItem", "awd");
+            console.log("Data Sent!");
+          },
+        },
 
         { type: "separator" },
         { label: "Exit", role: "quit" },
@@ -164,7 +172,7 @@ app.whenReady().then(() => {
             try {
               OpenFile(LogFilePath);
             } catch (err) {
-              WriteToLog(LogFilePath, "Error opening the logfile: " + err);
+              WriteToFile(LogFilePath, "Error opening the logfile: " + err);
               win.webContents.send(
                 "error",
                 "Error opening the logfile: " + err
@@ -178,10 +186,10 @@ app.whenReady().then(() => {
           click() {
             try {
               console.log("LogfilePath: ", LogFilePath);
-              Deletefile(LogFilePath);
+              DeleteFileContent(LogFilePath);
               win.webContents.send("Logfile", "Deleted the log files!");
             } catch (err) {
-              WriteToLog(
+              WriteToFile(
                 LogFilePath,
                 `Error deleting the ${LogFilePath} file: " + err`
               );
