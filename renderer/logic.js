@@ -2,8 +2,16 @@
 //#region Declarations
 import {
   CreateElementFn,
+  DeleteSavedItem,
   GetCurrentItem,
+  FixFocus,
+  DisplayInsertionMsg,
 } from "../HelperFunctionsFrontend/HelperFn.js";
+import {
+  DeleteLSSaveItem,
+  GetLSSaves,
+  ChangeLSSaves,
+} from "../HelperFunctionsFrontend/LocalStorageFn.js";
 const ModNameInput = document.getElementById("ModInput");
 const ExcludeModInput = document.getElementById("ExcludeModInput");
 const Container = document.getElementById("Container");
@@ -99,38 +107,6 @@ if (LagInputLS) {
   LagInput.value = Number(LagInputLS);
 }
 
-function GetLSSaves(Prefix) {
-  let Items = {};
-  for (let i = 0; i < localStorage.length; i++) {
-    let key = localStorage.key(i);
-    if (key.startsWith(Prefix)) {
-      let value = localStorage.getItem(key);
-      Items[key] = value;
-    }
-  }
-  return Items;
-}
-function ChangeLSSaves(Name, NewValue) {
-  for (let i = 0; i < localStorage.length; i++) {
-    let key = localStorage.key(i);
-    if (key.includes(Name)) {
-      localStorage.setItem(key, NewValue);
-      console.log("NewLSValue: ", localStorage.getItem(key));
-    }
-  }
-}
-function DeleteLSSaveItem(Name) {
-  let KeysToRemove = [];
-  for (let i = 0; i < localStorage.length; i++) {
-    let key = localStorage.key(i);
-    if (key.includes(Name)) {
-      KeysToRemove.push(key);
-    }
-  }
-  for (let key of KeysToRemove) {
-    localStorage.removeItem(key);
-  }
-}
 //#region Hotkey Object
 let Hotkeys = {
   RegalOrb: "Ctrl+Shift+Enter",
@@ -539,21 +515,6 @@ EssenceInput.addEventListener("focusout", function () {
 
 //#endregion
 //#region Add/Remove Mods
-/**
- *
- * @param {HTMLElement} InputElement
- * @param {HTMLElement} ParentElement
- * @param {string} ClassToAdd
- */
-const AddModElement = function (InputElement, ParentElement, ClassToAdd) {
-  let NewMod = document.createElement("label");
-  NewMod.textContent = InputElement.value;
-  // NewMod.setAttribute("id", "ModString" + ModNumber);
-  // ModNumber += 1;
-  NewMod.classList.add(...ClassToAdd);
-  ParentElement.appendChild(NewMod);
-  InputElement.value = "";
-};
 Container.addEventListener("click", (e) => {
   if (e.target.classList.contains("ModName")) {
     Container.removeChild(e.target);
@@ -572,7 +533,15 @@ Container.addEventListener("mouseout", (e) => {
 
 ModNameInput.addEventListener("keydown", (e) => {
   if (e.key == "Enter") {
-    AddModElement(ModNameInput, Container, ["ModName", "Mod"]);
+    CreateElementFn(
+      "div",
+      "",
+      ["ModName", "Mod"],
+      ModNameInput.value,
+      Container,
+      "rgb(112, 255, 112)" // green
+    );
+    ModNameInput.value = "";
   }
 });
 //#endregion
@@ -585,7 +554,16 @@ ExclusionContainer.addEventListener("click", (e) => {
 });
 ExcludeModInput.addEventListener("keydown", (e) => {
   if (e.key == "Enter") {
-    AddModElement(ExcludeModInput, ExclusionContainer, ["ExclusionMod", "Mod"]);
+    // AddModElement(ExcludeModInput, ExclusionContainer, ["", "Mod"]);
+    CreateElementFn(
+      "div",
+      "",
+      ["ExclusionMod", "Mod"],
+      ExcludeModInput.value,
+      Container,
+      "rgb(112, 255, 112)"
+    );
+    ExcludeModInput.value = "";
   }
 });
 ExclusionContainer.addEventListener("mouseover", (e) => {
@@ -706,6 +684,7 @@ LagInput.addEventListener("wheel", function (e) {});
 
 //#region CheckBox Eventlistener
 LagInput.addEventListener("blur", function () {
+  // Blur is used for element being out of focus in this case.
   localStorage.setItem("LagInput", LagInput.value);
 });
 //Loop through all instructions and show/hide them based on the checkbox
@@ -900,15 +879,10 @@ CurrencyDiv.addEventListener("click", (e) => {
 //#region Delete Saved Crafts
 
 document.addEventListener("keydown", (e) => {
-  let SelectedItem = document.getElementsByClassName("SavedSelectedIcon");
-  if (e.key === "Delete" && SelectedItem) {
-    SelectedItem = SelectedItem[0];
-    console.log(SelectedItem);
-    DeleteLSSaveItem(SelectedItem.id);
-    SelectedItem.remove();
-    let SavedItems = document.getElementsByClassName("Saved");
-    for (let i = 0; i < SavedItems.length; i++) {
-      SavedItems[i].style.opacity = "1";
+  if (e.key === "Delete") {
+    let SelectedItem = document.getElementsByClassName("SavedSelectedIcon")[0];
+    if (SelectedItem) {
+      DeleteSavedItem(SelectedItem, DeleteLSSaveItem);
     }
   }
 });
@@ -1180,13 +1154,8 @@ window.api.Counter((event, data) => {
   console.log("CounterElement: ", CounterElement);
   if (CounterElement === null) {
     Counter = 1;
-    CreateElementFn(
-      "label",
-      "Counter",
-      ["HoverTooltip"],
-      `Currency Used: ${Counter}`,
-      Insertion
-    );
+
+    DisplayInsertionMsg(`Currency Used: ${Counter}`, "aliceblue");
   } else {
     Counter++;
     CounterElement.textContent = `Currency Used: ${Counter}`;
@@ -1204,32 +1173,21 @@ window.api.Logfile((event, data) => {
 //#region Export Items as files
 ExportFileOKButton.addEventListener("click", function (e) {
   let FileName = document.getElementById("ExportFileInput").value;
+  document.body.classList.remove("Blur");
+  let Mods = GetCurrentItem(); // Mods[0] = positive, Mods[1] = negative
+
   if (FileName.length > 0) {
+    console.log("FileName: ", FileName);
     Mods.push(FileName);
     window.api.ReturnExportData(Mods);
-    document.body.classList.remove("Blur");
   } else {
-    // e.preventDefault();
-    // alert("File name cannot be empty");
-    // FixFocus();
-    document.body.classList.remove("Blur");
-
-    let ReturnMsg = CreateElementFn(
-      "div",
-      "",
-      ["HoverTooltip"],
-      "File name cannot be empty.",
-      Insertion
-    );
-    ReturnMsg.style.color = "red";
-    ReturnMsg.style.textAlign = "center";
+    DisplayInsertionMsg("File name cannot be empty", "red");
   }
   document.getElementById("ExportFileInput").value = "";
 });
 window.api.ExportItemsListener((event, data) => {
   console.log("Data: ", data);
   if (data === "InitialRequest") {
-    let Mods = GetCurrentItem(); // Mods[0] = positive, Mods[1] = negative
     let FileNameDialog = document.getElementById("FileNameDialog");
     FileNameDialog.showModal();
     let RemoveModsArray = Array.from(
@@ -1241,36 +1199,16 @@ window.api.ExportItemsListener((event, data) => {
     document.body.classList.add("Blur");
   }
   if (data === "Confirmation") {
-    let ReturnMsg = CreateElementFn(
-      "div",
-      "",
-      ["HoverTooltip"],
-      "Successfully exported current item!",
-      Insertion
-    );
-    ReturnMsg.style.color = "green";
-    ReturnMsg.style.textAlign = "center";
+    DisplayInsertionMsg("Successfully exported current item", "green");
   }
   if (data === "NamingError") {
-    let ReturnMsg = CreateElementFn(
-      "div",
-      "",
-      ["HoverTooltip"],
-      "Name already exists, please select another.",
-      Insertion
-    );
-    ReturnMsg.style.color = "red";
-    ReturnMsg.style.textAlign = "center";
+    DisplayInsertionMsg("Name already exists, please select another.", "red");
   }
 });
 
 //#endregion
 
 //#region Focux fix function
-
-function FixFocus() {
-  window.api.FocusFix("FixME!");
-}
 
 //#endregion
 

@@ -92,6 +92,7 @@ html {
 .HoverTooltip {
   display: flex;
   font-size: 20px;
+  text-align: center;
 }
 #EssenceContainer {
   -webkit-user-drag: none;

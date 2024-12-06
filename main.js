@@ -112,12 +112,14 @@ app.whenReady().then(() => {
     //data[2] = File name
     ItemExportPath = path.join(RerollFolder, `/${data[2]}.txt`);
     let FileExists = CheckFileExistence(ItemExportPath);
-    console.log(FileExists);
+    console.log("File exists: ", FileExists);
     if (!FileExists) {
       ExportItemToFile(ItemExportPath, data[0], data[1]);
       win.webContents.send("ExportItem", "Confirmation");
+      console.log("Confirmation sent!");
     } else {
       win.webContents.send("ExportItem", "NamingError");
+      console.log("Some error..");
     }
   });
   ipcMain.on("FocusFix", (e, d) => {
