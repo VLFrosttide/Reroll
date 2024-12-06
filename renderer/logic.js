@@ -306,6 +306,7 @@ if (localStorage.length < 2) {
   window.addEventListener("keydown", function (e) {
     if (e.key === "Escape") {
       document.body.classList.remove("Blur");
+
       let SaveCraftWindow = document.getElementById("SaveCraftIconSelector");
       if (SaveCraftWindow) {
         SaveCraftWindow.remove();
@@ -1201,24 +1202,66 @@ window.api.Logfile((event, data) => {
 //#endregion
 
 //#region Export Items as files
+ExportFileOKButton.addEventListener("click", function (e) {
+  let FileName = document.getElementById("ExportFileInput").value;
+  if (FileName.length > 0) {
+    Mods.push(FileName);
+    window.api.ReturnExportData(Mods);
+    document.body.classList.remove("Blur");
+  } else {
+    // e.preventDefault();
+    // alert("File name cannot be empty");
+    // FixFocus();
+    document.body.classList.remove("Blur");
+
+    let ReturnMsg = CreateElementFn(
+      "div",
+      "",
+      ["HoverTooltip"],
+      "File name cannot be empty.",
+      Insertion
+    );
+    ReturnMsg.style.color = "red";
+    ReturnMsg.style.textAlign = "center";
+  }
+  document.getElementById("ExportFileInput").value = "";
+});
 window.api.ExportItemsListener((event, data) => {
-  console.log("It works");
-  let Mods = GetCurrentItem(); // Mods[0] = positive, Mods[1] = negative
-  let FileNameDialog = document.getElementById("FileNameDialog");
-  FileNameDialog.showModal();
-  document.body.classList.add("Blur");
-  ExportFileOKButton.addEventListener("click", function (e) {
-    let FileName = document.getElementById("ExportFileInput").value;
-    if (FileName.length > 0) {
-      Mods.push(FileName);
-      window.api.ReturnExportData(Mods);
-      document.body.classList.remove("Blur");
-    } else {
-      e.preventDefault();
-      alert("File name cannot be empty");
-      FixFocus();
+  console.log("Data: ", data);
+  if (data === "InitialRequest") {
+    let Mods = GetCurrentItem(); // Mods[0] = positive, Mods[1] = negative
+    let FileNameDialog = document.getElementById("FileNameDialog");
+    FileNameDialog.showModal();
+    let RemoveModsArray = Array.from(
+      document.getElementsByClassName("HoverTooltip")
+    );
+    for (let i = 0; i < RemoveModsArray.length; i++) {
+      RemoveModsArray[i].remove();
     }
-  });
+    document.body.classList.add("Blur");
+  }
+  if (data === "Confirmation") {
+    let ReturnMsg = CreateElementFn(
+      "div",
+      "",
+      ["HoverTooltip"],
+      "Successfully exported current item!",
+      Insertion
+    );
+    ReturnMsg.style.color = "green";
+    ReturnMsg.style.textAlign = "center";
+  }
+  if (data === "NamingError") {
+    let ReturnMsg = CreateElementFn(
+      "div",
+      "",
+      ["HoverTooltip"],
+      "Name already exists, please select another.",
+      Insertion
+    );
+    ReturnMsg.style.color = "red";
+    ReturnMsg.style.textAlign = "center";
+  }
 });
 
 //#endregion

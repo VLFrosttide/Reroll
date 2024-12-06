@@ -1,12 +1,13 @@
+Implement a check for the save file functionality, so it wont write over existing files.
 Mod count,
 Import own icons - hard to manage space on UI, will skip for now
 Import / export item recipes
 Abstract the show/hide instructions to the menu
-Implement a check for the save file functionality, so it wont write over existing files.
 Move save window name / icon selecter to center and give it boxshadow
 
+Lock mods during rerolls?
 Look into replacing alert / confirm etc with dialog.showMesageBox() https://www.electronjs.org/docs/latest/api/dialog#dialogshowmessageboxwindow-options
 Add Hover effect for inputs - nah
 Add dark mode for native interface - bugged?
 
-Check artcam2012
+Check artcam2012 / aspire

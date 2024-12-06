@@ -16,6 +16,7 @@ import {
   OpenFile,
   WriteToFile,
   ExportItemToFile,
+  CheckFileExistence,
 } from "./HelperFunctionsBackend/LogFiles.js";
 import {
   CheckPython,
@@ -110,7 +111,14 @@ app.whenReady().then(() => {
     //data[1] = Negative mods
     //data[2] = File name
     ItemExportPath = path.join(RerollFolder, `/${data[2]}.txt`);
-    ExportItemToFile(ItemExportPath, data[0], data[1]);
+    let FileExists = CheckFileExistence(ItemExportPath);
+    console.log(FileExists);
+    if (!FileExists) {
+      ExportItemToFile(ItemExportPath, data[0], data[1]);
+      win.webContents.send("ExportItem", "Confirmation");
+    } else {
+      win.webContents.send("ExportItem", "NamingError");
+    }
   });
   ipcMain.on("FocusFix", (e, d) => {
     win.blur();
@@ -151,18 +159,13 @@ app.whenReady().then(() => {
           role: "toggleDevTools",
           accelerator: "Ctrl+`",
         },
-        {
-          label: "Clear All stored coords",
-          click() {
-            win.webContents.send("ClearLocalStorage", "awd");
-          },
-        },
+
         {
           label: "Export Current Item",
           accelerator: "Ctrl+e",
 
           click() {
-            win.webContents.send("ExportItem", "awd");
+            win.webContents.send("ExportItem", "InitialRequest");
           },
         },
         {
@@ -180,6 +183,14 @@ app.whenReady().then(() => {
     },
     {
       label: "Options",
+      submenu: [
+        {
+          label: "Clear All stored coords",
+          click() {
+            win.webContents.send("ClearLocalStorage", "awd");
+          },
+        },
+      ],
     },
     {
       label: "Logs",

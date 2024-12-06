@@ -33,3 +33,7 @@ export function ExportItemToFile(FilePath, Pmods, Nmods) {
     WriteToFile(FilePath, Nmods[i]);
   }
 }
+
+export function CheckFileExistence(FilePath) {
+  return fs.existsSync(FilePath);
+}
