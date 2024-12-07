@@ -13,7 +13,7 @@ export function CreateElementFn(
   Class = [""],
   Text,
   Parent,
-  TextColor = ""
+  TextColor = "aliceblue"
 ) {
   let NewElement = document.createElement(Type);
   if (ID) {
@@ -66,34 +66,14 @@ export function FixFocus() {
   window.api.FocusFix("FixME!");
 }
 
-export function DisplayInsertionMsg(Text, Color = "black") {
+export function DisplayInsertionMsg(Text, Color = "aliceblue") {
   let Parent = document.getElementById("Insertion");
   return CreateElementFn("div", "", ["HoverTooltip"], Text, Parent, Color);
 }
 
-/**
- *
- * @param {HTMLElement} InputElement
- * @param {HTMLElement} ParentElement
- * @param {string} ClassToAdd
- */
-export function GlueMod(ModName, ParentElement, ClassToAdd) {
-  let NewMod = document.createElement("label");
-  NewMod.textContent = InputElement.value;
-  // NewMod.setAttribute("id", "ModString" + ModNumber);
-  // ModNumber += 1;
-  NewMod.classList.add(...ClassToAdd);
-  ParentElement.appendChild(NewMod);
-  InputElement.value = "";
+export function RemoveModByClass(ClassName) {
+  let RemovalArray = Array.from(document.getElementsByClassName(ClassName));
+  for (let i = 0; i < RemovalArray.length; i++) {
+    RemovalArray[i].remove();
+  }
 }
-// aAAAAAAAAAAAAAAAAAAAAAAAAAAAAco
-console.log("awdawda");
-console.log("awdawda");
-console.log("awdawda");
-console.log("awdawda");
-console.log("awdawda");
-console.log("awdawda");
-console.log("awdawda");
-console.log("awdawda");
-console.log("awdawda");
-console.log("awdawda");

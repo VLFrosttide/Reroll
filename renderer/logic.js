@@ -6,6 +6,7 @@ import {
   GetCurrentItem,
   FixFocus,
   DisplayInsertionMsg,
+  RemoveModByClass,
 } from "../HelperFunctionsFrontend/HelperFn.js";
 import {
   DeleteLSSaveItem,
@@ -21,6 +22,7 @@ const ExclusionModClass = document.getElementsByClassName("ExclusionMod");
 const CurrencyDiv = document.getElementById("CurrencyDiv");
 const StartButton = document.getElementById("StartButton");
 const SavedCrafts = document.getElementById("SavedCrafts");
+let HoverTooltip = document.getElementsByClassName("HoverTooltip");
 let DeleteSaveButton;
 let Counter;
 const ExportFileOKButton = document.getElementById("ExportFileOKButton");
@@ -103,7 +105,6 @@ let ScreenRatio;
 //#endregion
 let LagInputLS = localStorage.getItem("LagInput");
 if (LagInputLS) {
-  console.log("LagInput: ", LagInputLS);
   LagInput.value = Number(LagInputLS);
 }
 
@@ -131,15 +132,16 @@ if (localStorage.length < 2) {
   StoreCoordsButton.style.display = "none";
   for (let i = 0; i < CoordsLabelDivList.length; i++) {
     CoordsLabelDivList[i].id = `${EssenceClassList[i].id}Div`;
-    let CoordsLabel = document.createElement("label");
-    CoordsLabel.textContent = "X: , Y: ";
-    CoordsLabel.id = `${EssenceClassList[i].id}Label`;
+    let CoordsLabel = CreateElementFn(
+      "label",
+      `${EssenceClassList[i].id}Label`,
+      ["XYLabel"],
+      "X: , Y: ",
+      CoordsLabel
+    );
     CoordsLabel.style.display = "flex";
     CoordsLabel.style.opacity = 0.1;
-    CoordsLabel.style.color = "aliceblue";
-    CoordsLabel.classList.add("XYLabel");
     CoordsLabel.style.margin = "5px";
-    CoordsLabelDivList[i].appendChild(CoordsLabel);
   }
 
   InputDiv.style.display = "none";
@@ -153,8 +155,9 @@ if (localStorage.length < 2) {
     MouseCoordsX = parseInt(CoordsSplit[0]);
     MouseCoordsY = parseInt(CoordsSplit[1]);
     if (ChangingLabel == undefined) {
-      alert("No currency selected.");
-      FixFocus();
+      RemoveModByClass("HoverTooltip");
+
+      DisplayInsertionMsg("No currency selected.", "red");
     }
     if (
       ChangingLabel !== undefined &&
@@ -233,12 +236,10 @@ if (localStorage.length < 2) {
         !RemoveTutorialString.includes("Orb") &&
         !RemoveTutorialString.includes("Currency")
       ) {
-        console.log("RemoveTStr: ", RemoveTutorialString);
         EssenceTabCoords = [
           parseInt(MouseCoordsX * ScreenRatio),
           parseInt(MouseCoordsY * ScreenRatio),
         ];
-        console.log("EssenceTabCoords: ", EssenceTabCoords);
       } else if (
         RemoveTutorialString.includes("Spot") &&
         RemoveTutorialString.includes("Currency")
@@ -289,7 +290,6 @@ if (localStorage.length < 2) {
         document.body.focus();
       }
       let ActiveElement = this.document.activeElement;
-      console.log(ActiveElement);
       if (ActiveElement.classList.contains("Input")) {
         ActiveElement.value = "";
       }
@@ -338,12 +338,15 @@ if (localStorage.length < 2) {
   });
   SavedCrafts.addEventListener("mouseover", (e) => {
     if (e.target.classList.contains("Image")) {
+      RemoveModByClass("HoverTooltip");
       CreateElementFn("div", "", ["HoverTooltip"], `${e.target.id}`, Insertion);
     }
   });
   SavedCrafts.addEventListener("mouseout", (e) => {
     if (e.target.classList.contains("Image")) {
-      let HoverTooltip = document.getElementsByClassName("HoverTooltip");
+      // let HoverTooltip = document.getElementsByClassName("HoverTooltip");
+      RemoveModByClass("HoverTooltip");
+
       for (let i = HoverTooltip.length - 1; i >= 0; i--) {
         HoverTooltip[i].remove();
       }
@@ -390,7 +393,8 @@ if (localStorage.length < 2) {
                 "",
                 ["ModName", "Mod"],
                 PositiveMods[i],
-                Container
+                Container,
+                "rgb(112, 255, 112)"
               );
             }
           }
@@ -402,12 +406,15 @@ if (localStorage.length < 2) {
                 "",
                 ["ExclusionMod", "Mod"],
                 NegativeMods[i],
-                ExclusionContainer
+                ExclusionContainer,
+                "rgb(255, 62, 28)"
               );
             }
           }
         }
       }
+      RemoveModByClass("HoverTooltip");
+      DisplayInsertionMsg("Saved item loaded successfully!", "green");
     }
   });
   //#endregion
@@ -417,33 +424,37 @@ if (localStorage.length < 2) {
   }
   ManualContainer.addEventListener("mouseover", function (e) {
     if (e.target.classList.contains("Manual")) {
-      e.target.style.opacity = 1;
-      let HoverTooltip = document.createElement("div");
-      HoverTooltip.textContent = Hotkeys[e.target.id];
-      HoverTooltip.classList.add("HoverTooltip");
-      Insertion.appendChild(HoverTooltip);
+      RemoveModByClass("HoverTooltip");
+
+      CreateElementFn(
+        "div",
+        "",
+        ["HoverTooltip"],
+        `${Hotkeys[e.target.id]}`,
+        Insertion
+      );
     }
   });
   ManualContainer.addEventListener("mouseout", function (e) {
     if (e.target.classList.contains("Manual")) {
       e.target.style.opacity = 0.2;
-      let HoverTooltip = document.getElementsByClassName("HoverTooltip");
-      for (let i = HoverTooltip.length - 1; i >= 0; i--) {
-        HoverTooltip[i].remove();
-      }
+      RemoveModByClass("HoverTooltip");
     }
   });
   StartButton.addEventListener("mouseover", function (e) {
-    let HoverTooltip = document.createElement("div");
-    HoverTooltip.textContent = "Ctrl + K";
-    HoverTooltip.classList.add("HoverTooltip");
-    Insertion.appendChild(HoverTooltip);
+    RemoveModByClass("HoverTooltip");
+
+    let newel = CreateElementFn(
+      "div",
+      "",
+      ["HoverTooltip"],
+      "Ctrl + Enter",
+      Insertion,
+      "aliceblue"
+    );
   });
   StartButton.addEventListener("mouseout", function (e) {
-    let HoverTooltip = document.getElementsByClassName("HoverTooltip");
-    for (let i = HoverTooltip.length - 1; i >= 0; i--) {
-      HoverTooltip[i].remove();
-    }
+    RemoveModByClass("HoverTooltip");
   });
 
   let InstructionsBox = localStorage.getItem("InstructionsCheckBox");
@@ -554,14 +565,13 @@ ExclusionContainer.addEventListener("click", (e) => {
 });
 ExcludeModInput.addEventListener("keydown", (e) => {
   if (e.key == "Enter") {
-    // AddModElement(ExcludeModInput, ExclusionContainer, ["", "Mod"]);
     CreateElementFn(
       "div",
       "",
       ["ExclusionMod", "Mod"],
       ExcludeModInput.value,
-      Container,
-      "rgb(112, 255, 112)"
+      ExclusionContainer,
+      "rgb(255, 62, 28)"
     );
     ExcludeModInput.value = "";
   }
@@ -582,12 +592,10 @@ let LengthCheck = document.getElementsByClassName("Hover");
 let Coords;
 function StartCrafting() {
   let Hover = document.getElementsByClassName("Hover");
-  console.log("Crafting triggered");
   if (localStorage.length < 1) {
-    alert("Select coords first");
-    FixFocus();
+    RemoveModByClass("HoverTooltip");
+    DisplayInsertionMsg("Select coords first!", "red");
   } else if (Hover.length > 0) {
-    console.log("Craft Started");
     InfoArray.length = 0;
     if (ModClass.length > 0) {
       let Fracture = FractureCheckBox.checked;
@@ -646,12 +654,17 @@ function StartCrafting() {
       InfoArray.push(Number(LagInputNumber)); //7
       window.api.StartCrafting(InfoArray);
     } else {
-      alert("No mods selected");
-      FixFocus();
+      RemoveModByClass("HoverTooltip");
+
+      DisplayInsertionMsg("No mods selected", "red");
     }
   } else {
-    alert("Select currency to roll with by clicking (Chaos, alt or essence)");
-    FixFocus();
+    RemoveModByClass("HoverTooltip");
+
+    DisplayInsertionMsg(
+      "Select currency to roll with by clicking (Chaos, alt or essence)",
+      "red"
+    );
   }
 }
 StartButton.addEventListener("click", function () {
@@ -745,14 +758,17 @@ EssenceContainer.addEventListener("click", function (e) {
 //#region Hover Event listeners
 EssenceContainer.addEventListener("mouseover", function (e) {
   if (e.target.classList.contains("Essence")) {
-    e.target.style.opacity = 1;
-    let HoverTooltip = document.createElement("div");
+    RemoveModByClass("HoverTooltip");
+
     let Spaces = `${e.target.id}`.replace(/([A-Z])/g, " $1").trim(); // Breaks down the essence ID and capitalizes every letter and adds space between words.
-    HoverTooltip.textContent = `${Spaces}`; // Used for the Label that displays name when an essence is hovered.
+    let HoverTooltip = CreateElementFn(
+      "div",
+      "",
+      ["HoverTooltip"],
+      Spaces,
+      Insertion
+    );
     HoverTooltip.style.position = "static";
-    Insertion.appendChild(HoverTooltip);
-    HoverTooltip.classList.add("HoverTooltip");
-    // }, 50);
   }
 });
 EssenceContainer.addEventListener("mouseout", function (e) {
@@ -1045,20 +1061,22 @@ SaveCraftButton.addEventListener("click", function () {
                   SavedCrafts.appendChild(NewSave);
                   IconSelector.remove();
                 } else {
-                  alert("Please select mods for the craft you want  to save");
-                  FixFocus();
+                  DisplayInsertionMsg(
+                    "Please select mods for the craft you want  to save",
+                    "red"
+                  );
                 }
               } else {
-                alert("Name already taken, please select another one");
-                FixFocus();
+                DisplayInsertionMsg(
+                  "Name already taken, please select another one",
+                  "red"
+                );
               }
             } else if (e.key === "Enter" && SaveName === "") {
-              alert("Please select a name for the save");
-              FixFocus();
+              DisplayInsertionMsg("Please select a name for the save", "red");
             }
           } else if (e.key === "Enter" && SaveIcon === undefined) {
-            alert("Please select an icon for the save");
-            FixFocus();
+            DisplayInsertionMsg("Please select an icon for the save", "red");
           }
         }
       });
@@ -1075,7 +1093,7 @@ StoreCoordsButton.addEventListener("click", function () {
     typeof EssenceTabCoords === "undefined" ||
     typeof CurrencyTabCoords === "undefined"
   ) {
-    alert("Please select at least one item's coords");
+    DisplayInsertionMsg("Please select at least one item's coords", "red");
   } else {
     localStorage.setItem("CurrencyTabCoords", `${CurrencyTabCoords}`);
     localStorage.setItem("ChaosOrbCoords", `${ChaosOrbCoords}`);
@@ -1088,14 +1106,16 @@ StoreCoordsButton.addEventListener("click", function () {
     localStorage.setItem("EssenceTabCoords", `${EssenceTabCoords}`);
 
     if (CurrencyTabLocationLabel.textContent === "X:, Y:") {
-      alert(
-        "Please select the location of the item that will be rolled with alts and chaos ."
+      DisplayInsertionMsg(
+        "Please select the location of the item that will be rolled with alts and chaos",
+        "red"
       );
     } else {
       EssenceTabLocationLabel.remove();
       if (EssenceTabLocationLabel.textContent === "X:, Y:") {
-        alert(
-          "Please select the location of the item that will be rolled with essences ."
+        DisplayInsertionMsg(
+          "Please select the location of the item that will be rolled with essences",
+          "red"
         );
       } else {
         // CurrencyTabLocationLabel.remove();
@@ -1116,7 +1136,7 @@ StoreCoordsButton.addEventListener("click", function () {
             }
           }
         }
-        alert("Items have been stored!");
+        DisplayInsertionMsg("Items have been stored!", "green");
         for (const Item of ElementsToRemove) {
           Item.remove();
         }
@@ -1132,10 +1152,10 @@ StoreCoordsButton.addEventListener("click", function () {
 
 //#region  ItemError:
 window.api.ItemError((event, data) => {
-  alert(`${data}`);
+  DisplayInsertionMsg(`${data}`, "red");
 });
 window.api.RarityError((event, data) => {
-  alert(`${data}`);
+  DisplayInsertionMsg(`${data}`, "red");
 });
 //#endregion
 
@@ -1165,7 +1185,7 @@ window.api.Counter((event, data) => {
 
 //#region Logfiles
 window.api.Logfile((event, data) => {
-  alert(data);
+  DisplayInsertionMsg(`${data}`);
 });
 
 //#endregion
@@ -1190,12 +1210,8 @@ window.api.ExportItemsListener((event, data) => {
   if (data === "InitialRequest") {
     let FileNameDialog = document.getElementById("FileNameDialog");
     FileNameDialog.showModal();
-    let RemoveModsArray = Array.from(
-      document.getElementsByClassName("HoverTooltip")
-    );
-    for (let i = 0; i < RemoveModsArray.length; i++) {
-      RemoveModsArray[i].remove();
-    }
+    RemoveModByClass("HoverTooltip");
+
     document.body.classList.add("Blur");
   }
   if (data === "Confirmation") {
