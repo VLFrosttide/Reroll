@@ -85,6 +85,15 @@ html {
   margin-bottom: 5px;
   user-select: none;
 }
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .Hover {
   border: 3px double;
   border-color: rgb(213, 9, 80);
@@ -93,6 +102,10 @@ html {
   display: flex;
   font-size: 20px;
   text-align: center;
+  animation: fadeIn 500ms;
+}
+.HoverTooltipScale {
+  opacity: 1;
 }
 #EssenceContainer {
   -webkit-user-drag: none;
@@ -228,6 +241,9 @@ html {
 .HoverSaved {
   border: 3px double;
   border-color: rgb(176, 183, 181);
+}
+.Mod {
+  padding: 2px;
 }
 .ExclusionMod {
   color: rgb(255, 62, 28);

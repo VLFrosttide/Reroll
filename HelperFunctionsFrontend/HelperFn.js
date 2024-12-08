@@ -67,6 +67,7 @@ export function FixFocus() {
 }
 
 export function DisplayInsertionMsg(Text, Color = "aliceblue") {
+  RemoveModByClass("HoverTooltip");
   let Parent = document.getElementById("Insertion");
   return CreateElementFn("div", "", ["HoverTooltip"], Text, Parent, Color);
 }

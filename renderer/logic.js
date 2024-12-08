@@ -1208,11 +1208,16 @@ ExportFileOKButton.addEventListener("click", function (e) {
 window.api.ExportItemsListener((event, data) => {
   console.log("Data: ", data);
   if (data === "InitialRequest") {
-    let FileNameDialog = document.getElementById("FileNameDialog");
-    FileNameDialog.showModal();
-    RemoveModByClass("HoverTooltip");
+    let ModCollection = document.getElementsByClassName("Mod");
+    if (ModCollection.length > 0) {
+      let FileNameDialog = document.getElementById("FileNameDialog");
+      FileNameDialog.showModal();
+      RemoveModByClass("HoverTooltip");
 
-    document.body.classList.add("Blur");
+      document.body.classList.add("Blur");
+    } else {
+      DisplayInsertionMsg("Add mods you want to export first", "red");
+    }
   }
   if (data === "Confirmation") {
     DisplayInsertionMsg("Successfully exported current item", "green");
@@ -1224,10 +1229,6 @@ window.api.ExportItemsListener((event, data) => {
 
 //#endregion
 
-//#region Focux fix function
-
-//#endregion
-
 //#region Clear Mods
 window.api.ClearMods((event, data) => {
   let RemoveModsArray = Array.from(document.getElementsByClassName("Mod"));
@@ -1236,3 +1237,30 @@ window.api.ClearMods((event, data) => {
   }
 });
 //#endregion
+
+window.api.ImportItemsListener((event, data) => {
+  console.log(data);
+  let Pmods = data[0];
+  let Nmods = data[1];
+  for (let i = 0; i < Pmods.length; i++) {
+    CreateElementFn(
+      "label",
+      "",
+      ["ModName", "Mod"],
+      Pmods[i],
+      Container,
+      "rgb(112, 255, 112)"
+    );
+  }
+  for (let i = 0; i < Nmods.length; i++) {
+    CreateElementFn(
+      "label",
+      "",
+      ["ExclusionMod", "Mod"],
+      Nmods[i],
+      ExclusionContainer,
+      "rgb(255, 62, 28)"
+    );
+  }
+  DisplayInsertionMsg("Item imported successfully!", "green");
+});

@@ -1,4 +1,5 @@
 import path from "path";
+import fs from "fs";
 import {
   app,
   BrowserWindow,
@@ -7,6 +8,7 @@ import {
   ipcMain,
   Menu,
   nativeTheme,
+  dialog,
 } from "electron";
 import { EventEmitter } from "events";
 import "./HelperFunctionsBackend/LogFiles.js";
@@ -17,6 +19,7 @@ import {
   WriteToFile,
   ExportItemToFile,
   CheckFileExistence,
+  LoadItem,
 } from "./HelperFunctionsBackend/LogFiles.js";
 import {
   CheckPython,
@@ -24,6 +27,7 @@ import {
 } from "./HelperFunctionsBackend/PythonCheck.js";
 import "./HelperFunctionsBackend/Craft.js";
 import "./HelperFunctionsBackend/UseCurrency.js";
+import { info } from "console";
 nativeTheme.themeSource = "dark";
 
 let win;
@@ -163,6 +167,23 @@ app.whenReady().then(() => {
         },
 
         {
+          label: "Import an Item",
+          accelerator: "Ctrl+q",
+
+          click() {
+            let MyFile = dialog.showOpenDialogSync(win, {
+              properties: [OpenFile],
+              filters: [{ name: "Text", extensions: ["txt"] }],
+            });
+            let MyFileContent = fs.readFileSync(MyFile[0], {
+              encoding: "utf8",
+              flag: "r",
+            });
+            let ItemMods = LoadItem(MyFileContent);
+            win.webContents.send("ImportItem", ItemMods);
+          },
+        },
+        {
           label: "Export Current Item",
           accelerator: "Ctrl+e",
 
@@ -188,8 +209,17 @@ app.whenReady().then(() => {
       submenu: [
         {
           label: "Clear All stored coords",
-          click() {
-            win.webContents.send("ClearLocalStorage", "awd");
+          click: async () => {
+            let MsgRes = await dialog.showMessageBox({
+              message:
+                "Are you sure you want to delete ALL coords?\nThis will reset the proram completely",
+              type: "question",
+              buttons: ["OK", "Cancel"],
+              title: "Reset all coords",
+            });
+            if (MsgRes.response === 0) {
+              win.webContents.send("ClearLocalStorage", "awd");
+            }
           },
         },
       ],

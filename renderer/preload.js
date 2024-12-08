@@ -9,6 +9,9 @@ contextBridge.exposeInMainWorld("api", {
   ClearMods: (callback) => ipcRenderer.on("ClearMods", callback),
 
   ExportItemsListener: (callback) => ipcRenderer.on("ExportItem", callback),
+
+  ImportItemsListener: (callback) => ipcRenderer.on("ImportItem", callback),
+
   ClearLocalStorage: (callback) =>
     ipcRenderer.on("ClearLocalStorage", callback),
 

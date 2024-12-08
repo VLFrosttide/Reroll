@@ -37,3 +37,14 @@ export function ExportItemToFile(FilePath, Pmods, Nmods) {
 export function CheckFileExistence(FilePath) {
   return fs.existsSync(FilePath);
 }
+
+export function LoadItem(Item) {
+  let LineArray = Item.split("\n");
+  LineArray = LineArray.filter((item) => item !== "");
+  let SplitIndex = LineArray.indexOf(
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  );
+  let Pmods = LineArray.slice(0, SplitIndex);
+  let Nmods = LineArray.slice(SplitIndex + 1);
+  return [Pmods, Nmods];
+}
