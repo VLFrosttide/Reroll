@@ -180,6 +180,7 @@ app.whenReady().then(() => {
               flag: "r",
             });
             let ItemMods = LoadItem(MyFileContent);
+            win.webContents.send("ClearMods", "awd");
             win.webContents.send("ImportItem", ItemMods);
           },
         },
