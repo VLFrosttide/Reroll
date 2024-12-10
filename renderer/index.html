@@ -1,61 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script type="module" src="logic.js" defer></script>
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <dialog style="display: none" id="FileNameDialog">
+      <form method="dialog">
+        <label>Input name for the save file: </label>
+        <input class="Input" id="ExportFileInput" type="text" />
+        <button style="display: none" id="ExportFileOKButton">OK</button>
+      </form>
+    </dialog>
+
     <div id="Main">
       <div id="SavedCrafts">Saved Crafts</div>
-      <div id="Gallery" hidden>
-        <img
-          src="SaveIconPics/SilverFlaskJewel.png"
-          alt=""
-          class="Image GalleryImage"
-        />
-        <img
-          src="SaveIconPics/SearchingEyeJewel.png"
-          class="Image GalleryImage"
-          alt=""
-        />
-        <img
-          src="SaveIconPics/GhastlyEyeJewel.png"
-          class="Image GalleryImage"
-          alt=""
-        />
-        <img
-          src="SaveIconPics/MurderEyeJewel.png"
-          class="Image GalleryImage"
-          alt=""
-        />
-        <img
-          src="SaveIconPics/HypnoticEyeJewel.png"
-          class="Image GalleryImage"
-          alt=""
-        />
-        <img
-          src="SaveIconPics/CobaltJewel.png"
-          class="Image GalleryImage"
-          alt=""
-        />
-        <img
-          src="SaveIconPics/CrimsonJewel.png"
-          class="Image GalleryImage"
-          alt=""
-        />
-        <img
-          src="SaveIconPics/ViridianJewel.png"
-          class="Image GalleryImage"
-          alt=""
-        />
-        <img
-          src="SaveIconPics/LargeClusterJewel.png"
-          class="Image GalleryImage"
-          alt=""
-        />
-      </div>
+      <div id="Gallery" hidden></div>
       <div id="Instructions" class="Instructions">
         Select a currency item (Left Mouse click), then <br />
         while the program is focused (Click on the program and do not click
@@ -85,12 +49,6 @@
           step="20"
           min="1"
           placeholder="Maximum rerolls"
-        />
-        <input
-          class="Input"
-          type="text"
-          id="EssenceInput"
-          placeholder="Essence Highlight"
         />
       </div>
 
@@ -197,7 +155,7 @@
         class="Image"
         alt=""
       />
-      <div id="EssenceContainer" hidden>
+      <div id="EssenceContainer" style="display: none">
         <div id="EssenceLeftSide">
           <div id="Greed" class="EssenceDiv">
             <div class="CoordsLabel">
@@ -761,23 +719,24 @@
         <div id="EssenceSpecial"></div>
       </div>
       <button id="StoreCoordsButton" class="button">Store coordinates</button>
-      <dialog id="FileNameDialog">
-        <form method="dialog">
-          <label>Input name for the save file: </label>
-          <input class="Input" id="ExportFileInput" type="text" />
-          <button style="display: none" id="ExportFileOKButton">OK</button>
-        </form>
-      </dialog>
       <div id="Insertion"></div>
       <label class="Instructions" hidden
         >You can click on a mod to remove it from the list.</label
       >
-      <div id="Container" hidden>Mods to look for:</div>
-      <div id="ExclusionContainer">Exclude mods that contain:</div>
+      <div id="Container" style="display: none">Mods to look for:</div>
+      <div id="ExclusionContainer" style="display: none">
+        Exclude mods that contain:
+      </div>
       <div id="HideInstructions">
-        <input type="checkbox" id="InstructionsCheckBox" class="CheckBox" />
-        <label>Hide Instructions</label>
-        <div id="LagContainer">
+        <div class="HideInstructions">
+          <input type="checkbox" id="InstructionsCheckBox" class="CheckBox" />
+          <label>Hide Instructions</label>
+        </div>
+        <div id="Fractures" class="HideInstructions" style="display: none">
+          <input type="checkbox" id="FractureCheckBox" class="CheckBox" />
+          <label>Ignore fractures</label>
+        </div>
+        <div id="LagContainer" class="HideInstructions">
           <input type="checkbox" id="LagCheckBox" class="CheckBox" />
           <label>Reroll delay</label>
           <input
@@ -792,13 +751,10 @@
       </div>
       <div id="Start">
         <button id="StartButton" class="button" hidden>Start crafting</button>
-        <button id="SaveCraftButton" class="button">Save craft</button>
-        <div id="Fractures" hidden>
-          <input type="checkbox" id="FractureCheckBox" class="CheckBox" />
-          <label>Ignore fractures</label>
-        </div>
+        <button id="SaveCraftButton" style="display: none" class="button">
+          Save craft
+        </button>
       </div>
     </div>
   </body>
-  <script type="module" src="logic.js" defer></script>
 </html>

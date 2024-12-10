@@ -36,22 +36,32 @@ export function CreateElementFn(
   }
   return NewElement;
 }
+/**
+ *
+ * @returns {Array<Array<string>>} An array containing two subarrays:
+ *          Array[0] = array of positive modifiers and
+ *          Array[1] = array of negative modifiers.
 
+ */
 export function GetCurrentItem() {
   let PositiveMods = document.getElementsByClassName("ModName");
   let NegativeMods = document.getElementsByClassName("ExclusionMod");
   let PmodArray = [];
   let NmodArray = [];
   for (let i = 0; i < PositiveMods.length; i++) {
-    PmodArray.push(PositiveMods[i].textContent);
+    PmodArray.push(PositiveMods[i].textContent.toLowerCase());
   }
   for (let i = 0; i < NegativeMods.length; i++) {
-    NmodArray.push(NegativeMods[i].textContent);
+    NmodArray.push(NegativeMods[i].textContent.toLowerCase());
   }
 
   return [PmodArray, NmodArray];
 }
-
+/**
+ *
+ * @param {HTMLElement} Item - The html element to be removed
+ * @param {Function} LSDeleteFunction - The function which will clear local storage
+ */
 export function DeleteSavedItem(Item, LSDeleteFunction) {
   console.log(Item), console.log(LSDeleteFunction);
   LSDeleteFunction(Item.id);
@@ -67,14 +77,41 @@ export function FixFocus() {
 }
 
 export function DisplayInsertionMsg(Text, Color = "aliceblue") {
-  RemoveModByClass("HoverTooltip");
+  RemoveElementByClass("HoverTooltip");
   let Parent = document.getElementById("Insertion");
   return CreateElementFn("div", "", ["HoverTooltip"], Text, Parent, Color);
 }
 
-export function RemoveModByClass(ClassName) {
+export function RemoveElementByClass(ClassName) {
   let RemovalArray = Array.from(document.getElementsByClassName(ClassName));
   for (let i = 0; i < RemovalArray.length; i++) {
     RemovalArray[i].remove();
+  }
+}
+
+/**
+ *
+ * @param {HTMLElement} Item
+ */
+export function CenterItem(Item) {
+  Item.style.position = "fixed";
+  Item.style.transform = "translateY(-30%)";
+}
+
+export function BlurBG() {
+  const Main = document.getElementById("Main");
+  Main.classList.add("Blur");
+  Main.classList.add("UserSelectNone");
+}
+export function RemoveBlur() {
+  const Main = document.getElementById("Main");
+  Main.classList.remove("Blur");
+  Main.classList.remove("UserSelectNone");
+}
+export function CloseSaveWindow() {
+  let SaveCraftWindow = document.getElementById("SaveCraftContainer");
+  if (SaveCraftWindow) {
+    SaveCraftWindow.remove();
+    document.body.focus();
   }
 }

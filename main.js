@@ -20,6 +20,8 @@ import {
   ExportItemToFile,
   CheckFileExistence,
   LoadItem,
+  ReadFolder,
+  CopyIcon,
 } from "./HelperFunctionsBackend/LogFiles.js";
 import {
   CheckPython,
@@ -28,6 +30,7 @@ import {
 import "./HelperFunctionsBackend/Craft.js";
 import "./HelperFunctionsBackend/UseCurrency.js";
 import { info } from "console";
+import Main from "electron/main";
 nativeTheme.themeSource = "dark";
 
 let win;
@@ -54,17 +57,8 @@ const CreateWindow = () => {
       sandbox: true,
       contextIsolation: true,
       preload: PreloadPath,
-      contentSecurityPolicy: {
-        directives: {
-          defaultSrc: ["self"],
-          scriptSrc: ["self"],
-          styleSrc: ["self"],
-          imgSrc: ["self"],
-          fontSrc: ["self"],
-          connectSrc: ["self"],
-          manifestSrc: ["self"],
-        },
-      },
+      contentSecurityPolicy:
+        "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self';",
     },
   });
 
@@ -74,9 +68,18 @@ const CreateWindow = () => {
 app.whenReady().then(() => {
   globalShortcut.unregisterAll();
   CreateWindow();
+  win.ELECTRON_ENABLE_SECURITY_WARNINGS = false;
   const DocPath = app.getPath("documents");
+
   const RerollFolder = path.join(DocPath, "RerollLogs");
   LogFilePath = path.join(RerollFolder, "/Logs.txt");
+  let SaveIconsFolder = path.join(
+    app.getPath("exe").replace("reroll.exe", ""),
+    "resources",
+    "app.asar.unpacked",
+    "renderer",
+    "SaveIconPics"
+  );
   CreateLogFolder(RerollFolder, DocPath);
   CheckPython(LogFilePath);
   CheckPyPackage("pyautogui", LogFilePath);
@@ -109,6 +112,16 @@ app.whenReady().then(() => {
   const Transmute = globalShortcut.register("Control+Alt+Enter", () => {
     console.log("Transmute function triggered");
     win.webContents.send("GlobalKey", "TransmuteOrb");
+  });
+  ipcMain.on("LoadSaveIconPics", async (event, data) => {
+    if (data === "InitialRequest") {
+      let IconPics = await ReadFolder(LogFilePath, SaveIconsFolder);
+      // let IconPics = await ReadFolder(
+      //   LogFilePath,
+      //   "C:\\Program Files\\reroll\\resources\\app.asar.unpacked\\renderer\\SaveIconPics"
+      // );
+      win.webContents.send("SaveIconsData", [SaveIconsFolder, IconPics]);
+    }
   });
   ipcMain.on("ExportItem", (event, data) => {
     //data[0] = Positive mods
@@ -221,6 +234,28 @@ app.whenReady().then(() => {
             if (MsgRes.response === 0) {
               win.webContents.send("ClearLocalStorage", "awd");
             }
+          },
+        },
+        {
+          label: "Import SaveIcon",
+          click: async () => {
+            let SaveIcon = await dialog.showOpenDialog({
+              properties: ["openFile", "multiSelections"],
+              filters: [{ name: "Text", extensions: ["png", "jpg", "jpeg"] }],
+            });
+            let IconsPath = [...SaveIcon.filePaths];
+
+            for (let i = 0; i < IconsPath.length; i++) {
+              console.log("BaseName: ", path.basename(IconsPath[i]));
+              CopyIcon(
+                IconsPath[i],
+                path.basename(IconsPath[i]),
+                SaveIconsFolder,
+                LogFilePath
+              );
+              // "C:\\Program Files\\reroll\\resources\\app.asar.unpacked\\renderer\\SaveIconPics"
+            }
+            // win.webContents.send("ImportSaveIcons", SaveIcon.filePaths);
           },
         },
       ],

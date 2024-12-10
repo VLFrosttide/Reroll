@@ -1,5 +1,6 @@
 import fs from "fs";
 import { exec } from "child_process";
+import Main from "electron/main";
 
 export function WriteToFile(FilePath, StringToWrite) {
   fs.appendFileSync(FilePath, StringToWrite + "\n");
@@ -47,4 +48,46 @@ export function LoadItem(Item) {
   let Pmods = LineArray.slice(0, SplitIndex);
   let Nmods = LineArray.slice(SplitIndex + 1);
   return [Pmods, Nmods];
+}
+
+/**
+ *
+ * @param {string} LogfilePath
+ * @param {string} FolderPath
+ * @returns
+ */
+export async function ReadFolder(LogfilePath, FolderPath) {
+  return new Promise((resolve, reject) => {
+    console.log("FolderPath: ", FolderPath);
+    fs.readdir(FolderPath, (err, files) => {
+      if (err) {
+        WriteToFile(LogfilePath, `Error reading SaveIcons folder:  ${err}`);
+        reject(err);
+      } else {
+        let ImageExt = ["jpg", "png", "jpeg"];
+        let ImageFiles = files.filter((file) => {
+          const ext = ImageExt.includes(file.split(".").pop()?.toLowerCase());
+          return ext;
+        });
+        WriteToFile(LogfilePath, `AllFiles: ${files}`);
+        WriteToFile(LogfilePath, `ImageFiles:  ${ImageFiles}`);
+        resolve(ImageFiles);
+      }
+    });
+  });
+}
+
+export function CopyIcon(MainFilePath, IconName, IconFolderPath, LogfilePath) {
+  let NewLocation = IconFolderPath + "\\" + IconName;
+  console.log("MainFilePath: ", MainFilePath);
+  console.log("NewLocation: ", NewLocation);
+  WriteToFile(LogfilePath, `MainFilePath: ${MainFilePath}`);
+  WriteToFile(LogfilePath, `NewLocation: ${NewLocation}`);
+  try {
+    fs.copyFileSync(MainFilePath, NewLocation);
+  } catch (err) {
+    if (err) {
+      WriteToFile(LogfilePath, `Error copying file: ${err}`);
+    }
+  }
 }

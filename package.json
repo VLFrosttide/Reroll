@@ -5,6 +5,8 @@
   "main": "main.js",
   "type": "module",
   "build": {
+    "asar": true,
+    "asarUnpack": "renderer/SaveIconPics",
     "appId": "PoeAutoReroll",
     "extraFiles": [
       {
@@ -22,7 +24,8 @@
     ],
     "win": {
       "target": "nsis",
-      "icon": "frosttide23.ico"
+      "icon": "frosttide23.ico",
+      "requestedExecutionLevel": "requireAdministrator"
     },
     "nsis": {
       "oneClick": true,

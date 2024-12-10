@@ -1,18 +1,25 @@
 "use strict";
-//#region Declarations
+
 import {
   CreateElementFn,
   DeleteSavedItem,
   GetCurrentItem,
   FixFocus,
   DisplayInsertionMsg,
-  RemoveModByClass,
+  RemoveElementByClass,
+  CenterItem,
+  BlurBG,
+  RemoveBlur,
+  CloseSaveWindow,
 } from "../HelperFunctionsFrontend/HelperFn.js";
 import {
   DeleteLSSaveItem,
   GetLSSaves,
   ChangeLSSaves,
 } from "../HelperFunctionsFrontend/LocalStorageFn.js";
+
+//#region Declarations
+const Main = document.getElementById("Main");
 const ModNameInput = document.getElementById("ModInput");
 const ExcludeModInput = document.getElementById("ExcludeModInput");
 const Container = document.getElementById("Container");
@@ -38,7 +45,6 @@ const ManualContainer = document.getElementById("ManualContainer");
 const EssenceContainer = document.getElementById("EssenceContainer");
 const EssenceImage = document.getElementById("EssenceImage");
 const EssenceClassList = document.getElementsByClassName("Essence");
-const EssenceInput = document.getElementById("EssenceInput");
 const DeafeningEssencesLeft = document.querySelectorAll(".Deafening.Left");
 const ScreamingEssencesLeft = document.querySelectorAll(".Screaming.Left");
 const ShriekingEssenceLeft = document.querySelectorAll(".Shrieking.Left");
@@ -64,6 +70,7 @@ const InstructionsDiv2 = document.getElementById("Instructions2");
 const InstructionsCheckBox = document.getElementById("InstructionsCheckBox");
 const LagCheckBox = document.getElementById("LagCheckBox");
 const CheckBoxClass = document.getElementsByClassName("CheckBox");
+const Fractures = document.getElementById("Fractures");
 const FractureCheckBox = document.getElementById("FractureCheckBox");
 const AllowLabelModification = document.getElementsByClassName("Modify");
 const Greed1 = document.getElementById("DeafeningEssenceOfGreed");
@@ -137,7 +144,7 @@ if (localStorage.length < 2) {
       `${EssenceClassList[i].id}Label`,
       ["XYLabel"],
       "X: , Y: ",
-      CoordsLabel
+      CoordsLabelDivList[i]
     );
     CoordsLabel.style.display = "flex";
     CoordsLabel.style.opacity = 0.1;
@@ -145,7 +152,6 @@ if (localStorage.length < 2) {
   }
 
   InputDiv.style.display = "none";
-  EssenceInput.style.display = "none";
 
   Container.style.display = "none";
 
@@ -155,7 +161,7 @@ if (localStorage.length < 2) {
     MouseCoordsX = parseInt(CoordsSplit[0]);
     MouseCoordsY = parseInt(CoordsSplit[1]);
     if (ChangingLabel == undefined) {
-      RemoveModByClass("HoverTooltip");
+      RemoveElementByClass("HoverTooltip");
 
       DisplayInsertionMsg("No currency selected.", "red");
     }
@@ -282,13 +288,8 @@ if (localStorage.length < 2) {
   //#region Saved crafts  ev.listeners
   window.addEventListener("keydown", function (e) {
     if (e.key === "Escape") {
-      document.body.classList.remove("Blur");
-
-      let SaveCraftWindow = document.getElementById("SaveCraftIconSelector");
-      if (SaveCraftWindow) {
-        SaveCraftWindow.remove();
-        document.body.focus();
-      }
+      RemoveBlur();
+      CloseSaveWindow();
       let ActiveElement = this.document.activeElement;
       if (ActiveElement.classList.contains("Input")) {
         ActiveElement.value = "";
@@ -338,14 +339,14 @@ if (localStorage.length < 2) {
   });
   SavedCrafts.addEventListener("mouseover", (e) => {
     if (e.target.classList.contains("Image")) {
-      RemoveModByClass("HoverTooltip");
+      RemoveElementByClass("HoverTooltip");
       CreateElementFn("div", "", ["HoverTooltip"], `${e.target.id}`, Insertion);
     }
   });
   SavedCrafts.addEventListener("mouseout", (e) => {
     if (e.target.classList.contains("Image")) {
       // let HoverTooltip = document.getElementsByClassName("HoverTooltip");
-      RemoveModByClass("HoverTooltip");
+      RemoveElementByClass("HoverTooltip");
 
       for (let i = HoverTooltip.length - 1; i >= 0; i--) {
         HoverTooltip[i].remove();
@@ -356,11 +357,12 @@ if (localStorage.length < 2) {
     if (e.target.classList.contains("Image")) {
       let LSSavedItems = GetLSSaves("Save");
       let Name = e.target.id; // awd
-      let MyMods;
       for (const key of Object.keys(LSSavedItems)) {
+        console.log("Key: ", key);
         let Index = key.indexOf("Jewel");
         Index = Index + 5;
         let KeyName = key.substring(Index);
+        console.log("Keyname: ", KeyName);
         if (Name === KeyName) {
           let OldModArray = document.getElementsByClassName("ModName");
           let OldNegatives = document.getElementsByClassName("ExclusionMod");
@@ -413,7 +415,7 @@ if (localStorage.length < 2) {
           }
         }
       }
-      RemoveModByClass("HoverTooltip");
+      RemoveElementByClass("HoverTooltip");
       DisplayInsertionMsg("Saved item loaded successfully!", "green");
     }
   });
@@ -424,7 +426,7 @@ if (localStorage.length < 2) {
   }
   ManualContainer.addEventListener("mouseover", function (e) {
     if (e.target.classList.contains("Manual")) {
-      RemoveModByClass("HoverTooltip");
+      RemoveElementByClass("HoverTooltip");
 
       CreateElementFn(
         "div",
@@ -438,11 +440,11 @@ if (localStorage.length < 2) {
   ManualContainer.addEventListener("mouseout", function (e) {
     if (e.target.classList.contains("Manual")) {
       e.target.style.opacity = 0.2;
-      RemoveModByClass("HoverTooltip");
+      RemoveElementByClass("HoverTooltip");
     }
   });
   StartButton.addEventListener("mouseover", function (e) {
-    RemoveModByClass("HoverTooltip");
+    RemoveElementByClass("HoverTooltip");
 
     let newel = CreateElementFn(
       "div",
@@ -454,7 +456,7 @@ if (localStorage.length < 2) {
     );
   });
   StartButton.addEventListener("mouseout", function (e) {
-    RemoveModByClass("HoverTooltip");
+    RemoveElementByClass("HoverTooltip");
   });
 
   let InstructionsBox = localStorage.getItem("InstructionsCheckBox");
@@ -491,6 +493,10 @@ if (localStorage.length < 2) {
   let RenderEssences = JSON.parse(localStorage.getItem("EssenceCoords"));
   let RemoveEssenceFromRender = [];
   StartButton.style.display = "flex";
+  SaveCraftButton.style.display = "flex";
+  Container.style.display = "flex";
+  ExclusionContainer.style.display = "flex";
+  Fractures.style.display = "flex";
   for (const Item of CoordsLabelDivList) {
     let Re = Item.id.toString();
     Re = Re.replace("Div", "");
@@ -508,7 +514,6 @@ if (localStorage.length < 2) {
     }
   }
 }
-EssenceInput.style.display = "none";
 //#region Placeholder Eventlisteners
 ModNameInput.addEventListener("focusin", function () {
   ModNameInput.placeholder = "";
@@ -517,26 +522,19 @@ ModNameInput.addEventListener("focusout", function () {
   ModNameInput.placeholder = "Mod youre looking for";
 });
 
-EssenceInput.addEventListener("focusin", function () {
-  EssenceInput.placeholder = "";
-});
-EssenceInput.addEventListener("focusout", function () {
-  EssenceInput.placeholder = "Essence Highlight";
-});
-
 //#endregion
-//#region Add/Remove Mods
-Container.addEventListener("click", (e) => {
-  if (e.target.classList.contains("ModName")) {
-    Container.removeChild(e.target);
+//#region Mods ev.listeners
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("Mod")) {
+    e.target.remove();
   }
 });
-Container.addEventListener("mouseover", (e) => {
+document.addEventListener("mouseover", (e) => {
   if (e.target.classList.contains("Mod")) {
     e.target.style.opacity = 0.5;
   }
 });
-Container.addEventListener("mouseout", (e) => {
+document.addEventListener("mouseout", (e) => {
   if (e.target.classList.contains("Mod")) {
     e.target.style.opacity = 1;
   }
@@ -555,14 +553,7 @@ ModNameInput.addEventListener("keydown", (e) => {
     ModNameInput.value = "";
   }
 });
-//#endregion
 
-//#region  Add/Remove Exclusion Mods
-ExclusionContainer.addEventListener("click", (e) => {
-  if (e.target.classList.contains("ExclusionMod")) {
-    ExclusionContainer.removeChild(e.target);
-  }
-});
 ExcludeModInput.addEventListener("keydown", (e) => {
   if (e.key == "Enter") {
     CreateElementFn(
@@ -576,24 +567,14 @@ ExcludeModInput.addEventListener("keydown", (e) => {
     ExcludeModInput.value = "";
   }
 });
-ExclusionContainer.addEventListener("mouseover", (e) => {
-  if (e.target.classList.contains("Mod")) {
-    e.target.style.opacity = 0.5;
-  }
-});
-ExclusionContainer.addEventListener("mouseout", (e) => {
-  if (e.target.classList.contains("Mod")) {
-    e.target.style.opacity = 1;
-  }
-});
+
 //#endregion
 //#region Start Button Eventlistener
-let LengthCheck = document.getElementsByClassName("Hover");
 let Coords;
 function StartCrafting() {
   let Hover = document.getElementsByClassName("Hover");
   if (localStorage.length < 1) {
-    RemoveModByClass("HoverTooltip");
+    RemoveElementByClass("HoverTooltip");
     DisplayInsertionMsg("Select coords first!", "red");
   } else if (Hover.length > 0) {
     InfoArray.length = 0;
@@ -654,12 +635,12 @@ function StartCrafting() {
       InfoArray.push(Number(LagInputNumber)); //7
       window.api.StartCrafting(InfoArray);
     } else {
-      RemoveModByClass("HoverTooltip");
+      RemoveElementByClass("HoverTooltip");
 
       DisplayInsertionMsg("No mods selected", "red");
     }
   } else {
-    RemoveModByClass("HoverTooltip");
+    RemoveElementByClass("HoverTooltip");
 
     DisplayInsertionMsg(
       "Select currency to roll with by clicking (Chaos, alt or essence)",
@@ -697,7 +678,7 @@ LagInput.addEventListener("wheel", function (e) {});
 
 //#region CheckBox Eventlistener
 LagInput.addEventListener("blur", function () {
-  // Blur is used for element being out of focus in this case.
+  // blur is used for element being out of focus in this case.
   localStorage.setItem("LagInput", LagInput.value);
 });
 //Loop through all instructions and show/hide them based on the checkbox
@@ -755,55 +736,27 @@ EssenceContainer.addEventListener("click", function (e) {
   }
 });
 //#endregion
-//#region Hover Event listeners
+//#region Essence Hover Event listeners
 EssenceContainer.addEventListener("mouseover", function (e) {
   if (e.target.classList.contains("Essence")) {
-    RemoveModByClass("HoverTooltip");
+    RemoveElementByClass("HoverTooltip");
 
     let Spaces = `${e.target.id}`.replace(/([A-Z])/g, " $1").trim(); // Breaks down the essence ID and capitalizes every letter and adds space between words.
-    let HoverTooltip = CreateElementFn(
-      "div",
-      "",
-      ["HoverTooltip"],
-      Spaces,
-      Insertion
-    );
-    HoverTooltip.style.position = "static";
+    CreateElementFn("div", "", ["HoverTooltip"], Spaces, Insertion);
   }
 });
 EssenceContainer.addEventListener("mouseout", function (e) {
   if (e.target.classList.contains("Essence")) {
-    let Remove = document.getElementsByClassName("HoverTooltip");
     if (!e.target.classList.contains("Highlight")) {
       e.target.style.opacity = 0.3;
     }
     // if (e.target.classList.contains("Hover"))
-    for (const Item of Remove) {
-      Item.remove();
-    }
+    RemoveElementByClass("HoverTooltip");
   }
 });
 //#endregion
-//#region Input highlight
-EssenceInput.addEventListener("input", function () {
-  for (const Name of EssenceNameArray) {
-    let SpacedName = Name.replace(/([A-Z])/g, " $1").trim();
-    if (
-      SpacedName.toLowerCase().includes(EssenceInput.value.toLowerCase()) &&
-      EssenceInput.value !== ""
-    ) {
-      document.getElementById(`${Name}`).style.opacity = 1;
-      document.getElementById(`${Name}`).classList.add("Highlight");
-    } else if (
-      !document.getElementById(`${Name}`).classList.contains("Hover")
-    ) {
-      document.getElementById(`${Name}`).classList.remove("Highlight");
-      document.getElementById(`${Name}`).style.opacity = 0.3;
-    }
-  }
-});
-//#endregion
-//#region EssenceImage Click event
+
+//#region Essence Image Click event
 EssenceImage.addEventListener("click", function (e) {
   for (const Item of AllowLabelModification) {
     Item.classList.remove("Modify");
@@ -813,9 +766,6 @@ EssenceImage.addEventListener("click", function (e) {
   }
 
   if (e.target == EssenceImage && !EssenceImage.classList.contains("Clicked")) {
-    if (InputDiv.style.display == "flex") {
-      EssenceInput.style.display = "flex";
-    }
     if (localStorage.length < 1) {
       InstructionsDiv1.innerText = `Now repeat the same process for the highlighted essences. Once you're done , 
       click on the button at the bottom of the page to store your coordinates and NameTaken`;
@@ -830,8 +780,6 @@ EssenceImage.addEventListener("click", function (e) {
       Currencies[j].classList.remove("Hover");
     }
     CurrencyDiv.style.display = "none";
-    window.api.ResizeWindow("awd");
-    EssenceInput.style.display = "flex";
     EssenceContainer.style.display = "flex";
     ImageContainer.style.flexDirection = "column";
     EssenceImage.src = "EssencePics/Arrow.png";
@@ -856,7 +804,6 @@ EssenceImage.addEventListener("click", function (e) {
     CurrencyDiv.style.display = "flex";
     EssenceImage.classList.remove("Clicked");
     window.api.ResizeWindow("abruvwd");
-    EssenceInput.style.display = "none";
     EssenceContainer.style.display = "none";
     ImageContainer.style.flexDirection = "column";
     EssenceImage.src =
@@ -893,10 +840,19 @@ CurrencyDiv.addEventListener("click", (e) => {
 //#endregion
 
 //#region Delete Saved Crafts
-
+SavedCrafts.addEventListener("mouseover", (e) => {
+  if (e.target.classList.contains("Saved")) {
+    e.target.classList.add("Delete");
+  }
+});
+SavedCrafts.addEventListener("mouseout", (e) => {
+  if (e.target.classList.contains("Delete")) {
+    e.target.classList.remove("Delete");
+  }
+});
 document.addEventListener("keydown", (e) => {
   if (e.key === "Delete") {
-    let SelectedItem = document.getElementsByClassName("SavedSelectedIcon")[0];
+    let SelectedItem = document.getElementsByClassName("Delete")[0];
     if (SelectedItem) {
       DeleteSavedItem(SelectedItem, DeleteLSSaveItem);
     }
@@ -906,58 +862,53 @@ document.addEventListener("keydown", (e) => {
 //#endregion
 
 //#region Save craft
-// Create label
-//SavedSelectedIcon
+
 SaveCraftButton.addEventListener("click", function () {
   let SavedSelectedIcon = document.getElementsByClassName("SavedSelectedIcon");
+  let Mods = GetCurrentItem();
   console.log(SavedSelectedIcon);
+  // Used so you can add / remove mods from existing saves
   if (SavedSelectedIcon.length > 0) {
     let SelectedName = SavedSelectedIcon[0].id;
     console.log("SelectedName: ", SelectedName);
-    let PositiveModArray = [];
-    let NegativeModArray = [];
-    for (let i = 0; i < ExclusionModClass.length; i++) {
-      NegativeModArray.push(
-        ExclusionModClass[i].textContent.toLocaleLowerCase()
-      );
-    }
-    for (let i = 0; i < ModClass.length; i++) {
-      PositiveModArray.push(ModClass[i].textContent.toLocaleLowerCase());
-    }
-    if (NegativeModArray.length > 0 && PositiveModArray.length > 0) {
-      ChangeLSSaves(
-        SelectedName,
-        `${JSON.stringify(PositiveModArray)}NegativeMods${JSON.stringify(
-          NegativeModArray
-        )}`
+    if (Mods[0].length > 0) {
+      let SaveString = `${JSON.stringify(Mods[0])}NegativeMods${JSON.stringify(
+        Mods[1]
+      )}`;
+
+      ChangeLSSaves(SelectedName, SaveString);
+      DisplayInsertionMsg(
+        "Successfully saved changes to the selected existing item",
+        "green"
       );
     } else {
-      ChangeLSSaves(SelectedName, `${JSON.stringify(PositiveModArray)}`);
+      DisplayInsertionMsg("Please select at least one positive mod", "red");
     }
-  } else {
-    const SaveCraftIconSelector = document.getElementById(
-      "SaveCraftIconSelector"
-    );
-    if (!SaveCraftIconSelector) {
-      let IconSelector = CreateElementFn(
-        "label",
-        "SaveCraftIconSelector",
+  } else if (Mods[0].length > 0) {
+    const SaveCraftContainer = document.getElementById("SaveCraftContainer");
+    console.log(SaveCraftContainer);
+    if (!SaveCraftContainer) {
+      let SaveCraftContainer = CreateElementFn(
+        "div",
+        "SaveCraftContainer",
         ["SaveCraft", "SelectNone"],
         "Select an icon",
         document.body
       );
+      BlurBG();
+      CenterItem(SaveCraftContainer);
+      window.api.LoadSaveIconPics("InitialRequest");
       SaveGallery.style.display = "grid";
-      IconSelector.appendChild(SaveGallery);
+      SaveCraftContainer.appendChild(SaveGallery);
 
       SaveGallery.addEventListener("mousedown", (e) => {
         if (e.target.classList.contains("Image")) {
-          e.target.style.width = "30px";
-          e.target.style.height = "30px";
+          e.target.style.transform = "scale(0.6)";
           e.target.style.opacity = "1";
           e.target.classList.add("SelectedIcon");
           for (let i = 0; i < GalleryImageArray.length; i++) {
             if (e.target !== GalleryImageArray[i]) {
-              GalleryImageArray[i].style.opacity = "0.2";
+              GalleryImageArray[i].style.opacity = "0.35";
               GalleryImageArray[i].classList.remove("SelectedIcon");
             }
           }
@@ -965,14 +916,12 @@ SaveCraftButton.addEventListener("click", function () {
       });
       SaveGallery.addEventListener("mouseup", (e) => {
         if (e.target.classList.contains("Image")) {
-          e.target.style.width = "40px";
-          e.target.style.height = "40px";
+          e.target.style.transform = "scale(1)";
         }
       });
       SaveGallery.addEventListener("mouseout", (e) => {
         if (e.target.classList.contains("Image")) {
-          e.target.style.width = "40px";
-          e.target.style.height = "40px";
+          e.target.style.transform = "scale(1)";
         }
       });
       let NameSaveSelector = CreateElementFn(
@@ -980,107 +929,98 @@ SaveCraftButton.addEventListener("click", function () {
         "NameSaveSelectorInput",
         ["SaveCraft", "Input"],
         "",
-        IconSelector
+        SaveCraftContainer
       );
       NameSaveSelector.placeholder = "Select a name";
 
       NameSaveSelector.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
           let SaveName = NameSaveSelector.value;
-          let SaveIcon = document.getElementsByClassName("SelectedIcon");
-          SaveIcon = SaveIcon[0];
+          let SaveIcon = document.getElementsByClassName("SelectedIcon")[0];
           let NameTaken = false; // used to check if the name is already taken
+          console.log("SaveName: ", SaveName);
           if (e.key === "Enter" && SaveIcon != null) {
             if (SaveName !== "") {
               let LSSave = GetLSSaves("Save");
               console.log("LSSave: ", LSSave);
               if (Object.keys(LSSave).length > 0) {
-                // If object exists, extract its name from the LS save and compare it.
+                // If object exists, extract its name from the LS save and compare it and assign a value to NameTaken.
                 for (const key of Object.keys(LSSave)) {
                   let Index = key.indexOf("Jewel");
                   Index = Index + 5;
                   let Name = key.substring(Index);
                   console.log("Name: ", Name);
                   if (SaveName === Name) {
+                    NameTaken = true; // Break out of the loop without setting NameTaken to true
                     break;
-                  } else {
-                    NameTaken = true;
                   }
                 }
-              } else {
-                NameTaken = true;
               }
-              if (NameTaken) {
-                console.log("Name already taken, please select another.");
-                let PathParts = SaveIcon.src.split("/");
-                let SaveIconName = PathParts[PathParts.length - 1];
-                SaveIconName = SaveIconName.replace(".png", "");
-                let ModArray = [];
-                let NegativeModArray = [];
-                for (let i = 0; i < ModClass.length; i++) {
-                  ModArray.push(ModClass[i].textContent.toLocaleLowerCase());
-                }
-                for (let i = 0; i < ExclusionModClass.length; i++) {
-                  NegativeModArray.push(
-                    ExclusionModClass[i].textContent.toLocaleLowerCase()
-                  );
-                }
-                if (ModArray.length > 0 && NegativeModArray.length > 0) {
-                  localStorage.setItem(
-                    `Save${SaveIconName}${SaveName}`,
-                    `${JSON.stringify(ModArray)}NegativeMods${JSON.stringify(
-                      NegativeModArray
-                    )}`
-                  );
+              //
+              //
+              //
+              //
+              if (!NameTaken) {
+                RemoveBlur();
+                CloseSaveWindow();
+
+                let SaveIconName = SaveIcon.src.split("/").pop();
+                console.log("SaveIconName: ", SaveIconName);
+                // && GetMods[1].length > 0
+                let GetMods = GetCurrentItem();
+                if (GetMods[0].length > 0) {
+                  RemoveBlur();
+                  CloseSaveWindow();
+                  let SaveString = `SaveIconName${SaveIconName}PositiveMods${JSON.stringify(
+                    GetMods[0]
+                  )}NegativeMods${JSON.stringify(GetMods[1])}`;
+
+                  localStorage.setItem(`Save${SaveName}`, SaveString);
                   let NewSave = CreateElementFn(
                     "img",
                     SaveName,
                     ["Saved", "Image"],
                     "",
-                    document.body
+                    SavedCrafts
                   );
                   NewSave.src = `${SaveIcon.src}`;
                   SavedCrafts.appendChild(NewSave);
-                  IconSelector.remove();
-                } else if (
-                  ModArray.length > 0 &&
-                  NegativeModArray.length == 0
-                ) {
-                  localStorage.setItem(
-                    `Save${SaveIconName}${SaveName}`,
-                    `${JSON.stringify(ModArray)}`
-                  );
-                  let NewSave = CreateElementFn(
-                    "img",
-                    SaveName,
-                    ["Saved", "Image"],
-                    "",
-                    document.body
-                  );
-                  NewSave.src = `${SaveIcon.src}`;
-                  SavedCrafts.appendChild(NewSave);
-                  IconSelector.remove();
+                  SaveCraftContainer.remove();
                 } else {
+                  RemoveBlur();
+                  CloseSaveWindow();
+
                   DisplayInsertionMsg(
                     "Please select mods for the craft you want  to save",
                     "red"
                   );
                 }
               } else {
+                RemoveBlur();
+                CloseSaveWindow();
+
                 DisplayInsertionMsg(
                   "Name already taken, please select another one",
                   "red"
                 );
               }
             } else if (e.key === "Enter" && SaveName === "") {
+              RemoveBlur();
+              CloseSaveWindow();
+
               DisplayInsertionMsg("Please select a name for the save", "red");
             }
           } else if (e.key === "Enter" && SaveIcon === undefined) {
+            CloseSaveWindow();
+
+            RemoveBlur();
             DisplayInsertionMsg("Please select an icon for the save", "red");
           }
         }
       });
     }
+  } else {
+    DisplayInsertionMsg("Please add at least one positive mod", "red");
   }
 });
 //#endregion
@@ -1122,6 +1062,7 @@ StoreCoordsButton.addEventListener("click", function () {
         Currencies = document.getElementsByClassName("Currency");
         InputDiv.style.display = "flex";
         StartButton.style.display = "flex";
+        SaveCraftButton.style.display = "flex";
         StoreCoordsButton.style.display = "none";
         localStorage.setItem("EssenceCoords", JSON.stringify(EssenceCoords));
         for (const Essence of CoordsLabelDivList) {
@@ -1143,6 +1084,7 @@ StoreCoordsButton.addEventListener("click", function () {
         window.location.reload();
       }
     }
+    RemoveElementByClass;
     for (let i = XYLabelList.length - 1; i > 0; i--) {
       XYLabelList[i].remove();
     }
@@ -1193,7 +1135,8 @@ window.api.Logfile((event, data) => {
 //#region Export Items as files
 ExportFileOKButton.addEventListener("click", function (e) {
   let FileName = document.getElementById("ExportFileInput").value;
-  document.body.classList.remove("Blur");
+  RemoveBlur();
+
   let Mods = GetCurrentItem(); // Mods[0] = positive, Mods[1] = negative
 
   if (FileName.length > 0) {
@@ -1212,9 +1155,9 @@ window.api.ExportItemsListener((event, data) => {
     if (ModCollection.length > 0) {
       let FileNameDialog = document.getElementById("FileNameDialog");
       FileNameDialog.showModal();
-      RemoveModByClass("HoverTooltip");
+      RemoveElementByClass("HoverTooltip");
 
-      document.body.classList.add("Blur");
+      BlurBG();
     } else {
       DisplayInsertionMsg("Add mods you want to export first", "red");
     }
@@ -1263,4 +1206,25 @@ window.api.ImportItemsListener((event, data) => {
     );
   }
   DisplayInsertionMsg("Item imported successfully!", "green");
+});
+window.api.SaveIconsData((event, data) => {
+  console.log("SaveIconData: ", data);
+
+  let IconFolderPath = data[0];
+  let IconNameArray = data[1];
+
+  for (let i = 0; i < IconNameArray.length; i++) {
+    let NewElement = document.getElementById(IconNameArray[i]);
+    if (!NewElement) {
+      let NewImg = CreateElementFn(
+        "img",
+        `${IconNameArray[i]}`,
+        ["Image", "GalleryImage"],
+        "",
+        SaveGallery
+      );
+      let NewImgSrc = IconFolderPath + "\\" + IconNameArray[i];
+      NewImg.src = NewImgSrc;
+    }
+  }
 });

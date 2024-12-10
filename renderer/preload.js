@@ -7,11 +7,10 @@ contextBridge.exposeInMainWorld("api", {
   MousePos: (callback) => ipcRenderer.on("MouseCoords", callback),
   Logfile: (callback) => ipcRenderer.on("Logfile", callback),
   ClearMods: (callback) => ipcRenderer.on("ClearMods", callback),
-
+  SaveIconsData: (callback) => ipcRenderer.on("SaveIconsData", callback),
   ExportItemsListener: (callback) => ipcRenderer.on("ExportItem", callback),
 
   ImportItemsListener: (callback) => ipcRenderer.on("ImportItem", callback),
-
   ClearLocalStorage: (callback) =>
     ipcRenderer.on("ClearLocalStorage", callback),
 
@@ -20,6 +19,8 @@ contextBridge.exposeInMainWorld("api", {
   StartCraft: (callback) => ipcRenderer.on("StartCraft", callback),
   GlobalKey: (callback) => ipcRenderer.on("GlobalKey", callback),
   Counter: (callback) => ipcRenderer.on("Counter", callback),
+  LoadSaveIconPics: (callback) =>
+    ipcRenderer.send("LoadSaveIconPics", callback),
   TriggerCurrencyUse: (callback) => {
     ipcRenderer.send("TriggerCurrencyUse", callback);
   },
