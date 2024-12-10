@@ -32,7 +32,15 @@ import "./HelperFunctionsBackend/UseCurrency.js";
 import { info } from "console";
 import Main from "electron/main";
 nativeTheme.themeSource = "dark";
-
+//
+//
+//
+let LocalDev = true;
+//
+//
+//
+//
+//
 let win;
 let LogFilePath;
 let ItemExportPath;
@@ -73,13 +81,20 @@ app.whenReady().then(() => {
 
   const RerollFolder = path.join(DocPath, "RerollLogs");
   LogFilePath = path.join(RerollFolder, "/Logs.txt");
-  let SaveIconsFolder = path.join(
-    app.getPath("exe").replace("reroll.exe", ""),
-    "resources",
-    "app.asar.unpacked",
-    "renderer",
-    "SaveIconPics"
-  );
+  let SaveIconsFolder;
+  if (LocalDev) {
+    SaveIconsFolder =
+      "C:\\Program Files\\reroll\\resources\\app.asar.unpacked\\renderer\\SaveIconPics";
+    console.log(SaveIconsFolder);
+  } else {
+    SaveIconsFolder = path.join(
+      app.getPath("exe").replace("reroll.exe", ""),
+      "resources",
+      "app.asar.unpacked",
+      "renderer",
+      "SaveIconPics"
+    );
+  }
   CreateLogFolder(RerollFolder, DocPath);
   CheckPython(LogFilePath);
   CheckPyPackage("pyautogui", LogFilePath);
@@ -116,10 +131,6 @@ app.whenReady().then(() => {
   ipcMain.on("LoadSaveIconPics", async (event, data) => {
     if (data === "InitialRequest") {
       let IconPics = await ReadFolder(LogFilePath, SaveIconsFolder);
-      // let IconPics = await ReadFolder(
-      //   LogFilePath,
-      //   "C:\\Program Files\\reroll\\resources\\app.asar.unpacked\\renderer\\SaveIconPics"
-      // );
       win.webContents.send("SaveIconsData", [SaveIconsFolder, IconPics]);
     }
   });
@@ -253,7 +264,6 @@ app.whenReady().then(() => {
                 SaveIconsFolder,
                 LogFilePath
               );
-              // "C:\\Program Files\\reroll\\resources\\app.asar.unpacked\\renderer\\SaveIconPics"
             }
             // win.webContents.send("ImportSaveIcons", SaveIcon.filePaths);
           },

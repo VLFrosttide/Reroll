@@ -16,6 +16,8 @@ import {
   DeleteLSSaveItem,
   GetLSSaves,
   ChangeLSSaves,
+  CreateLocalStorageSave,
+  GetSavedItem,
 } from "../HelperFunctionsFrontend/LocalStorageFn.js";
 
 //#region Declarations
@@ -264,24 +266,19 @@ if (localStorage.length < 2) {
 } else {
   let SavedItems = GetLSSaves("Save");
   if (Object.keys(SavedItems).length > 0) {
+    console.log("SavedItems: ", SavedItems);
     for (const key of Object.keys(SavedItems)) {
-      let Index = key.indexOf("Save");
-      if (Index !== -1) {
-        let res = key.substring(Index + 4);
-        let Index2 = res.indexOf("Jewel");
-        if (Index2 !== -1) {
-          let IconName = res.substring(0, Index2 + 5);
-          let CraftName = res.substring(Index2 + 5);
-          let NewEl = CreateElementFn(
-            "img",
-            `${CraftName}`,
-            ["Image", "Saved"],
-            "",
-            SavedCrafts
-          );
-          NewEl.src = `SaveIconPics/${IconName}.png`;
-        }
-      }
+      let IconName = localStorage.getItem(key);
+      IconName = IconName.replace("SaveIconName", "");
+      IconName = IconName.split("PositiveMods").shift();
+      let NewEl = CreateElementFn(
+        "img",
+        `${key}`,
+        ["Image", "Saved"],
+        "",
+        SavedCrafts
+      );
+      NewEl.src = `SaveIconPics/${IconName}`;
     }
   }
 
@@ -304,6 +301,7 @@ if (localStorage.length < 2) {
         e.target.classList.contains("Image") &&
         !e.target.classList.contains("SavedSelectedIcon")
       ) {
+        //rework
         e.target.style.width = "30px";
         e.target.style.height = "30px";
         e.target.style.opacity = "1";
@@ -345,7 +343,6 @@ if (localStorage.length < 2) {
   });
   SavedCrafts.addEventListener("mouseout", (e) => {
     if (e.target.classList.contains("Image")) {
-      // let HoverTooltip = document.getElementsByClassName("HoverTooltip");
       RemoveElementByClass("HoverTooltip");
 
       for (let i = HoverTooltip.length - 1; i >= 0; i--) {
@@ -355,68 +352,41 @@ if (localStorage.length < 2) {
   });
   SavedCrafts.addEventListener("click", (e) => {
     if (e.target.classList.contains("Image")) {
-      let LSSavedItems = GetLSSaves("Save");
-      let Name = e.target.id; // awd
-      for (const key of Object.keys(LSSavedItems)) {
-        console.log("Key: ", key);
-        let Index = key.indexOf("Jewel");
-        Index = Index + 5;
-        let KeyName = key.substring(Index);
-        console.log("Keyname: ", KeyName);
-        if (Name === KeyName) {
-          let OldModArray = document.getElementsByClassName("ModName");
-          let OldNegatives = document.getElementsByClassName("ExclusionMod");
-          if (OldNegatives.length > 0) {
-            for (let i = OldNegatives.length; i--; ) {
-              OldNegatives[i].remove();
-            }
+      let Name = e.target.id; // Example:  ShaperWand
+      GetSavedItem("Save", Name)
+        .then((result) => {
+          let Pmods = JSON.parse(result[0]);
+          let Nmods = JSON.parse(result[1]);
+          RemoveElementByClass("ModName");
+          RemoveElementByClass("ExclusionMod");
+          for (let i = 0; i < Pmods.length; i++) {
+            CreateElementFn(
+              "label",
+              "",
+              ["ModName", "Mod"],
+              Pmods[i],
+              Container,
+              "rgb(112, 255, 112)"
+            );
           }
-          if (OldModArray.length > 0) {
-            for (let i = OldModArray.length; i--; ) {
-              OldModArray[i].remove();
-            }
-          }
-          let ModArray = LSSavedItems[key];
-          let PositiveMods;
-          let NegativeMods;
-
-          if (ModArray.includes("NegativeMods")) {
-            ModArray = ModArray.split("NegativeMods");
-            PositiveMods = JSON.parse(ModArray[0]);
-            NegativeMods = JSON.parse(ModArray[1]);
-          } else {
-            PositiveMods = JSON.parse(ModArray);
-            NegativeMods = null;
-          }
-          if (PositiveMods && PositiveMods.length > 0) {
-            for (let i = 0; i < PositiveMods.length; i++) {
-              CreateElementFn(
-                "label",
-                "",
-                ["ModName", "Mod"],
-                PositiveMods[i],
-                Container,
-                "rgb(112, 255, 112)"
-              );
-            }
+          for (let i = 0; i < Nmods.length; i++) {
+            CreateElementFn(
+              "label",
+              "",
+              ["ExclusionMod", "Mod"],
+              Nmods[i],
+              ExclusionContainer,
+              "rgb(255, 62, 28)"
+            );
           }
 
-          if (NegativeMods && NegativeMods.length > 0) {
-            for (let i = 0; i < NegativeMods.length; i++) {
-              CreateElementFn(
-                "label",
-                "",
-                ["ExclusionMod", "Mod"],
-                NegativeMods[i],
-                ExclusionContainer,
-                "rgb(255, 62, 28)"
-              );
-            }
-          }
-        }
-      }
-      RemoveElementByClass("HoverTooltip");
-      DisplayInsertionMsg("Saved item loaded successfully!", "green");
+          DisplayInsertionMsg("Saved item loaded successfully!", "green");
+        })
+        .catch((error) => {
+          DisplayInsertionMsg(`Error loading item: ${error}`, "red");
+
+          console.error(error);
+        });
     }
   });
   //#endregion
@@ -597,8 +567,6 @@ function StartCrafting() {
         }
         ModArray.push(MyMod);
       }
-      // console.log("ModArray: ", ModArray);
-      console.log("ModArray: ", ModArray);
       InfoArray.push(ModArray); //0
 
       InfoArray.push(MaxRerolls.value); //1
@@ -649,13 +617,14 @@ function StartCrafting() {
   }
 }
 StartButton.addEventListener("click", function () {
-  console.log("StartButton clicked");
+  DisplayInsertionMsg("Crafting started!", "green");
   StartCrafting();
 });
 //#endregion
 //#region  Global hotkey
 window.api.StartCraft((event, data) => {
-  console.log("StartCrafting shortcut works");
+  DisplayInsertionMsg("Crafting started!", "green");
+
   StartCrafting();
 });
 window.api.GlobalKey((event, data) => {
@@ -830,7 +799,6 @@ CurrencyDiv.addEventListener("click", (e) => {
     if (!wasHovered) {
       e.target.classList.add("Hover");
       CraftMaterial = e.target.id;
-      console.log("CraftMaterialCurrency: ", CraftMaterial);
       if (ChangingLabel !== null) {
         ChangingLabel.classList.add("Modify");
       }
@@ -865,17 +833,16 @@ document.addEventListener("keydown", (e) => {
 
 SaveCraftButton.addEventListener("click", function () {
   let SavedSelectedIcon = document.getElementsByClassName("SavedSelectedIcon");
-  let Mods = GetCurrentItem();
-  console.log(SavedSelectedIcon);
+
   // Used so you can add / remove mods from existing saves
   if (SavedSelectedIcon.length > 0) {
+    let Mods = GetCurrentItem();
+    let IconName = SavedSelectedIcon[0].src.split("/").pop();
     let SelectedName = SavedSelectedIcon[0].id;
-    console.log("SelectedName: ", SelectedName);
     if (Mods[0].length > 0) {
-      let SaveString = `${JSON.stringify(Mods[0])}NegativeMods${JSON.stringify(
-        Mods[1]
-      )}`;
-
+      let SaveString = `SaveIconName${IconName}PositiveMods${JSON.stringify(
+        Mods[0]
+      )}NegativeMods${JSON.stringify(Mods[1])}`;
       ChangeLSSaves(SelectedName, SaveString);
       DisplayInsertionMsg(
         "Successfully saved changes to the selected existing item",
@@ -884,9 +851,8 @@ SaveCraftButton.addEventListener("click", function () {
     } else {
       DisplayInsertionMsg("Please select at least one positive mod", "red");
     }
-  } else if (Mods[0].length > 0) {
+  } else {
     const SaveCraftContainer = document.getElementById("SaveCraftContainer");
-    console.log(SaveCraftContainer);
     if (!SaveCraftContainer) {
       let SaveCraftContainer = CreateElementFn(
         "div",
@@ -933,24 +899,18 @@ SaveCraftButton.addEventListener("click", function () {
       );
       NameSaveSelector.placeholder = "Select a name";
 
-      NameSaveSelector.addEventListener("keydown", (e) => {
+      NameSaveSelector.addEventListener("keydown", async (e) => {
         if (e.key === "Enter") {
           let SaveName = NameSaveSelector.value;
           let SaveIcon = document.getElementsByClassName("SelectedIcon")[0];
           let NameTaken = false; // used to check if the name is already taken
-          console.log("SaveName: ", SaveName);
           if (e.key === "Enter" && SaveIcon != null) {
             if (SaveName !== "") {
               let LSSave = GetLSSaves("Save");
-              console.log("LSSave: ", LSSave);
               if (Object.keys(LSSave).length > 0) {
                 // If object exists, extract its name from the LS save and compare it and assign a value to NameTaken.
                 for (const key of Object.keys(LSSave)) {
-                  let Index = key.indexOf("Jewel");
-                  Index = Index + 5;
-                  let Name = key.substring(Index);
-                  console.log("Name: ", Name);
-                  if (SaveName === Name) {
+                  if (SaveName === key) {
                     NameTaken = true; // Break out of the loop without setting NameTaken to true
                     break;
                   }
@@ -965,7 +925,6 @@ SaveCraftButton.addEventListener("click", function () {
                 CloseSaveWindow();
 
                 let SaveIconName = SaveIcon.src.split("/").pop();
-                console.log("SaveIconName: ", SaveIconName);
                 // && GetMods[1].length > 0
                 let GetMods = GetCurrentItem();
                 if (GetMods[0].length > 0) {
@@ -974,8 +933,10 @@ SaveCraftButton.addEventListener("click", function () {
                   let SaveString = `SaveIconName${SaveIconName}PositiveMods${JSON.stringify(
                     GetMods[0]
                   )}NegativeMods${JSON.stringify(GetMods[1])}`;
-
-                  localStorage.setItem(`Save${SaveName}`, SaveString);
+                  let SavedItem = await CreateLocalStorageSave(
+                    SaveName,
+                    SaveString
+                  );
                   let NewSave = CreateElementFn(
                     "img",
                     SaveName,
@@ -1019,16 +980,12 @@ SaveCraftButton.addEventListener("click", function () {
         }
       });
     }
-  } else {
-    DisplayInsertionMsg("Please add at least one positive mod", "red");
   }
 });
 //#endregion
 //#region Store Coords button
 
 StoreCoordsButton.addEventListener("click", function () {
-  console.log("EssenceTabCoords: ", EssenceTabCoords);
-  console.log("CurrencyTabCoords: ", CurrencyTabCoords);
   if (
     typeof EssenceTabCoords === "undefined" ||
     typeof CurrencyTabCoords === "undefined"
@@ -1103,7 +1060,6 @@ window.api.RarityError((event, data) => {
 
 //#region Clear Local Storage
 window.api.ClearLocalStorage((event, data) => {
-  console.log("Signal's here");
   localStorage.clear();
   location.reload();
 });
@@ -1111,9 +1067,7 @@ window.api.ClearLocalStorage((event, data) => {
 
 //#region Counter
 window.api.Counter((event, data) => {
-  console.log("Counter: ", data);
   let CounterElement = document.getElementById("Counter");
-  console.log("CounterElement: ", CounterElement);
   if (CounterElement === null) {
     Counter = 1;
 
@@ -1140,7 +1094,6 @@ ExportFileOKButton.addEventListener("click", function (e) {
   let Mods = GetCurrentItem(); // Mods[0] = positive, Mods[1] = negative
 
   if (FileName.length > 0) {
-    console.log("FileName: ", FileName);
     Mods.push(FileName);
     window.api.ReturnExportData(Mods);
   } else {
@@ -1149,7 +1102,6 @@ ExportFileOKButton.addEventListener("click", function (e) {
   document.getElementById("ExportFileInput").value = "";
 });
 window.api.ExportItemsListener((event, data) => {
-  console.log("Data: ", data);
   if (data === "InitialRequest") {
     let ModCollection = document.getElementsByClassName("Mod");
     if (ModCollection.length > 0) {
@@ -1182,7 +1134,6 @@ window.api.ClearMods((event, data) => {
 //#endregion
 
 window.api.ImportItemsListener((event, data) => {
-  console.log(data);
   let Pmods = data[0];
   let Nmods = data[1];
   for (let i = 0; i < Pmods.length; i++) {
@@ -1208,8 +1159,6 @@ window.api.ImportItemsListener((event, data) => {
   DisplayInsertionMsg("Item imported successfully!", "green");
 });
 window.api.SaveIconsData((event, data) => {
-  console.log("SaveIconData: ", data);
-
   let IconFolderPath = data[0];
   let IconNameArray = data[1];
 
