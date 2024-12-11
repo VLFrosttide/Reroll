@@ -63,7 +63,6 @@ export function GetCurrentItem() {
  * @param {Function} LSDeleteFunction - The function which will clear local storage
  */
 export function DeleteSavedItem(Item, LSDeleteFunction) {
-  console.log(Item), console.log(LSDeleteFunction);
   LSDeleteFunction(Item.id);
   Item.remove();
   let SavedItems = document.getElementsByClassName("Saved");
@@ -102,11 +101,13 @@ export function BlurBG() {
   const Main = document.getElementById("Main");
   Main.classList.add("Blur");
   Main.classList.add("UserSelectNone");
+  // Main.style.position = "absolute";
 }
 export function RemoveBlur() {
   const Main = document.getElementById("Main");
   Main.classList.remove("Blur");
   Main.classList.remove("UserSelectNone");
+  // Main.style.position = "";
 }
 export function CloseSaveWindow() {
   let SaveCraftWindow = document.getElementById("SaveCraftContainer");

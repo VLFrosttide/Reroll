@@ -19,7 +19,10 @@ import {
   CreateLocalStorageSave,
   GetSavedItem,
 } from "../HelperFunctionsFrontend/LocalStorageFn.js";
-
+import {
+  LoadInitialState,
+  ShowHiddenContent,
+} from "../HelperFunctionsFrontend/LoadInitialState.js";
 //#region Declarations
 const Main = document.getElementById("Main");
 const ModNameInput = document.getElementById("ModInput");
@@ -138,135 +141,10 @@ for (const Essence of EssenceClassList) {
   Essence.style.opacity = 0.2;
 }
 if (localStorage.length < 2) {
-  StoreCoordsButton.style.display = "none";
-  for (let i = 0; i < CoordsLabelDivList.length; i++) {
-    CoordsLabelDivList[i].id = `${EssenceClassList[i].id}Div`;
-    let CoordsLabel = CreateElementFn(
-      "label",
-      `${EssenceClassList[i].id}Label`,
-      ["XYLabel"],
-      "X: , Y: ",
-      CoordsLabelDivList[i]
-    );
-    CoordsLabel.style.display = "flex";
-    CoordsLabel.style.opacity = 0.1;
-    CoordsLabel.style.margin = "5px";
-  }
-
-  InputDiv.style.display = "none";
-
-  Container.style.display = "none";
-
-  //#region Mouse Position
-  window.api.MousePos((event, data) => {
-    let CoordsSplit = data.split(",");
-    MouseCoordsX = parseInt(CoordsSplit[0]);
-    MouseCoordsY = parseInt(CoordsSplit[1]);
-    if (ChangingLabel == undefined) {
-      RemoveElementByClass("HoverTooltip");
-
-      DisplayInsertionMsg("No currency selected.", "red");
-    }
-    if (
-      ChangingLabel !== undefined &&
-      ChangingLabel.classList.contains("Modify")
-    ) {
-      ChangingLabel.innerText = `X: ${MouseCoordsX}, Y: ${MouseCoordsY}`;
-      ChangingLabel.style.opacity = 1;
-      let RemoveTutorialString = ChangingLabel.id.replace("Label", "");
-      let EssenceTier;
-      if (
-        RemoveTutorialString.includes("Deaf") ||
-        RemoveTutorialString.includes("Scream") ||
-        RemoveTutorialString.includes("Shriek")
-      ) {
-        if (RemoveTutorialString.includes("Deaf")) {
-          EssenceTier = "Deafening";
-        } else if (RemoveTutorialString.includes("Shrieking")) {
-          EssenceTier = "Shrieking";
-        } else if (RemoveTutorialString.includes("Screaming")) {
-          EssenceTier = "Screaming";
-        }
-
-        EssenceCoords[`${RemoveTutorialString}`] = {
-          //////////////////////////////////////////////////
-          Name: `${RemoveTutorialString}`,
-          Coords: [
-            parseInt(MouseCoordsX * ScreenRatio),
-            parseInt(MouseCoordsY * ScreenRatio),
-          ],
-          Tier: EssenceTier,
-        };
-      } else if (
-        !RemoveTutorialString.includes("Spot") &&
-        !RemoveTutorialString.includes("Essence")
-      ) {
-        if (RemoveTutorialString.includes("Chaos")) {
-          ChaosOrbCoords = [
-            parseInt(MouseCoordsX * ScreenRatio),
-            parseInt(MouseCoordsY * ScreenRatio),
-          ];
-        } else if (RemoveTutorialString.includes("Alteration")) {
-          OrbofAlterationCoords = [
-            parseInt(MouseCoordsX * ScreenRatio),
-            parseInt(MouseCoordsY * ScreenRatio),
-          ];
-        } else if (RemoveTutorialString.includes("Annul")) {
-          AnnulOrbCoords = [
-            parseInt(MouseCoordsX * ScreenRatio),
-            parseInt(MouseCoordsY * ScreenRatio),
-          ];
-        } else if (RemoveTutorialString.includes("Regal")) {
-          RegalOrbCoords = [
-            parseInt(MouseCoordsX * ScreenRatio),
-            parseInt(MouseCoordsY * ScreenRatio),
-          ];
-        } else if (RemoveTutorialString.includes("Transmute")) {
-          TransmuteOrbCoords = [
-            parseInt(MouseCoordsX * ScreenRatio),
-            parseInt(MouseCoordsY * ScreenRatio),
-          ];
-        } else if (RemoveTutorialString.includes("Scour")) {
-          ScourOrbCoords = [
-            parseInt(MouseCoordsX * ScreenRatio),
-            parseInt(MouseCoordsY * ScreenRatio),
-          ];
-        } else if (RemoveTutorialString.includes("Aug")) {
-          AugOrbCoords = [
-            parseInt(MouseCoordsX * ScreenRatio),
-            parseInt(MouseCoordsY * ScreenRatio),
-          ];
-        }
-      } else if (
-        !RemoveTutorialString.includes("Deafen") &&
-        !RemoveTutorialString.includes("Shriek") &&
-        !RemoveTutorialString.includes("Scream") &&
-        !RemoveTutorialString.includes("Orb") &&
-        !RemoveTutorialString.includes("Currency")
-      ) {
-        EssenceTabCoords = [
-          parseInt(MouseCoordsX * ScreenRatio),
-          parseInt(MouseCoordsY * ScreenRatio),
-        ];
-      } else if (
-        RemoveTutorialString.includes("Spot") &&
-        RemoveTutorialString.includes("Currency")
-      ) {
-        CurrencyTabCoords = [
-          parseInt(MouseCoordsX * ScreenRatio),
-          parseInt(MouseCoordsY * ScreenRatio),
-        ];
-      }
-
-      let RemoveTutorial = document.getElementById(`${RemoveTutorialString}`);
-      RemoveTutorial.classList.remove("Tutorial");
-    }
-  });
-  //#endregion
+  LoadInitialState();
 } else {
   let SavedItems = GetLSSaves("Save");
   if (Object.keys(SavedItems).length > 0) {
-    console.log("SavedItems: ", SavedItems);
     for (const key of Object.keys(SavedItems)) {
       let IconName = localStorage.getItem(key);
       IconName = IconName.replace("SaveIconName", "");
@@ -282,114 +160,6 @@ if (localStorage.length < 2) {
     }
   }
 
-  //#region Saved crafts  ev.listeners
-  window.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") {
-      RemoveBlur();
-      CloseSaveWindow();
-      let ActiveElement = this.document.activeElement;
-      if (ActiveElement.classList.contains("Input")) {
-        ActiveElement.value = "";
-      }
-    }
-  });
-
-  SavedCrafts.addEventListener("mousedown", (e) => {
-    if (e.button === 0) {
-      let SavedCraftImg = document.getElementsByClassName("Saved");
-      if (
-        e.target.classList.contains("Image") &&
-        !e.target.classList.contains("SavedSelectedIcon")
-      ) {
-        //rework
-        e.target.style.width = "30px";
-        e.target.style.height = "30px";
-        e.target.style.opacity = "1";
-        e.target.classList.add("SavedSelectedIcon");
-        e.target.classList.add("HoverSaved");
-        for (let i = 0; i < SavedCraftImg.length; i++) {
-          if (e.target !== SavedCraftImg[i]) {
-            SavedCraftImg[i].style.opacity = "0.2";
-            SavedCraftImg[i].classList.remove("SavedSelectedIcon");
-            SavedCraftImg[i].classList.remove("HoverSaved");
-          }
-        }
-      } else {
-        for (let i = 0; i < SavedCraftImg.length; i++) {
-          SavedCraftImg[i].style.opacity = "1";
-        }
-        e.target.classList.remove("SavedSelectedIcon");
-        e.target.classList.remove("HoverSaved");
-      }
-    }
-  });
-  SavedCrafts.addEventListener("mouseup", (e) => {
-    if (e.target.classList.contains("Image")) {
-      e.target.style.width = "40px";
-      e.target.style.height = "40px";
-    }
-  });
-  SavedCrafts.addEventListener("mouseout", (e) => {
-    if (e.target.classList.contains("Image")) {
-      e.target.style.width = "40px";
-      e.target.style.height = "40px";
-    }
-  });
-  SavedCrafts.addEventListener("mouseover", (e) => {
-    if (e.target.classList.contains("Image")) {
-      RemoveElementByClass("HoverTooltip");
-      CreateElementFn("div", "", ["HoverTooltip"], `${e.target.id}`, Insertion);
-    }
-  });
-  SavedCrafts.addEventListener("mouseout", (e) => {
-    if (e.target.classList.contains("Image")) {
-      RemoveElementByClass("HoverTooltip");
-
-      for (let i = HoverTooltip.length - 1; i >= 0; i--) {
-        HoverTooltip[i].remove();
-      }
-    }
-  });
-  SavedCrafts.addEventListener("click", (e) => {
-    if (e.target.classList.contains("Image")) {
-      let Name = e.target.id; // Example:  ShaperWand
-      GetSavedItem("Save", Name)
-        .then((result) => {
-          let Pmods = JSON.parse(result[0]);
-          let Nmods = JSON.parse(result[1]);
-          RemoveElementByClass("ModName");
-          RemoveElementByClass("ExclusionMod");
-          for (let i = 0; i < Pmods.length; i++) {
-            CreateElementFn(
-              "label",
-              "",
-              ["ModName", "Mod"],
-              Pmods[i],
-              Container,
-              "rgb(112, 255, 112)"
-            );
-          }
-          for (let i = 0; i < Nmods.length; i++) {
-            CreateElementFn(
-              "label",
-              "",
-              ["ExclusionMod", "Mod"],
-              Nmods[i],
-              ExclusionContainer,
-              "rgb(255, 62, 28)"
-            );
-          }
-
-          DisplayInsertionMsg("Saved item loaded successfully!", "green");
-        })
-        .catch((error) => {
-          DisplayInsertionMsg(`Error loading item: ${error}`, "red");
-
-          console.error(error);
-        });
-    }
-  });
-  //#endregion
   for (let i = 0; i < ManualCurrency.length; i++) {
     ManualCurrency[i].classList.remove("Currency");
     ManualCurrency[i].style.opacity = 0.2;
@@ -448,9 +218,7 @@ if (localStorage.length < 2) {
     LagCheckBox.checked = false;
   }
 
-  for (let i = XYLabelList.length - 1; i >= 0; i--) {
-    XYLabelList[i].remove();
-  }
+  RemoveElementByClass("XYLabel");
   EssenceTabDiv.remove();
   CurrencyTabDiv.remove();
   InstructionsDiv2.style.display = "none";
@@ -462,11 +230,12 @@ if (localStorage.length < 2) {
   StoreCoordsButton.remove();
   let RenderEssences = JSON.parse(localStorage.getItem("EssenceCoords"));
   let RemoveEssenceFromRender = [];
-  StartButton.style.display = "flex";
-  SaveCraftButton.style.display = "flex";
-  Container.style.display = "flex";
-  ExclusionContainer.style.display = "flex";
-  Fractures.style.display = "flex";
+  // StartButton.style.display = "flex";
+  // SaveCraftButton.style.display = "flex";
+  // Container.style.display = "flex";
+  // ExclusionContainer.style.display = "flex";
+  // Fractures.style.display = "flex";
+  ShowHiddenContent();
   for (const Item of CoordsLabelDivList) {
     let Re = Item.id.toString();
     Re = Re.replace("Div", "");
@@ -676,6 +445,7 @@ LagCheckBox.addEventListener("change", function () {
 
 EssenceContainer.addEventListener("click", function (e) {
   if (e.target.classList.contains("Essence")) {
+    Main.style.position = "";
     ChangingLabel = document.getElementById(`${e.target.id}` + "Label");
     // Returns true or false
     let HoverHighlight = e.target.classList.contains("Hover", "Highlight");
@@ -706,23 +476,23 @@ EssenceContainer.addEventListener("click", function (e) {
 });
 //#endregion
 //#region Essence Hover Event listeners
-EssenceContainer.addEventListener("mouseover", function (e) {
-  if (e.target.classList.contains("Essence")) {
-    RemoveElementByClass("HoverTooltip");
+// EssenceContainer.addEventListener("mouseover", function (e) {
+//   if (e.target.classList.contains("Essence")) {
+//     RemoveElementByClass("HoverTooltip");
 
-    let Spaces = `${e.target.id}`.replace(/([A-Z])/g, " $1").trim(); // Breaks down the essence ID and capitalizes every letter and adds space between words.
-    CreateElementFn("div", "", ["HoverTooltip"], Spaces, Insertion);
-  }
-});
-EssenceContainer.addEventListener("mouseout", function (e) {
-  if (e.target.classList.contains("Essence")) {
-    if (!e.target.classList.contains("Highlight")) {
-      e.target.style.opacity = 0.3;
-    }
-    // if (e.target.classList.contains("Hover"))
-    RemoveElementByClass("HoverTooltip");
-  }
-});
+//     let Spaces = `${e.target.id}`.replace(/([A-Z])/g, " $1").trim(); // Breaks down the essence ID and capitalizes every letter and adds space between words.
+//     CreateElementFn("div", "", ["HoverTooltip"], Spaces, Insertion);
+//   }
+// });
+// EssenceContainer.addEventListener("mouseout", function (e) {
+//   if (e.target.classList.contains("Essence")) {
+//     if (!e.target.classList.contains("Highlight")) {
+//       e.target.style.opacity = 0.3;
+//     }
+//     // if (e.target.classList.contains("Hover"))
+//     RemoveElementByClass("HoverTooltip");
+//   }
+// });
 //#endregion
 
 //#region Essence Image Click event
@@ -734,10 +504,13 @@ EssenceImage.addEventListener("click", function (e) {
     StoreCoordsButton.style.display = "flex";
   }
 
-  if (e.target == EssenceImage && !EssenceImage.classList.contains("Clicked")) {
+  if (
+    e.target === EssenceImage &&
+    !EssenceImage.classList.contains("Clicked")
+  ) {
     if (localStorage.length < 1) {
       InstructionsDiv1.innerText = `Now repeat the same process for the highlighted essences. Once you're done , 
-      click on the button at the bottom of the page to store your coordinates and NameTaken`;
+      click on the button at the bottom of the page to store your coordinates`;
       InstructionsDiv2.style.display = "none";
     } else {
       InstructionsDiv1.textContent = ` Type in the mod youre looking for and press enter then select the maximum number rerolls (you can use the scroll wheel)
@@ -1017,10 +790,7 @@ StoreCoordsButton.addEventListener("click", function () {
       } else {
         // CurrencyTabLocationLabel.remove();
         Currencies = document.getElementsByClassName("Currency");
-        InputDiv.style.display = "flex";
-        StartButton.style.display = "flex";
-        SaveCraftButton.style.display = "flex";
-        StoreCoordsButton.style.display = "none";
+        ShowHiddenContent();
         localStorage.setItem("EssenceCoords", JSON.stringify(EssenceCoords));
         for (const Essence of CoordsLabelDivList) {
           let Replace = Essence.id.replace("Div", "");
@@ -1034,16 +804,12 @@ StoreCoordsButton.addEventListener("click", function () {
             }
           }
         }
-        DisplayInsertionMsg("Items have been stored!", "green");
         for (const Item of ElementsToRemove) {
           Item.remove();
         }
         window.location.reload();
+        DisplayInsertionMsg("Items have been stored!", "green");
       }
-    }
-    RemoveElementByClass;
-    for (let i = XYLabelList.length - 1; i > 0; i--) {
-      XYLabelList[i].remove();
     }
   }
 });
@@ -1177,3 +943,221 @@ window.api.SaveIconsData((event, data) => {
     }
   }
 });
+//#region Escape ev.listener
+window.addEventListener("keydown", function (e) {
+  if (e.key === "Escape") {
+    RemoveBlur();
+    CloseSaveWindow();
+    let ActiveElement = this.document.activeElement;
+    if (ActiveElement.classList.contains("Input")) {
+      ActiveElement.value = "";
+    }
+  }
+});
+
+//#endregion
+//#region Saved crafts  ev.listeners
+
+SavedCrafts.addEventListener("mousedown", (e) => {
+  if (e.button === 0) {
+    let SavedCraftImg = document.getElementsByClassName("Saved");
+    if (
+      e.target.classList.contains("Image") &&
+      !e.target.classList.contains("SavedSelectedIcon")
+    ) {
+      //rework
+      e.target.style.width = "30px";
+      e.target.style.height = "30px";
+      e.target.style.opacity = "1";
+      e.target.classList.add("SavedSelectedIcon");
+      e.target.classList.add("HoverSaved");
+      for (let i = 0; i < SavedCraftImg.length; i++) {
+        if (e.target !== SavedCraftImg[i]) {
+          SavedCraftImg[i].style.opacity = "0.2";
+          SavedCraftImg[i].classList.remove("SavedSelectedIcon");
+          SavedCraftImg[i].classList.remove("HoverSaved");
+        }
+      }
+    } else {
+      for (let i = 0; i < SavedCraftImg.length; i++) {
+        SavedCraftImg[i].style.opacity = "1";
+      }
+      e.target.classList.remove("SavedSelectedIcon");
+      e.target.classList.remove("HoverSaved");
+    }
+  }
+});
+SavedCrafts.addEventListener("mouseup", (e) => {
+  if (e.target.classList.contains("Image")) {
+    e.target.style.width = "40px";
+    e.target.style.height = "40px";
+  }
+});
+SavedCrafts.addEventListener("mouseout", (e) => {
+  if (e.target.classList.contains("Image")) {
+    e.target.style.width = "40px";
+    e.target.style.height = "40px";
+  }
+});
+SavedCrafts.addEventListener("mouseover", (e) => {
+  if (e.target.classList.contains("Image")) {
+    RemoveElementByClass("HoverTooltip");
+    CreateElementFn("div", "", ["HoverTooltip"], `${e.target.id}`, Insertion);
+  }
+});
+SavedCrafts.addEventListener("mouseout", (e) => {
+  if (e.target.classList.contains("Image")) {
+    RemoveElementByClass("HoverTooltip");
+
+    for (let i = HoverTooltip.length - 1; i >= 0; i--) {
+      HoverTooltip[i].remove();
+    }
+  }
+});
+SavedCrafts.addEventListener("click", (e) => {
+  if (e.target.classList.contains("Image")) {
+    let Name = e.target.id; // Example:  ShaperWand
+    GetSavedItem("Save", Name)
+      .then((result) => {
+        let Pmods = JSON.parse(result[0]);
+        let Nmods = JSON.parse(result[1]);
+        RemoveElementByClass("ModName");
+        RemoveElementByClass("ExclusionMod");
+        for (let i = 0; i < Pmods.length; i++) {
+          CreateElementFn(
+            "label",
+            "",
+            ["ModName", "Mod"],
+            Pmods[i],
+            Container,
+            "rgb(112, 255, 112)"
+          );
+        }
+        for (let i = 0; i < Nmods.length; i++) {
+          CreateElementFn(
+            "label",
+            "",
+            ["ExclusionMod", "Mod"],
+            Nmods[i],
+            ExclusionContainer,
+            "rgb(255, 62, 28)"
+          );
+        }
+
+        DisplayInsertionMsg("Saved item loaded successfully!", "green");
+      })
+      .catch((error) => {
+        DisplayInsertionMsg(`Error loading item: ${error}`, "red");
+
+        console.error(error);
+      });
+  }
+});
+//#endregion
+//#region Mouse position API
+//rework
+window.api.MousePos((event, data) => {
+  let CoordsSplit = data.split(",");
+  MouseCoordsX = parseInt(CoordsSplit[0]);
+  MouseCoordsY = parseInt(CoordsSplit[1]);
+  if (ChangingLabel == undefined) {
+    RemoveElementByClass("HoverTooltip");
+
+    DisplayInsertionMsg("No currency selected.", "red");
+  }
+  if (
+    ChangingLabel !== undefined &&
+    ChangingLabel.classList.contains("Modify")
+  ) {
+    ChangingLabel.innerText = `X: ${MouseCoordsX}, Y: ${MouseCoordsY}`;
+    ChangingLabel.style.opacity = 1;
+    let RemoveTutorialString = ChangingLabel.id.replace("Label", "");
+    let EssenceTier;
+    if (
+      RemoveTutorialString.includes("Deaf") ||
+      RemoveTutorialString.includes("Scream") ||
+      RemoveTutorialString.includes("Shriek")
+    ) {
+      if (RemoveTutorialString.includes("Deaf")) {
+        EssenceTier = "Deafening";
+      } else if (RemoveTutorialString.includes("Shrieking")) {
+        EssenceTier = "Shrieking";
+      } else if (RemoveTutorialString.includes("Screaming")) {
+        EssenceTier = "Screaming";
+      }
+
+      EssenceCoords[`${RemoveTutorialString}`] = {
+        //////////////////////////////////////////////////
+        Name: `${RemoveTutorialString}`,
+        Coords: [
+          parseInt(MouseCoordsX * ScreenRatio),
+          parseInt(MouseCoordsY * ScreenRatio),
+        ],
+        Tier: EssenceTier,
+      };
+    } else if (
+      !RemoveTutorialString.includes("Spot") &&
+      !RemoveTutorialString.includes("Essence")
+    ) {
+      if (RemoveTutorialString.includes("Chaos")) {
+        ChaosOrbCoords = [
+          parseInt(MouseCoordsX * ScreenRatio),
+          parseInt(MouseCoordsY * ScreenRatio),
+        ];
+      } else if (RemoveTutorialString.includes("Alteration")) {
+        OrbofAlterationCoords = [
+          parseInt(MouseCoordsX * ScreenRatio),
+          parseInt(MouseCoordsY * ScreenRatio),
+        ];
+      } else if (RemoveTutorialString.includes("Annul")) {
+        AnnulOrbCoords = [
+          parseInt(MouseCoordsX * ScreenRatio),
+          parseInt(MouseCoordsY * ScreenRatio),
+        ];
+      } else if (RemoveTutorialString.includes("Regal")) {
+        RegalOrbCoords = [
+          parseInt(MouseCoordsX * ScreenRatio),
+          parseInt(MouseCoordsY * ScreenRatio),
+        ];
+      } else if (RemoveTutorialString.includes("Transmute")) {
+        TransmuteOrbCoords = [
+          parseInt(MouseCoordsX * ScreenRatio),
+          parseInt(MouseCoordsY * ScreenRatio),
+        ];
+      } else if (RemoveTutorialString.includes("Scour")) {
+        ScourOrbCoords = [
+          parseInt(MouseCoordsX * ScreenRatio),
+          parseInt(MouseCoordsY * ScreenRatio),
+        ];
+      } else if (RemoveTutorialString.includes("Aug")) {
+        AugOrbCoords = [
+          parseInt(MouseCoordsX * ScreenRatio),
+          parseInt(MouseCoordsY * ScreenRatio),
+        ];
+      }
+    } else if (
+      !RemoveTutorialString.includes("Deafen") &&
+      !RemoveTutorialString.includes("Shriek") &&
+      !RemoveTutorialString.includes("Scream") &&
+      !RemoveTutorialString.includes("Orb") &&
+      !RemoveTutorialString.includes("Currency")
+    ) {
+      EssenceTabCoords = [
+        parseInt(MouseCoordsX * ScreenRatio),
+        parseInt(MouseCoordsY * ScreenRatio),
+      ];
+    } else if (
+      RemoveTutorialString.includes("Spot") &&
+      RemoveTutorialString.includes("Currency")
+    ) {
+      CurrencyTabCoords = [
+        parseInt(MouseCoordsX * ScreenRatio),
+        parseInt(MouseCoordsY * ScreenRatio),
+      ];
+    }
+
+    let RemoveTutorial = document.getElementById(`${RemoveTutorialString}`);
+    RemoveTutorial.classList.remove("Tutorial");
+  }
+});
+//#endregion

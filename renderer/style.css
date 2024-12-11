@@ -9,10 +9,10 @@ body {
   align-items: center;
   transition: filter 300ms;
   margin: 0;
-  overflow-y: auto;
+  position: relative;
 }
 #Main {
-  /* position: absolute; */
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,11 +20,15 @@ body {
   transition: filter 300ms;
   margin: 1rem;
   height: 100%;
+  min-width: 100vw;
 }
 
 html {
+  position: absolute;
   margin: 0;
   overflow-y: auto;
+  height: 100%;
+  width: 100%;
 }
 .Blur {
   filter: blur(3px);
@@ -50,7 +54,6 @@ html {
 }
 #InputDiv {
   user-select: none;
-  display: flex;
 }
 .CoordsLabel {
   display: flex;
@@ -63,7 +66,6 @@ html {
 }
 #Container,
 #ExclusionContainer {
-  display: flex;
   flex-direction: column;
   align-items: center;
   user-select: none;
@@ -122,10 +124,13 @@ html {
   opacity: 1;
 }
 #EssenceContainer {
+  padding: 1em;
   display: flex;
   -webkit-user-drag: none;
   user-select: none;
+  overflow-y: auto;
 }
+
 #EssenceLeftSide {
   border-right: 50px solid transparent;
 }
@@ -174,7 +179,6 @@ html {
   display: flex;
 }
 #HideInstructions {
-  display: flex;
   flex-direction: column;
   position: absolute;
   bottom: 1%;
@@ -213,7 +217,6 @@ html {
 }
 
 #Start {
-  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -298,8 +301,25 @@ html {
 
   box-shadow: 0 0 0 999px #151515b0;
   transition: box-shadow 3s ease-in-out;
+  overflow: auto;
 }
 .UserSelectNone {
   user-select: none;
   pointer-events: none;
+}
+.InitiallyHidden {
+  display: none;
+}
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  margin: 4px; /* Space between scrollbar and content */
+}
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+.scrollable-container {
+  scroll-margin-left: 4px; /* Adds space on the right side when scrolling */
 }

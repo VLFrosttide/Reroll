@@ -18,7 +18,7 @@
     </dialog>
 
     <div id="Main">
-      <div id="SavedCrafts">Saved Crafts</div>
+      <div id="SavedCrafts" class="InitiallyHidden">Saved Crafts</div>
       <div id="Gallery" hidden></div>
       <div id="Instructions" class="Instructions">
         Select a currency item (Left Mouse click), then <br />
@@ -29,7 +29,7 @@
         then press F1 to record its coordinates. <br />Remember that the program
         window must be on focus for it to record the coords.
       </div>
-      <div id="InputDiv">
+      <div class="InitiallyHidden" id="InputDiv">
         <input
           class="Input"
           type="text"
@@ -723,20 +723,20 @@
       <label class="Instructions" hidden
         >You can click on a mod to remove it from the list.</label
       >
-      <div id="Container" style="display: none">Mods to look for:</div>
-      <div id="ExclusionContainer" style="display: none">
+      <div id="Container" class="InitiallyHidden">Mods to look for:</div>
+      <div id="ExclusionContainer" class="InitiallyHidden">
         Exclude mods that contain:
       </div>
-      <div id="HideInstructions">
+      <div id="HideInstructions" class="InitiallyHidden">
         <div class="HideInstructions">
           <input type="checkbox" id="InstructionsCheckBox" class="CheckBox" />
           <label>Hide Instructions</label>
         </div>
-        <div id="Fractures" class="HideInstructions" style="display: none">
+        <div id="Fractures">
           <input type="checkbox" id="FractureCheckBox" class="CheckBox" />
           <label>Ignore fractures</label>
         </div>
-        <div id="LagContainer" class="HideInstructions">
+        <div id="LagContainer">
           <input type="checkbox" id="LagCheckBox" class="CheckBox" />
           <label>Reroll delay</label>
           <input
@@ -749,11 +749,9 @@
           />
         </div>
       </div>
-      <div id="Start">
-        <button id="StartButton" class="button" hidden>Start crafting</button>
-        <button id="SaveCraftButton" style="display: none" class="button">
-          Save craft
-        </button>
+      <div id="Start" class="InitiallyHidden">
+        <button id="StartButton" class="button">Start crafting</button>
+        <button id="SaveCraftButton" class="button">Save craft</button>
       </div>
     </div>
   </body>
