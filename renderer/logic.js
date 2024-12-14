@@ -143,22 +143,38 @@ for (const Essence of EssenceClassList) {
 if (localStorage.length < 2) {
   LoadInitialState();
 } else {
-  let SavedItems = GetLSSaves("Save");
-  if (Object.keys(SavedItems).length > 0) {
-    for (const key of Object.keys(SavedItems)) {
-      let IconName = localStorage.getItem(key);
-      IconName = IconName.replace("SaveIconName", "");
-      IconName = IconName.split("PositiveMods").shift();
-      let NewEl = CreateElementFn(
-        "img",
-        `${key}`,
-        ["Image", "Saved"],
-        "",
-        SavedCrafts
-      );
-      NewEl.src = `SaveIconPics/${IconName}`;
+  // Get icon path here
+  // let IconFolderPath = new Promise((resolve) => {
+  //   window.api.GetIconPath((data) => {
+  //     resolve(data);
+  //   });
+  // });
+  (async function () {
+    let IconFolderPath = new Promise((resolve) => {
+      window.api.GetIconPath((event, data) => {
+        console.log("Data: ", data);
+        resolve(data);
+      });
+    });
+    let IconPath = await IconFolderPath;
+
+    let SavedItems = GetLSSaves("Save");
+    if (Object.keys(SavedItems).length > 0) {
+      for (const key of Object.keys(SavedItems)) {
+        let IconName = localStorage.getItem(key);
+        IconName = IconName.replace("SaveIconName", "");
+        IconName = IconName.split("PositiveMods").shift();
+        let NewEl = CreateElementFn(
+          "img",
+          `${key}`,
+          ["Image", "Saved"],
+          "",
+          SavedCrafts
+        );
+        NewEl.src = `${IconPath}/${IconName}`;
+      }
     }
-  }
+  })();
 
   for (let i = 0; i < ManualCurrency.length; i++) {
     ManualCurrency[i].classList.remove("Currency");
@@ -833,14 +849,14 @@ window.api.ClearLocalStorage((event, data) => {
 
 //#region Counter
 window.api.Counter((event, data) => {
-  let CounterElement = document.getElementById("Counter");
-  if (CounterElement === null) {
-    Counter = 1;
-
-    DisplayInsertionMsg(`Currency Used: ${Counter}`, "aliceblue");
-  } else {
+  if (data === "+") {
     Counter++;
-    CounterElement.textContent = `Currency Used: ${Counter}`;
+    let CounterElement = document.getElementsByClassName("HoverTooltip");
+    CounterElement = CounterElement[0];
+    CounterElement.textContent = `Currency used: ${Counter}`;
+  } else {
+    Counter = 0;
+    DisplayInsertionMsg(`Currency used: ${Counter}`);
   }
 });
 //#endregion
@@ -941,6 +957,16 @@ window.api.SaveIconsData((event, data) => {
       let NewImgSrc = IconFolderPath + "\\" + IconNameArray[i];
       NewImg.src = NewImgSrc;
     }
+  }
+});
+window.api.ImportSaveIcons((event, data) => {
+  let msg = data;
+  console.log(msg);
+  console.log("MsgType: ", typeof msg);
+  if (typeof data === "string") {
+    DisplayInsertionMsg(msg, "green");
+  } else {
+    DisplayInsertionMsg(msg, "red");
   }
 });
 //#region Escape ev.listener

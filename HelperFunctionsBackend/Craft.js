@@ -13,6 +13,8 @@ ExePath = ExePath.substring(0, ExePath.lastIndexOf("\\"));
 let LiftKeysPath = path.join(ExePath, "/python/LiftKeys.py");
 
 ipcMain.on("StartCrafting", (event, args) => {
+  win.webContents.send("Counter", "reset");
+
   WriteToFile(LogFilePath, "Program started crafting");
   let ModName = args[0];
   let MaxRolls = args[1];
@@ -40,7 +42,7 @@ ipcMain.on("StartCrafting", (event, args) => {
     let PrintThis = String(data);
     console.log("MyData:", PrintThis);
     if (PrintThis.includes("MyCounter")) {
-      win.webContents.send("Counter", "awd");
+      win.webContents.send("Counter", "+");
     }
     if (PrintThis.includes("CurrentBase")) {
       WriteToFile(

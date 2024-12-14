@@ -1,6 +1,7 @@
 import fs from "fs";
 import { exec } from "child_process";
 import Main from "electron/main";
+import { resolve } from "path";
 
 export function WriteToFile(FilePath, StringToWrite) {
   fs.appendFileSync(FilePath, StringToWrite + "\n");
@@ -78,16 +79,21 @@ export async function ReadFolder(LogfilePath, FolderPath) {
 }
 
 export function CopyIcon(MainFilePath, IconName, IconFolderPath, LogfilePath) {
-  let NewLocation = IconFolderPath + "\\" + IconName;
-  console.log("MainFilePath: ", MainFilePath);
-  console.log("NewLocation: ", NewLocation);
-  WriteToFile(LogfilePath, `MainFilePath: ${MainFilePath}`);
-  WriteToFile(LogfilePath, `NewLocation: ${NewLocation}`);
-  try {
-    fs.copyFileSync(MainFilePath, NewLocation);
-  } catch (err) {
-    if (err) {
-      WriteToFile(LogfilePath, `Error copying file: ${err}`);
+  return new Promise((resolve, reject) => {
+    let NewLocation = IconFolderPath + "\\" + IconName;
+    console.log("MainFilePath: ", MainFilePath);
+    console.log("NewLocation: ", NewLocation);
+    WriteToFile(LogfilePath, `MainFilePath: ${MainFilePath}`);
+    WriteToFile(LogfilePath, `NewLocation: ${NewLocation}`);
+    try {
+      fs.copyFileSync(MainFilePath, NewLocation);
+      resolve("Sucessfully imported all icons");
+    } catch (err) {
+      if (err) {
+        let NewErr = new Error(`Failed to copy icons: ${err}`);
+        reject(NewErr);
+        WriteToFile(LogfilePath, `Error copying: ${err}`);
+      }
     }
-  }
+  });
 }

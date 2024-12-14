@@ -109,10 +109,47 @@ html {
     opacity: 1;
   }
 }
+@keyframes snakeBorder {
+  0% {
+    border-top: 5px solid black;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid transparent;
+  }
+  25% {
+    border-top: 5px solid black;
+    border-right: 5px solid black;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid transparent;
+  }
+  50% {
+    border-top: 5px solid black;
+    border-right: 5px solid black;
+    border-bottom: 5px solid black;
+    border-left: 5px solid transparent;
+  }
+  75% {
+    border-top: 5px solid black;
+    border-right: 5px solid black;
+    border-bottom: 5px solid black;
+    border-left: 5px solid black;
+  }
+  100% {
+    border-top: 5px solid transparent;
+    border-right: 5px solid black;
+    border-bottom: 5px solid black;
+    border-left: 5px solid black;
+  }
+}
 
 .Hover {
   border: 3px double;
-  border-color: rgb(213, 9, 80);
+  /* border-color: rgb(213, 9, 80); */
+  color: rgb(192, 23, 23);
+  width: 100px;
+  height: 100px;
+
+  animation: snakeBorder 2s infinite;
 }
 .HoverTooltip {
   display: flex;

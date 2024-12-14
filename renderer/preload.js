@@ -3,11 +3,20 @@ const { ipcRenderer, contextBridge } = require("electron");
 // console.log("Preload script is running");
 
 contextBridge.exposeInMainWorld("api", {
+  // GetIconPath: (callback) => {
+  //   console.log("Setting up IPC listener for GetIconPath");
+
+  //   ipcRenderer.on("GetIconPath", (event, data) => {
+  //     console.log("Preload received: ", data);
+  //   });
+  // },
+  GetIconPath: (callback) => ipcRenderer.on("GetIconPath", callback),
   RarityError: (callback) => ipcRenderer.on("ItemError", callback),
   MousePos: (callback) => ipcRenderer.on("MouseCoords", callback),
   Logfile: (callback) => ipcRenderer.on("Logfile", callback),
   ClearMods: (callback) => ipcRenderer.on("ClearMods", callback),
   SaveIconsData: (callback) => ipcRenderer.on("SaveIconsData", callback),
+  ImportSaveIcons: (callback) => ipcRenderer.on("ImportSaveIcons", callback),
   ExportItemsListener: (callback) => ipcRenderer.on("ExportItem", callback),
 
   ImportItemsListener: (callback) => ipcRenderer.on("ImportItem", callback),

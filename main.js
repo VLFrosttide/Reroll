@@ -35,7 +35,7 @@ nativeTheme.themeSource = "dark";
 //
 //
 //
-let LocalDev = true;
+let LocalDev = false;
 //
 //
 //
@@ -85,6 +85,8 @@ app.whenReady().then(() => {
   if (LocalDev) {
     SaveIconsFolder =
       "C:\\Program Files\\reroll\\resources\\app.asar.unpacked\\renderer\\SaveIconPics";
+    // win.webContents.send("GetIconPath", SaveIconsFolder);
+
     console.log(SaveIconsFolder);
   } else {
     SaveIconsFolder = path.join(
@@ -94,7 +96,13 @@ app.whenReady().then(() => {
       "renderer",
       "SaveIconPics"
     );
+    // win.webContents.send("GetIconPath", SaveIconsFolder);
   }
+  win.webContents.on("did-finish-load", () => {
+    console.log("Window loaded. Sending GetIconPath...", SaveIconsFolder);
+    win.webContents.send("GetIconPath", SaveIconsFolder);
+  });
+
   CreateLogFolder(RerollFolder, DocPath);
   CheckPython(LogFilePath);
   CheckPyPackage("pyautogui", LogFilePath);
@@ -173,6 +181,7 @@ app.whenReady().then(() => {
           label: "Capture Mouse position",
           accelerator: "F1",
           click() {
+            win.focus();
             MousePosition = screen.getCursorScreenPoint();
             MousePosition = JSON.stringify(MousePosition);
             MousePosition = MousePosition.replace(/[^\d,]/g, "");
@@ -255,17 +264,32 @@ app.whenReady().then(() => {
               filters: [{ name: "Text", extensions: ["png", "jpg", "jpeg"] }],
             });
             let IconsPath = [...SaveIcon.filePaths];
-
-            for (let i = 0; i < IconsPath.length; i++) {
-              console.log("BaseName: ", path.basename(IconsPath[i]));
-              CopyIcon(
-                IconsPath[i],
-                path.basename(IconsPath[i]),
-                SaveIconsFolder,
-                LogFilePath
+            let IconPromises = [];
+            try {
+              for (let i = 0; i < IconsPath.length; i++) {
+                console.log("BaseName: ", path.basename(IconsPath[i]));
+                let IconImport = await CopyIcon(
+                  IconsPath[i],
+                  path.basename(IconsPath[i]),
+                  SaveIconsFolder,
+                  LogFilePath
+                );
+                IconPromises.push(IconImport);
+              }
+              await Promise.all(IconPromises);
+              win.webContents.send(
+                "ImportSaveIcons",
+                "Successfully loaded icons"
               );
+            } catch (err) {
+              win.webContents.send("ImportSaveIcons", err);
             }
-            // win.webContents.send("ImportSaveIcons", SaveIcon.filePaths);
+          },
+        },
+        {
+          label: "Open icon folder",
+          click: async () => {
+            OpenFile(SaveIconsFolder);
           },
         },
       ],
